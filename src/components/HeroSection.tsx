@@ -101,45 +101,48 @@ export const HeroSection = () => {
           </div>
 
           {/* Right Content - Profile Image */}
-          <div className="relative flex justify-center lg:justify-end animate-scale-in order-1 lg:order-2" style={{ animationDelay: '0.3s' }}>
+          <div className="relative flex justify-center lg:justify-end animate-scale-in order-1 lg:order-2 py-8 lg:py-0" style={{ animationDelay: '0.3s' }}>
             {/* Glow Ring */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full border-2 border-primary/30 animate-rotate-slow" />
-              <div className="absolute w-36 h-36 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full border border-secondary/20 animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-52 h-52 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[22rem] lg:h-[22rem] xl:w-[26rem] xl:h-[26rem] rounded-full border-2 border-primary/30 animate-rotate-slow" />
+              <div className="absolute w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] rounded-full border border-secondary/20 animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
             </div>
             
             {/* Profile Image Container */}
             <div className="relative">
-              <div className="w-36 h-36 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden neon-glow-lg relative z-10">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/30" />
+              {/* Glowing background behind image */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 via-secondary/30 to-accent/40 blur-2xl scale-110" />
+              
+              <div className="w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] rounded-full overflow-hidden neon-glow-lg relative z-10 border-4 border-primary/20">
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent z-10" />
                 <img
                   src={profileImage}
                   alt={settings.name}
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-center scale-105"
                   loading="eager"
                 />
               </div>
               
-              {/* Floating Cards - Hidden on mobile/tablet */}
+              {/* Floating Cards - Positioned better */}
               <FloatingCard
                 icon={Code}
                 label="Developer"
-                className="absolute -left-6 lg:-left-8 top-1/4 floating hidden lg:flex"
+                className="absolute -left-12 lg:-left-16 top-[20%] floating hidden lg:flex"
               />
               <FloatingCard
                 icon={Palette}
                 label="Designer"
-                className="absolute -right-4 lg:-right-6 top-1/3 floating-delayed hidden lg:flex"
+                className="absolute -right-10 lg:-right-14 top-[30%] floating-delayed hidden lg:flex"
               />
               <FloatingCard
                 icon={Video}
                 label="Editor"
-                className="absolute -left-4 lg:-left-6 bottom-1/4 floating-slow hidden xl:flex"
+                className="absolute -left-10 lg:-left-14 bottom-[25%] floating-slow hidden xl:flex"
               />
               <FloatingCard
                 icon={Globe}
                 label="Marketer"
-                className="absolute -right-6 lg:-right-8 bottom-1/3 floating hidden xl:flex"
+                className="absolute -right-12 lg:-right-16 bottom-[35%] floating hidden xl:flex"
               />
             </div>
           </div>
