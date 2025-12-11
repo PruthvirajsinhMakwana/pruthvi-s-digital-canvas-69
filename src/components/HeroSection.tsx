@@ -21,28 +21,28 @@ export const HeroSection = () => {
   const lastName = nameParts.slice(1).join(' ') || '';
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20">
+    <section id="home" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden py-20 sm:py-24 lg:pt-20">
       {/* Background Elements */}
       <div className="absolute inset-0 tech-grid opacity-30" />
-      <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-neon" />
-      <div className="absolute bottom-1/4 right-1/4 w-56 sm:w-80 h-56 sm:h-80 bg-secondary/20 rounded-full blur-[100px] animate-pulse-neon" style={{ animationDelay: '1s' }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-accent/10 rounded-full blur-[150px]" />
+      <div className="absolute top-1/4 left-1/4 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary/20 rounded-full blur-[80px] sm:blur-[120px] animate-pulse-neon" />
+      <div className="absolute bottom-1/4 right-1/4 w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-secondary/20 rounded-full blur-[60px] sm:blur-[100px] animate-pulse-neon" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] lg:w-[600px] h-[300px] sm:h-[500px] lg:h-[600px] bg-accent/10 rounded-full blur-[100px] sm:blur-[150px]" />
       
       {/* Animated Orbs - Hidden on mobile */}
-      <div className="absolute top-20 right-20 w-4 h-4 rounded-full bg-primary floating animate-glow hidden sm:block" />
-      <div className="absolute bottom-40 left-20 w-6 h-6 rounded-full bg-secondary floating-delayed animate-glow hidden sm:block" />
-      <div className="absolute top-40 left-40 w-3 h-3 rounded-full bg-accent floating-slow animate-glow hidden sm:block" />
+      <div className="absolute top-20 right-20 w-4 h-4 rounded-full bg-primary floating animate-glow hidden lg:block" />
+      <div className="absolute bottom-40 left-20 w-6 h-6 rounded-full bg-secondary floating-delayed animate-glow hidden lg:block" />
+      <div className="absolute top-40 left-40 w-3 h-3 rounded-full bg-accent floating-slow animate-glow hidden lg:block" />
       
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left animate-fade-in-up order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 glass-card rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
+            <div className="inline-flex items-center gap-2 glass-card rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-3 sm:mb-4 lg:mb-6">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs sm:text-sm text-muted-foreground">{settings.availabilityStatus}</span>
+              <span className="text-[11px] sm:text-xs lg:text-sm text-muted-foreground">{settings.availabilityStatus}</span>
             </div>
             
-            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-4 sm:mb-6">
+            <h1 className="font-heading text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] sm:leading-tight mb-3 sm:mb-4 lg:mb-6">
               <span className="text-foreground">Hi, I'm</span>
               <br />
               <span className="gradient-text">{firstName}</span>
@@ -50,7 +50,7 @@ export const HeroSection = () => {
               <span className="text-foreground">{lastName}</span>
             </h1>
             
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-3 sm:mb-4 leading-relaxed">
+            <p className="text-[13px] sm:text-sm md:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-2 sm:mb-3 lg:mb-4 leading-relaxed">
               {settings.title.split(' | ').map((part, index) => (
                 <span key={index}>
                   {index > 0 && ' | '}
@@ -59,43 +59,43 @@ export const HeroSection = () => {
               ))}
             </p>
             
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-4 sm:mb-6 leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-4 sm:mb-5 lg:mb-6 leading-relaxed line-clamp-3 sm:line-clamp-none">
               {settings.description}
             </p>
 
-            <div className="flex flex-wrap gap-2 sm:gap-3 justify-center lg:justify-start mb-6 sm:mb-8">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 lg:gap-3 justify-center lg:justify-start mb-4 sm:mb-6 lg:mb-8">
               {settings.skillTags.map((tag) => (
-                <span key={tag} className="glass-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-foreground">
+                <span key={tag} className="glass-card px-2 sm:px-2.5 lg:px-3 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] lg:text-xs font-medium text-foreground">
                   {tag}
                 </span>
               ))}
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="w-full sm:w-auto" asChild>
+            <div className="flex flex-row gap-2 sm:gap-3 lg:gap-4 justify-center lg:justify-start">
+              <Button size="default" className="flex-1 sm:flex-none sm:px-6 lg:px-8 text-sm sm:text-base" asChild>
                 <Link to={settings.hireMeLink}>
                   {settings.hireMeText}
-                  <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+                  <ArrowDown className="w-4 h-4 ml-1.5 sm:ml-2" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto" asChild>
+              <Button variant="outline" size="default" className="flex-1 sm:flex-none sm:px-6 lg:px-8 text-sm sm:text-base" asChild>
                 <Link to={settings.servicesLink}>{settings.servicesText}</Link>
               </Button>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border/30">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-12 pt-4 sm:pt-6 lg:pt-8 border-t border-border/30">
               <div className="text-center lg:text-left">
-                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">{settings.projectsDone}</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Projects Done</div>
+                <div className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold gradient-text">{settings.projectsDone}</div>
+                <div className="text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-muted-foreground mt-0.5 sm:mt-1">Projects Done</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">{settings.toolsMastered}</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Tools Mastered</div>
+                <div className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold gradient-text">{settings.toolsMastered}</div>
+                <div className="text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-muted-foreground mt-0.5 sm:mt-1">Tools Mastered</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">{settings.yearsLearning}</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Years Learning</div>
+                <div className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold gradient-text">{settings.yearsLearning}</div>
+                <div className="text-[9px] sm:text-[10px] md:text-xs lg:text-sm text-muted-foreground mt-0.5 sm:mt-1">Years Learning</div>
               </div>
             </div>
           </div>
@@ -104,41 +104,42 @@ export const HeroSection = () => {
           <div className="relative flex justify-center lg:justify-end animate-scale-in order-1 lg:order-2" style={{ animationDelay: '0.3s' }}>
             {/* Glow Ring */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-2 border-primary/30 animate-rotate-slow" />
-              <div className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full border border-secondary/20 animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
+              <div className="w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full border-2 border-primary/30 animate-rotate-slow" />
+              <div className="absolute w-36 h-36 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full border border-secondary/20 animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
             </div>
             
             {/* Profile Image Container */}
             <div className="relative">
-              <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden neon-glow-lg relative z-10">
+              <div className="w-36 h-36 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden neon-glow-lg relative z-10">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/30" />
                 <img
                   src={profileImage}
                   alt={settings.name}
                   className="w-full h-full object-cover object-top"
+                  loading="eager"
                 />
               </div>
               
-              {/* Floating Cards - Hidden on small mobile */}
+              {/* Floating Cards - Hidden on mobile/tablet */}
               <FloatingCard
                 icon={Code}
                 label="Developer"
-                className="absolute -left-4 sm:-left-8 top-1/4 floating hidden sm:flex"
+                className="absolute -left-6 lg:-left-8 top-1/4 floating hidden lg:flex"
               />
               <FloatingCard
                 icon={Palette}
                 label="Designer"
-                className="absolute -right-2 sm:-right-4 top-1/3 floating-delayed hidden sm:flex"
+                className="absolute -right-4 lg:-right-6 top-1/3 floating-delayed hidden lg:flex"
               />
               <FloatingCard
                 icon={Video}
                 label="Editor"
-                className="absolute -left-2 sm:-left-4 bottom-1/4 floating-slow hidden md:flex"
+                className="absolute -left-4 lg:-left-6 bottom-1/4 floating-slow hidden xl:flex"
               />
               <FloatingCard
                 icon={Globe}
                 label="Marketer"
-                className="absolute -right-4 sm:-right-8 bottom-1/3 floating hidden md:flex"
+                className="absolute -right-6 lg:-right-8 bottom-1/3 floating hidden xl:flex"
               />
             </div>
           </div>
@@ -146,9 +147,9 @@ export const HeroSection = () => {
       </div>
 
       {/* Scroll Indicator - Hidden on mobile */}
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 animate-bounce hidden sm:flex">
-        <span className="text-xs text-muted-foreground">Scroll Down</span>
-        <ArrowDown className="w-5 h-5 text-primary" />
+      <div className="absolute bottom-4 sm:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-1.5 sm:gap-2 animate-bounce hidden md:flex">
+        <span className="text-[10px] sm:text-xs text-muted-foreground">Scroll Down</span>
+        <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
       </div>
     </section>
   );
