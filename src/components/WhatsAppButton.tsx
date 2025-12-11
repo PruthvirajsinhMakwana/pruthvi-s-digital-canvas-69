@@ -6,10 +6,10 @@ export const WhatsAppButton = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { settings } = useSiteSettings();
   
-  // Remove any non-numeric characters except +
-  const phoneNumber = settings.whatsappNumber.replace(/[^\d+]/g, '').replace('+', '');
-  const message = encodeURIComponent("Hi! I'm interested in your services.");
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+  // Support both wa.link URLs and phone numbers
+  const whatsappUrl = settings.whatsappNumber.startsWith('http') 
+    ? settings.whatsappNumber 
+    : `https://wa.me/${settings.whatsappNumber.replace(/[^\d]/g, '')}?text=${encodeURIComponent("Hi! I'm interested in your services.")}`;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
