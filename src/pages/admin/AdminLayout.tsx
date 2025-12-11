@@ -10,7 +10,8 @@ import {
   LogOut,
   Menu,
   X,
-  Home
+  Home,
+  ChevronLeft
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -51,6 +52,11 @@ const AdminLayout = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  // Close sidebar on route change
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success('Signed out successfully');
@@ -77,90 +83,105 @@ const AdminLayout = () => {
 
       {/* Sidebar */}
       <aside className={cn(
-        'fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 lg:transform-none',
+        'fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 lg:transform-none flex flex-col',
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       )}>
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="p-6 border-b border-border">
-            <Link to="/admin" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-heading font-bold text-primary-foreground">
-                P
-              </div>
-              <div>
-                <span className="font-heading font-semibold text-foreground">Admin Panel</span>
-                <p className="text-xs text-muted-foreground">Pruthvirajsinh</p>
-              </div>
-            </Link>
-          </div>
+        {/* Logo */}
+        <div className="p-4 sm:p-6 border-b border-border flex items-center justify-between">
+          <Link to="/admin" className="flex items-center gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-heading font-bold text-primary-foreground text-sm sm:text-base">
+              P
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-heading font-semibold text-foreground text-sm">Admin Panel</span>
+              <p className="text-xs text-muted-foreground">Pruthvirajsinh</p>
+            </div>
+          </Link>
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.href || 
-                (item.href !== '/admin' && location.pathname.startsWith(item.href));
-              
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsSidebarOpen(false)}
-                  className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200',
-                    isActive 
-                      ? 'bg-primary text-primary-foreground neon-glow' 
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                  )}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
+        {/* Navigation */}
+        <nav className="flex-1 p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.href || 
+              (item.href !== '/admin' && location.pathname.startsWith(item.href));
+            
+            return (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={cn(
+                  'flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl transition-all duration-200 touch-manipulation',
+                  isActive 
+                    ? 'bg-primary text-primary-foreground shadow-md' 
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                )}
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="text-sm font-medium">{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-border space-y-2">
-            <Link
-              to="/"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200"
-            >
-              <Home className="w-5 h-5" />
-              View Site
-            </Link>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200 w-full"
-            >
-              <LogOut className="w-5 h-5" />
-              Sign Out
-            </button>
-          </div>
+        {/* Footer */}
+        <div className="p-3 sm:p-4 border-t border-border space-y-1 sm:space-y-2">
+          <Link
+            to="/"
+            className="flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200"
+          >
+            <Home className="w-5 h-5" />
+            <span className="text-sm font-medium">View Site</span>
+          </Link>
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200 w-full"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="text-sm font-medium">Sign Out</span>
+          </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen w-full">
         {/* Top Bar */}
-        <header className="h-16 border-b border-border flex items-center px-6 gap-4 bg-card/50 backdrop-blur-sm sticky top-0 z-30">
+        <header className="h-14 sm:h-16 border-b border-border flex items-center px-4 sm:px-6 gap-3 sm:gap-4 bg-card/50 backdrop-blur-sm sticky top-0 z-30">
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden h-9 w-9"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
-            {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Menu className="w-5 h-5" />
           </Button>
-          <h1 className="font-heading font-semibold text-lg">
-            {navItems.find(item => 
-              location.pathname === item.href || 
-              (item.href !== '/admin' && location.pathname.startsWith(item.href))
-            )?.name || 'Dashboard'}
-          </h1>
+          
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm">
+            {location.pathname !== '/admin' && (
+              <button 
+                onClick={() => navigate(-1)}
+                className="text-muted-foreground hover:text-foreground lg:hidden"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+            <h1 className="font-heading font-semibold text-base sm:text-lg truncate">
+              {navItems.find(item => 
+                location.pathname === item.href || 
+                (item.href !== '/admin' && location.pathname.startsWith(item.href))
+              )?.name || 'Dashboard'}
+            </h1>
+          </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-4 sm:p-6 overflow-auto">
           <Outlet />
         </main>
       </div>
