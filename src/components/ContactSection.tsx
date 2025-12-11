@@ -6,21 +6,10 @@ import { Mail, Phone, MapPin, Send, Linkedin, Github, Instagram, Twitter } from 
 import { toast } from 'sonner';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { supabase } from '@/integrations/supabase/client';
-
-const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'pruthvirajsinh@example.com', href: 'mailto:pruthvirajsinh@example.com' },
-  { icon: Phone, label: 'Phone', value: 'WhatsApp Available', href: '#' },
-  { icon: MapPin, label: 'Location', value: 'Gujarat, India', href: '#' },
-];
-
-const socialLinks = [
-  { icon: Linkedin, href: 'https://linkedin.com/in/pruthvirajsinh', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com/pruthvirajsinh', label: 'GitHub' },
-  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh', label: 'Instagram' },
-  { icon: Twitter, href: 'https://twitter.com/pruthvirajsinh', label: 'Twitter' },
-];
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export const ContactSection = () => {
+  const { settings } = useSiteSettings();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,6 +17,19 @@ export const ContactSection = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const contactInfo = [
+    { icon: Mail, label: 'Email', value: settings.email, href: `mailto:${settings.email}` },
+    { icon: Phone, label: 'Phone', value: '+91 7016592727', href: 'tel:+917016592727' },
+    { icon: MapPin, label: 'Location', value: 'Gujarat, India', href: '#' },
+  ];
+
+  const socialLinks = [
+    { icon: Linkedin, href: settings.linkedinUrl, label: 'LinkedIn' },
+    { icon: Github, href: settings.githubUrl, label: 'GitHub' },
+    { icon: Instagram, href: settings.instagramUrl, label: 'Instagram' },
+    { icon: Twitter, href: settings.twitterUrl, label: 'Twitter' },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
