@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Send, Linkedin, Github, Instagram, Twitter } from 'lucide-react';
 import { toast } from 'sonner';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
+import { supabase } from '@/integrations/supabase/client';
 
 const contactInfo = [
   { icon: Mail, label: 'Email', value: 'pruthvirajsinh@example.com', href: 'mailto:pruthvirajsinh@example.com' },
@@ -32,15 +33,29 @@ export const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success('Message sent successfully!', {
-      description: "I'll get back to you as soon as possible.",
-    });
-    
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    setIsSubmitting(false);
+    try {
+      const { error } = await supabase
+        .from('contact_messages')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          message: formData.message,
+        });
+
+      if (error) throw error;
+      
+      toast.success('Message sent successfully!', {
+        description: "I'll get back to you as soon as possible.",
+      });
+      
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast.error('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

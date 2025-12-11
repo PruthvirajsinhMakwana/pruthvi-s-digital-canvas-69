@@ -1,4 +1,5 @@
 import { Heart, ArrowUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
   const scrollToTop = () => {
@@ -26,10 +27,11 @@ export const Footer = () => {
 
           {/* Quick Links */}
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#home" className="hover:text-primary transition-colors">Home</a>
-            <a href="#about" className="hover:text-primary transition-colors">About</a>
-            <a href="#projects" className="hover:text-primary transition-colors">Projects</a>
-            <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <Link to="/about" className="hover:text-primary transition-colors">About</Link>
+            <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
+            <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+            <Link to="/auth" className="hover:text-primary transition-colors">Admin</Link>
           </div>
 
           {/* Back to Top */}
