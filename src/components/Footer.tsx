@@ -1,9 +1,11 @@
 import { Heart, ArrowUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { useLinktree } from '@/hooks/useLinktree';
 
 export const Footer = () => {
   const { settings } = useSiteSettings();
+  const { settings: linktreeSettings } = useLinktree();
   
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -58,6 +60,16 @@ export const Footer = () => {
               aria-label="Admin access"
             />
           </p>
+          
+          {/* Pruthvi Links - Hidden Linktree access */}
+          {linktreeSettings.footer_link_visible && (
+            <Link 
+              to="/links" 
+              className="mt-3 inline-block text-xs text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors"
+            >
+              Pruthvi Links
+            </Link>
+          )}
         </div>
       </div>
     </footer>
