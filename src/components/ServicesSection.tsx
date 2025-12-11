@@ -1,67 +1,163 @@
-import { Globe, Palette, Video, Megaphone, Layers, PenTool } from 'lucide-react';
+import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 
-const services = [
+const itServices = [
   {
     icon: Globe,
     title: 'Web Development',
     description: 'Clean, responsive, and fast websites built for performance and user experience.',
     deliverables: ['Landing Pages', 'Portfolio Sites', 'Business Websites', 'Website Redesign', 'Maintenance & Optimization'],
-    gradient: 'from-primary to-secondary',
+    color: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+    iconBg: 'bg-blue-500',
   },
   {
     icon: Megaphone,
     title: 'Digital Marketing',
     description: 'Strategies that boost reach, engagement, and brand visibility.',
     deliverables: ['Social Media Strategy', 'SEO Optimization', 'Content Planning', 'Ad Creatives', 'Analytics Reports'],
-    gradient: 'from-secondary to-accent',
+    color: 'bg-green-500/10 text-green-500 border-green-500/20',
+    iconBg: 'bg-green-500',
   },
   {
     icon: Palette,
     title: 'Graphic Design',
     description: 'Creative visuals that communicate brand identity and attract attention.',
     deliverables: ['Logos & Branding', 'Posters & Flyers', 'Social Media Creatives', 'Thumbnails & Banners'],
-    gradient: 'from-accent to-primary',
+    color: 'bg-pink-500/10 text-pink-500 border-pink-500/20',
+    iconBg: 'bg-pink-500',
   },
   {
     icon: Video,
     title: 'Video Editing',
     description: 'Engaging videos for businesses, personal brands, and social platforms.',
     deliverables: ['Short Reels', 'Promotional Videos', 'Editing + Color Correction', 'Motion Graphic Elements'],
-    gradient: 'from-primary to-neon-blue',
+    color: 'bg-red-500/10 text-red-500 border-red-500/20',
+    iconBg: 'bg-red-500',
   },
   {
     icon: Layers,
     title: 'UI/UX Design',
     description: 'User-centered design that creates intuitive and delightful digital experiences.',
     deliverables: ['Wireframes', 'Prototypes', 'User Research', 'Interface Design'],
-    gradient: 'from-neon-blue to-secondary',
+    color: 'bg-purple-500/10 text-purple-500 border-purple-500/20',
+    iconBg: 'bg-purple-500',
   },
   {
     icon: PenTool,
     title: 'IT Support & Technical Assistance',
     description: 'Basic troubleshooting, software setup, and digital workflow assistance.',
     deliverables: ['Software Setup', 'Troubleshooting', 'Digital Workflow', 'Productivity Tools'],
-    gradient: 'from-secondary to-primary',
+    color: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+    iconBg: 'bg-orange-500',
   },
 ];
 
-export const ServicesSection = () => {
+const esportsServices = [
+  {
+    icon: Mic,
+    title: 'Esports Commentary',
+    description: 'Professional play-by-play and color commentary for competitive gaming events.',
+    deliverables: ['Live Match Commentary', 'Play-by-Play Analysis', 'Color Commentary', 'Post-Match Breakdown'],
+    color: 'bg-violet-500/10 text-violet-500 border-violet-500/20',
+    iconBg: 'bg-violet-500',
+  },
+  {
+    icon: Radio,
+    title: 'Event Hosting',
+    description: 'Energetic hosting for gaming events, award shows, and esports broadcasts.',
+    deliverables: ['Stage Hosting', 'Broadcast Presenting', 'Interview Segments', 'Panel Moderation'],
+    color: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
+    iconBg: 'bg-cyan-500',
+  },
+  {
+    icon: Trophy,
+    title: 'Tournament Organization',
+    description: 'End-to-end tournament management from planning to execution.',
+    deliverables: ['Event Planning', 'Ruleset Creation', 'Bracket Management', 'Production Support'],
+    color: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+    iconBg: 'bg-amber-500',
+  },
+  {
+    icon: Gamepad2,
+    title: 'Gaming Content Creation',
+    description: 'Engaging gaming content for YouTube, Twitch, and social media platforms.',
+    deliverables: ['YouTube Videos', 'Stream Content', 'Gaming Reviews', 'Tutorial Content'],
+    color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+    iconBg: 'bg-emerald-500',
+  },
+  {
+    icon: Users,
+    title: 'Player & Team Management',
+    description: 'Coordination and support for esports teams and individual players.',
+    deliverables: ['Team Coordination', 'Schedule Management', 'Communication', 'Event Logistics'],
+    color: 'bg-rose-500/10 text-rose-500 border-rose-500/20',
+    iconBg: 'bg-rose-500',
+  },
+  {
+    icon: Calendar,
+    title: 'Community Events',
+    description: 'Building and managing gaming communities through events and engagement.',
+    deliverables: ['Community Tournaments', 'Watch Parties', 'Gaming Meetups', 'Online Leagues'],
+    color: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
+    iconBg: 'bg-indigo-500',
+  },
+];
+
+interface ServiceCardProps {
+  service: typeof itServices[0];
+  index: number;
+}
+
+const ServiceCard = ({ service, index }: ServiceCardProps) => (
+  <ScrollReveal animation="fade-up" delay={index * 80}>
+    <div className="group relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl h-full">
+      {/* Icon */}
+      <div className={`w-14 h-14 rounded-xl ${service.iconBg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+        <service.icon className="w-7 h-7 text-white" />
+      </div>
+
+      {/* Content */}
+      <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-primary transition-colors">
+        {service.title}
+      </h3>
+      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+        {service.description}
+      </p>
+
+      {/* Deliverables */}
+      <div className="space-y-1.5">
+        {service.deliverables.map((item, i) => (
+          <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className={`w-1.5 h-1.5 rounded-full ${service.iconBg}`} />
+            {item}
+          </div>
+        ))}
+      </div>
+    </div>
+  </ScrollReveal>
+);
+
+interface ServicesSectionProps {
+  showBothCategories?: boolean;
+}
+
+export const ServicesSection = ({ showBothCategories = false }: ServicesSectionProps) => {
   return (
-    <section id="services" className="py-24 relative overflow-hidden">
+    <section id="services" className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-muted/20 to-background">
       {/* Background */}
-      <div className="absolute inset-0 tech-grid opacity-20" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/10 rounded-full blur-[100px]" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px]" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section Header */}
+        {/* IT Services Section */}
         <ScrollReveal animation="fade-up">
-          <div className="text-center mb-16">
-            <span className="text-primary font-medium text-sm tracking-wider uppercase">What I Do</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
-              My <span className="gradient-text">Services</span>
+          <div className="text-center mb-12">
+            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              💻 IT & Digital Services
+            </span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Digital <span className="text-primary">Solutions</span>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Comprehensive digital solutions tailored to help your brand stand out and succeed online.
@@ -69,47 +165,67 @@ export const ServicesSection = () => {
           </div>
         </ScrollReveal>
 
-        {/* Services Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <ScrollReveal key={index} animation="fade-up" delay={index * 100}>
-              <div
-                className="group relative glass-card rounded-3xl p-8 hover:neon-glow transition-all duration-500 hover:-translate-y-2 h-full"
-              >
-                {/* Gradient Border Effect */}
-                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl`} />
-                
-                {/* Icon */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 neon-glow`}>
-                  <service.icon className="w-8 h-8 text-primary-foreground" />
-                </div>
-
-                {/* Content */}
-                <h3 className="font-heading text-xl font-bold mb-3 group-hover:gradient-text transition-all duration-300">
-                  {service.title}
-                </h3>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {service.description}
-                </p>
-
-                {/* Deliverables */}
-                <div className="space-y-2 mb-6">
-                  {service.deliverables.map((item, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient}`} />
-                      {item}
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <Button variant="glass" size="sm" className="w-full group-hover:neon-glow">
-                  Learn More
-                </Button>
-              </div>
-            </ScrollReveal>
+        {/* IT Services Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+          {itServices.map((service, index) => (
+            <ServiceCard key={index} service={service} index={index} />
           ))}
         </div>
+
+        {showBothCategories && (
+          <>
+            {/* Divider */}
+            <div className="flex items-center gap-4 mb-20">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-muted-foreground text-sm">Also Available</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+
+            {/* Esports Services Section */}
+            <ScrollReveal animation="fade-up">
+              <div className="text-center mb-12">
+                <span className="inline-block px-4 py-2 bg-secondary/10 text-secondary rounded-full text-sm font-medium mb-4">
+                  🎮 Esports & Gaming Services
+                </span>
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+                  Gaming <span className="text-secondary">Services</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Professional esports services to elevate your gaming events and competitive experiences.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            {/* Esports Services Grid */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {esportsServices.map((service, index) => (
+                <ServiceCard key={index} service={service} index={index} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* CTA Section */}
+        <ScrollReveal animation="fade-up" delay={200}>
+          <div className="mt-16 text-center">
+            <div className="bg-card border border-border rounded-3xl p-8 sm:p-12 max-w-3xl mx-auto">
+              <h3 className="font-heading text-2xl sm:text-3xl font-bold mb-4">
+                Ready to Start a Project?
+              </h3>
+              <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+                Let's discuss your requirements and create something amazing together. Get in touch for a free consultation.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="px-8">
+                  Get in Touch
+                </Button>
+                <Button variant="outline" size="lg" className="px-8">
+                  View Portfolio
+                </Button>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
