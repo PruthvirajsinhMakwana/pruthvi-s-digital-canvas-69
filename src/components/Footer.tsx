@@ -26,12 +26,12 @@ export const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
             <Link to="/" className="hover:text-primary transition-colors">Home</Link>
             <Link to="/about" className="hover:text-primary transition-colors">About</Link>
+            <Link to="/services" className="hover:text-primary transition-colors">Services</Link>
             <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
             <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
-            <Link to="/auth" className="hover:text-primary transition-colors">Admin</Link>
           </div>
 
           {/* Back to Top */}
