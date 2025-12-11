@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, Mic, Trophy, Award, Youtube, Instagram, Twitch, Mail, MapPin, Gamepad2, Tv } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
+import profileGaming from '@/assets/profile-gaming.jpg';
 
 const esportsSkills = [
   { name: 'Esports Commentary', level: 95, icon: '🎤' },
@@ -112,9 +113,11 @@ export const EsportsAboutSection = () => {
             <div className="bg-card border border-secondary/30 rounded-3xl p-8 h-full">
               <div className="text-center mb-6">
                 <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-secondary to-primary p-1">
-                  <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
-                    <span className="text-4xl">🎮</span>
-                  </div>
+                  <img 
+                    src={profileGaming} 
+                    alt="Pruthvirajsinh Makwana - Gaming" 
+                    className="w-full h-full rounded-full object-cover"
+                  />
                 </div>
                 <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
                 <p className="text-secondary font-medium text-center">🎤 Esports Commentator | ⚙️ Tech Enthusiast</p>

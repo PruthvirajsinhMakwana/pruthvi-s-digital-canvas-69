@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, Briefcase, GraduationCap, Award, Linkedin, Github, Instagram, Mail, MapPin, Calendar, Code, Palette } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
+import profileIT from '@/assets/profile-it.jpg';
 
 const skills = [
   { name: 'Web Development', level: 90, icon: '🌐' },
@@ -112,9 +113,11 @@ export const AboutSection = () => {
             <div className="bg-card border border-border rounded-3xl p-8 h-full">
               <div className="text-center mb-6">
                 <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-secondary p-1">
-                  <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
-                    <span className="text-4xl font-heading font-bold text-primary">PM</span>
-                  </div>
+                  <img 
+                    src={profileIT} 
+                    alt="Pruthvirajsinh Makwana" 
+                    className="w-full h-full rounded-full object-cover"
+                  />
                 </div>
                 <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
                 <p className="text-primary font-medium text-center">💻 IT Professional & Digital Creator</p>
