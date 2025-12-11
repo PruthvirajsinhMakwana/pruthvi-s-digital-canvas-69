@@ -1,48 +1,48 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Mic, Trophy, Award, Linkedin, Youtube, Instagram, Mail, MapPin, Gamepad2, Tv } from 'lucide-react';
+import { Download, Briefcase, GraduationCap, Award, Linkedin, Github, Instagram, Mail, MapPin, Calendar, Code, Palette } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 
 const skills = [
-  { name: 'Esports Commentary', level: 95, icon: '🎤' },
-  { name: 'Event Hosting', level: 90, icon: '🎭' },
-  { name: 'Tournament Organization', level: 85, icon: '🏆' },
-  { name: 'Gameplay Analysis', level: 90, icon: '🎯' },
-  { name: 'Content Creation', level: 85, icon: '📺' },
-  { name: 'Live Production', level: 80, icon: '🎬' },
+  { name: 'Web Development', level: 90, icon: '🌐' },
+  { name: 'Digital Marketing & SEO', level: 85, icon: '📈' },
+  { name: 'Graphic Design', level: 85, icon: '🎨' },
+  { name: 'Video Editing', level: 80, icon: '🎬' },
+  { name: 'UI/UX Design', level: 75, icon: '✨' },
+  { name: 'AI & Automation', level: 80, icon: '🤖' },
 ];
 
 const experiences = [
   {
+    year: '2024 – Present',
+    title: 'B.Voc in Information Technology',
+    company: 'Shati Business School',
+    type: 'education',
+  },
+  {
     year: '2023 – Present',
-    title: 'Esports Commentator & Host',
-    company: 'Freelance / Various Tournaments',
+    title: 'Freelance Digital Creator',
+    company: 'Self-Employed',
     type: 'work',
   },
   {
     year: '2023 – Present',
-    title: 'YouTube Gaming Host',
-    company: 'Gaming Content Creator',
-    type: 'work',
-  },
-  {
-    year: '2022 – Present',
-    title: 'Tournament Organizer',
-    company: 'Local & Online Events',
+    title: 'Web Developer & Designer',
+    company: 'Freelance Projects',
     type: 'work',
   },
 ];
 
 const stats = [
-  { icon: Trophy, value: 50, label: 'Events', suffix: '+' },
-  { icon: Mic, value: 100, label: 'Streams', suffix: '+' },
+  { icon: Briefcase, value: 50, label: 'Projects', suffix: '+' },
+  { icon: GraduationCap, value: 15, label: 'Tools', suffix: '+' },
   { icon: Award, value: 3, label: 'Years', suffix: '+' },
 ];
 
 const socialLinks = [
-  { icon: Youtube, href: 'https://youtube.com/@pruthvirajsinh', label: 'YouTube', color: 'hover:text-[#ff0000]' },
-  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh.makwana', label: 'Instagram', color: 'hover:text-[#e4405f]' },
   { icon: Linkedin, href: 'https://linkedin.com/in/pruthvirajsinh-makwana', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
+  { icon: Github, href: 'https://github.com/pruthvirajsinh-makwana', label: 'GitHub', color: 'hover:text-[#333] dark:hover:text-white' },
+  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh.makwana', label: 'Instagram', color: 'hover:text-[#e4405f]' },
   { icon: Mail, href: 'mailto:pruthvirajsinh.biz@gmail.com', label: 'Email', color: 'hover:text-primary' },
 ];
 
@@ -117,8 +117,8 @@ export const AboutSection = () => {
                   </div>
                 </div>
                 <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
-                <p className="text-primary font-medium text-center">🎮 Gamer | ⚙️ Tech Enthusiast | 🎤 Esports Commentator</p>
-                <p className="text-muted-foreground text-sm mt-1">📺 YouTube Host | Voice of Gaming</p>
+                <p className="text-primary font-medium text-center">💻 IT Professional & Digital Creator</p>
+                <p className="text-muted-foreground text-sm mt-1">🎨 Designer | 🌐 Developer | 📈 Marketer</p>
               </div>
 
               <div className="space-y-3 mb-6">
@@ -127,12 +127,12 @@ export const AboutSection = () => {
                   <span>Gujarat, India</span>
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground">
-                  <Gamepad2 className="w-4 h-4 text-primary" />
-                  <span>Available for Events & Commentary</span>
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>Available for Freelance & Internships</span>
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground">
-                  <Tv className="w-4 h-4 text-primary" />
-                  <span>Esports Professional</span>
+                  <GraduationCap className="w-4 h-4 text-primary" />
+                  <span>B.Voc IT Student</span>
                 </div>
               </div>
 
@@ -169,17 +169,17 @@ export const AboutSection = () => {
               {/* Bio Card */}
               <div className="bg-card border border-border rounded-3xl p-8">
                 <h3 className="font-heading text-xl font-bold mb-4 flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">🎮</span>
-                  Hello, Gamers!
+                  <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">👋</span>
+                  Hello!
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  I'm <span className="text-foreground font-medium">Pruthvirajsinh Makwana</span>, an enthusiastic <span className="text-primary font-medium">Esports Commentator</span>, <span className="text-primary font-medium">Event Host</span>, <span className="text-primary font-medium">Gaming Content Creator</span>, and <span className="text-primary font-medium">Tournament Organizer</span>. I've been deeply involved in the esports and gaming community for years.
+                  I'm <span className="text-foreground font-medium">Pruthvirajsinh Makwana</span>, an aspiring <span className="text-primary font-medium">IT Professional</span> currently pursuing a Bachelor of Vocation (B.Voc) in Information Technology from Shati Business School. I specialize in <span className="text-primary font-medium">Web Development</span>, <span className="text-primary font-medium">Digital Marketing</span>, <span className="text-primary font-medium">Graphic Design</span>, <span className="text-primary font-medium">Video Editing</span>, and <span className="text-primary font-medium">Brand Creation</span>.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  I've worked across multiple tournaments—local, online, and community-driven—handling everything from <span className="text-foreground">commentary and hosting</span> to <span className="text-foreground">full tournament organization</span>, rulesets, scheduling, and production support. My voice, energy, and game knowledge make streams more <span className="text-primary font-medium">engaging, exciting, and memorable</span> for viewers.
+                  I'm passionate about working at the intersection of <span className="text-foreground">technology, design, and innovation</span>, where ideas turn into solutions. I enjoy building responsive websites, improving brand visibility through strategic marketing, designing compelling visuals, and leveraging modern tools to enhance productivity and quality.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Beyond commentary, I also enjoy creating <span className="text-foreground">gaming content</span>, hosting <span className="text-foreground">YouTube segments</span>, and connecting with players to help grow the esports ecosystem. I aim to become a recognized personality in the gaming world, supporting tournaments, brand projects, and esports events with passion, professionalism, and creativity.
+                  Driven by curiosity and continuous learning, I strive to deliver excellence in every project. My goal is to support business growth and establish myself as a <span className="text-primary font-medium">versatile professional</span> in the digital and IT ecosystem. I'm open to collaborations, freelance projects, internships, and opportunities to innovate and grow.
                 </p>
               </div>
 
@@ -259,7 +259,7 @@ export const AboutSection = () => {
               <div className="mt-8 pt-6 border-t border-border">
                 <h4 className="font-medium text-sm text-muted-foreground mb-3">What I Bring</h4>
                 <div className="flex flex-wrap gap-2">
-                  {['High Energy', 'Game Knowledge', 'Audience Engagement', 'Professional Voice', 'Creative Vision'].map((tag, index) => (
+                  {['Problem Solver', 'Quick Learner', 'Creative Thinker', 'Detail Oriented', 'Team Player'].map((tag, index) => (
                     <span
                       key={index}
                       className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full"
