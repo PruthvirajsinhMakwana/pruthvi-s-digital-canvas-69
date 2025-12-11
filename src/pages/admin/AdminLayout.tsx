@@ -11,13 +11,15 @@ import {
   Menu,
   X,
   Home,
-  ChevronLeft
+  ChevronLeft,
+  Globe
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Site Content', href: '/admin/content', icon: Globe },
   { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
