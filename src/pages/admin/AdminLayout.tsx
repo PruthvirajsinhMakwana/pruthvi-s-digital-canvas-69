@@ -12,7 +12,8 @@ import {
   X,
   Home,
   ChevronLeft,
-  Globe
+  Globe,
+  Link2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -22,6 +23,7 @@ const navItems = [
   { name: 'Site Content', href: '/admin/content', icon: Globe },
   { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
+  { name: 'Links Manager', href: '/admin/links', icon: Link2 },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 

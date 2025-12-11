@@ -136,6 +136,78 @@ export type Database = {
         }
         Relationships: []
       }
+      linktree_links: {
+        Row: {
+          animation_enabled: boolean | null
+          button_color: string | null
+          button_shape: Database["public"]["Enums"]["link_button_shape"] | null
+          button_style: Database["public"]["Enums"]["link_button_style"] | null
+          created_at: string | null
+          icon: string | null
+          icon_color: string | null
+          id: string
+          is_visible: boolean | null
+          sort_order: number | null
+          subtitle: string | null
+          title: string
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          animation_enabled?: boolean | null
+          button_color?: string | null
+          button_shape?: Database["public"]["Enums"]["link_button_shape"] | null
+          button_style?: Database["public"]["Enums"]["link_button_style"] | null
+          created_at?: string | null
+          icon?: string | null
+          icon_color?: string | null
+          id?: string
+          is_visible?: boolean | null
+          sort_order?: number | null
+          subtitle?: string | null
+          title: string
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          animation_enabled?: boolean | null
+          button_color?: string | null
+          button_shape?: Database["public"]["Enums"]["link_button_shape"] | null
+          button_style?: Database["public"]["Enums"]["link_button_style"] | null
+          created_at?: string | null
+          icon?: string | null
+          icon_color?: string | null
+          id?: string
+          is_visible?: boolean | null
+          sort_order?: number | null
+          subtitle?: string | null
+          title?: string
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      linktree_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string | null
+          value: Json | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string | null
+          value?: Json | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: Json | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -220,6 +292,8 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer"
+      link_button_shape: "pill" | "rounded" | "square"
+      link_button_style: "solid" | "outline" | "neon" | "minimal"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -348,6 +422,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "viewer"],
+      link_button_shape: ["pill", "rounded", "square"],
+      link_button_style: ["solid", "outline", "neon", "minimal"],
     },
   },
 } as const
