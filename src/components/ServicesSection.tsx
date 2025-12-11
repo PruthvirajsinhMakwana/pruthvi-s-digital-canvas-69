@@ -149,7 +149,7 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-[120px]" />
       <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px]" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* IT Services Section */}
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-12">

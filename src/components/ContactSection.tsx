@@ -67,7 +67,7 @@ export const ContactSection = () => {
       <div className="absolute top-1/3 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
       <div className="absolute bottom-1/3 right-0 w-80 h-80 bg-secondary/10 rounded-full blur-[100px]" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-16">

@@ -92,7 +92,7 @@ export const AboutSection = () => {
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-16">
@@ -184,7 +184,7 @@ export const AboutSection = () => {
               </div>
 
               {/* Stats Row */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
                 {stats.map((stat, index) => (
                   <div
                     key={index}
@@ -209,7 +209,7 @@ export const AboutSection = () => {
                 <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">⚡</span>
                 My Skills
               </h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                 {skills.map((skill, index) => (
                   <div
                     key={index}
