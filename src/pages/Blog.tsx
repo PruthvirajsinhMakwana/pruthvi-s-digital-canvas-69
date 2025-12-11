@@ -97,7 +97,7 @@ const Blog = () => {
           <section className="py-16 sm:py-20 relative overflow-hidden bg-gradient-to-b from-primary/5 to-background">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.1),transparent_50%)]" />
             
-            <div className="container mx-auto px-6 relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
               <ScrollReveal animation="fade-up">
                 <div className="text-center max-w-3xl mx-auto">
                   <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
@@ -161,7 +161,7 @@ const Blog = () => {
 
           {/* Posts Section */}
           <section className="py-16">
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto px-4 sm:px-6">
               {isLoading ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="w-10 h-10 border-3 border-primary/30 border-t-primary rounded-full animate-spin" />

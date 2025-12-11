@@ -13,7 +13,7 @@ export const Footer = () => {
     <footer className="relative py-12 border-t border-border/30">
       <div className="absolute inset-0 tech-grid opacity-10" />
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
           {/* Logo & Copyright */}
           <div className="flex items-center gap-4">
