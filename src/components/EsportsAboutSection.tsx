@@ -42,9 +42,9 @@ const esportsStats = [
 
 const esportsSocialLinks = [
   { icon: Youtube, href: 'https://youtube.com/@pruthvirajsinh', label: 'YouTube', color: 'hover:text-[#ff0000]' },
-  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh.makwana', label: 'Instagram', color: 'hover:text-[#e4405f]' },
+  { icon: Instagram, href: 'https://www.instagram.com/pruthvirajsinh__makwana/', label: 'Instagram', color: 'hover:text-[#e4405f]' },
   { icon: Twitch, href: 'https://twitch.tv/pruthvirajsinh', label: 'Twitch', color: 'hover:text-[#9146ff]' },
-  { icon: Mail, href: 'mailto:pruthvirajsinh.biz@gmail.com', label: 'Email', color: 'hover:text-primary' },
+  { icon: Mail, href: 'mailto:pruthvirajsinhpvt@gmail.com', label: 'Email', color: 'hover:text-primary' },
 ];
 
 const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {

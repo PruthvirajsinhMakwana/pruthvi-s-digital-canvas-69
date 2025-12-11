@@ -41,10 +41,10 @@ const stats = [
 ];
 
 const socialLinks = [
-  { icon: Linkedin, href: 'https://linkedin.com/in/pruthvirajsinh-makwana', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
-  { icon: Github, href: 'https://github.com/pruthvirajsinh-makwana', label: 'GitHub', color: 'hover:text-[#333] dark:hover:text-white' },
-  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh.makwana', label: 'Instagram', color: 'hover:text-[#e4405f]' },
-  { icon: Mail, href: 'mailto:pruthvirajsinh.biz@gmail.com', label: 'Email', color: 'hover:text-primary' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/pruthvirajsinh-makwana-635974393/', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
+  { icon: Github, href: 'https://github.com/PruthvirajsinhMakwana', label: 'GitHub', color: 'hover:text-[#333] dark:hover:text-white' },
+  { icon: Instagram, href: 'https://www.instagram.com/pruthvirajsinh__makwana/', label: 'Instagram', color: 'hover:text-[#e4405f]' },
+  { icon: Mail, href: 'mailto:pruthvirajsinhpvt@gmail.com', label: 'Email', color: 'hover:text-primary' },
 ];
 
 const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
