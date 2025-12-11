@@ -5,11 +5,16 @@ import profileImage from '@/assets/profile-hero.png';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const FloatingCard = ({ icon: Icon, label, className }: { icon: any; label: string; className?: string }) => (
-  <div className={`glass-card rounded-xl sm:rounded-2xl p-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 neon-glow ${className}`}>
-    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+  <div className={`glass-card rounded-xl sm:rounded-2xl p-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 neon-glow cursor-pointer
+    transition-all duration-300 ease-out
+    hover:scale-110 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/20
+    hover:border-primary/40 hover:bg-card/80
+    group ${className}`}>
+    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center
+      transition-all duration-300 group-hover:from-primary/40 group-hover:to-secondary/40 group-hover:scale-110">
+      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary transition-all duration-300 group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
     </div>
-    <span className="font-medium text-foreground text-xs sm:text-sm">{label}</span>
+    <span className="font-medium text-foreground text-xs sm:text-sm transition-all duration-300 group-hover:text-primary">{label}</span>
   </div>
 );
 
@@ -101,48 +106,55 @@ export const HeroSection = () => {
           </div>
 
           {/* Right Content - Profile Image */}
-          <div className="relative flex justify-center lg:justify-end animate-scale-in order-1 lg:order-2 py-8 lg:py-0" style={{ animationDelay: '0.3s' }}>
-            {/* Glow Ring */}
+          <div className="relative flex items-center justify-center lg:justify-center animate-scale-in order-1 lg:order-2 py-6 lg:py-0" style={{ animationDelay: '0.3s' }}>
+            {/* Glow Ring - Centered */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-52 h-52 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[22rem] lg:h-[22rem] xl:w-[26rem] xl:h-[26rem] rounded-full border-2 border-primary/30 animate-rotate-slow" />
-              <div className="absolute w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] rounded-full border border-secondary/20 animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
+              <div className="w-56 h-56 sm:w-80 sm:h-80 md:w-[22rem] md:h-[22rem] lg:w-[24rem] lg:h-[24rem] xl:w-[28rem] xl:h-[28rem] rounded-full border-2 border-primary/30 animate-rotate-slow" />
+              <div className="absolute w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[22rem] lg:h-[22rem] xl:w-[26rem] xl:h-[26rem] rounded-full border border-secondary/20 animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
             </div>
             
-            {/* Profile Image Container */}
-            <div className="relative">
+            {/* Profile Image Container - Properly Centered */}
+            <div className="relative flex items-center justify-center">
               {/* Glowing background behind image */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 via-secondary/30 to-accent/40 blur-2xl scale-110" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/50 via-secondary/40 to-accent/50 blur-3xl scale-125 opacity-60" />
               
-              <div className="w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] rounded-full overflow-hidden neon-glow-lg relative z-10 border-4 border-primary/20">
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent z-10" />
+              {/* Main Image Container */}
+              <div className="w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[22rem] lg:h-[22rem] xl:w-[24rem] xl:h-[24rem] rounded-full overflow-hidden relative z-10 
+                border-4 border-primary/30 shadow-2xl shadow-primary/20
+                transition-transform duration-500 hover:scale-[1.02]">
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent z-10 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-secondary/20 z-10 pointer-events-none" />
+                
+                {/* Profile Image */}
                 <img
                   src={profileImage}
                   alt={settings.name}
-                  className="w-full h-full object-cover object-center scale-105"
+                  className="w-full h-full object-cover object-[center_20%]"
                   loading="eager"
                 />
               </div>
               
-              {/* Floating Cards - Positioned better */}
+              {/* Floating Cards - Better positioned around the circle */}
               <FloatingCard
                 icon={Code}
                 label="Developer"
-                className="absolute -left-12 lg:-left-16 top-[20%] floating hidden lg:flex"
+                className="absolute -left-16 lg:-left-20 xl:-left-24 top-[15%] floating hidden lg:flex z-20"
               />
               <FloatingCard
                 icon={Palette}
                 label="Designer"
-                className="absolute -right-10 lg:-right-14 top-[30%] floating-delayed hidden lg:flex"
+                className="absolute -right-14 lg:-right-18 xl:-right-22 top-[25%] floating-delayed hidden lg:flex z-20"
               />
               <FloatingCard
                 icon={Video}
                 label="Editor"
-                className="absolute -left-10 lg:-left-14 bottom-[25%] floating-slow hidden xl:flex"
+                className="absolute -left-14 lg:-left-18 xl:-left-22 bottom-[20%] floating-slow hidden xl:flex z-20"
               />
               <FloatingCard
                 icon={Globe}
                 label="Marketer"
-                className="absolute -right-12 lg:-right-16 bottom-[35%] floating hidden xl:flex"
+                className="absolute -right-16 lg:-right-20 xl:-right-24 bottom-[30%] floating hidden xl:flex z-20"
               />
             </div>
           </div>
