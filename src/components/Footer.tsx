@@ -47,6 +47,13 @@ export const Footer = () => {
         <div className="mt-8 pt-8 border-t border-border/30 text-center">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Pruthvirajsinh Makwana. All rights reserved.
+            {/* Hidden admin access - click the dot */}
+            <Link 
+              to="/auth" 
+              className="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-muted-foreground/30 hover:bg-primary transition-colors cursor-pointer"
+              title=""
+              aria-label="Admin access"
+            />
           </p>
         </div>
       </div>
