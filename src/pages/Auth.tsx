@@ -13,12 +13,16 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+// Default admin credentials
+const DEFAULT_ADMIN_EMAIL = 'pruthviraj.admin@example.com';
+const DEFAULT_ADMIN_PASSWORD = 'Pruthvi!01';
+
 const Auth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: DEFAULT_ADMIN_EMAIL,
+    password: DEFAULT_ADMIN_PASSWORD,
   });
 
   useEffect(() => {
@@ -44,18 +48,49 @@ const Auth = () => {
     try {
       loginSchema.parse(formData);
 
-      const { error } = await supabase.auth.signInWithPassword({
+      // First try to sign in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
 
-      if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          toast.error('Invalid email or password');
+      if (signInError) {
+        // If invalid credentials, try to sign up
+        if (signInError.message.includes('Invalid login credentials')) {
+          toast.info('Creating new account...');
+          
+          const { error: signUpError } = await supabase.auth.signUp({
+            email: formData.email,
+            password: formData.password,
+            options: {
+              emailRedirectTo: `${window.location.origin}/admin`,
+            },
+          });
+
+          if (signUpError) {
+            toast.error(signUpError.message);
+            return;
+          }
+
+          toast.success('Account created! Logging you in...');
+          
+          // Auto login after signup
+          const { error: loginError } = await supabase.auth.signInWithPassword({
+            email: formData.email,
+            password: formData.password,
+          });
+
+          if (loginError) {
+            toast.error('Account created but login failed. Please try again.');
+            return;
+          }
+
+          navigate('/admin');
+          return;
         } else {
-          toast.error(error.message);
+          toast.error(signInError.message);
+          return;
         }
-        return;
       }
 
       toast.success('Welcome back!');
@@ -150,6 +185,10 @@ const Auth = () => {
               )}
             </Button>
           </form>
+
+          <p className="text-center text-xs text-muted-foreground mt-4">
+            New accounts are created automatically on first login
+          </p>
         </div>
       </div>
     </div>
