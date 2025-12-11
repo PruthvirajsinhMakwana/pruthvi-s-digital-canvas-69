@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from './ThemeToggle';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
   { name: 'Services', href: '#services' },
-  { name: 'Projects', href: '#projects' },
+  { name: 'Testimonials', href: '#testimonials' },
   { name: 'Contact', href: '#contact' },
 ];
 
@@ -58,10 +59,11 @@ export const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button variant="hero" size="default">
-              Hire Me
+          {/* Theme Toggle & CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
+            <Button variant="hero" size="default" asChild>
+              <a href="#contact">Hire Me</a>
             </Button>
           </div>
 
@@ -93,9 +95,12 @@ export const Navigation = () => {
               {link.name}
             </a>
           ))}
-          <Button variant="hero" className="mt-2">
-            Hire Me
-          </Button>
+          <div className="flex items-center justify-between pt-2 border-t border-border/50">
+            <ThemeToggle />
+            <Button variant="hero" asChild>
+              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Hire Me</a>
+            </Button>
+          </div>
         </div>
       </div>
     </nav>

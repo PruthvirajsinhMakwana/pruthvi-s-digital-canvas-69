@@ -2,10 +2,39 @@ import { Navigation } from '@/components/Navigation';
 import { HeroSection } from '@/components/HeroSection';
 import { AboutSection } from '@/components/AboutSection';
 import { ServicesSection } from '@/components/ServicesSection';
+import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { ContactSection } from '@/components/ContactSection';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { Helmet } from 'react-helmet-async';
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Pruthvirajsinh Makwana",
+  "alternateName": "Pruthviraj Makwana",
+  "jobTitle": "IT Professional & Creative Technologist",
+  "description": "IT Professional specializing in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding",
+  "url": "https://pruthviraj.dev",
+  "sameAs": [
+    "https://linkedin.com/in/pruthvirajsinh-makwana",
+    "https://github.com/pruthvirajsinh-makwana",
+    "https://instagram.com/pruthvirajsinh.makwana"
+  ],
+  "knowsAbout": [
+    "Web Development",
+    "Digital Marketing",
+    "Graphic Design",
+    "Video Editing",
+    "SEO",
+    "Branding",
+    "UI/UX Design"
+  ],
+  "alumniOf": {
+    "@type": "EducationalOrganization",
+    "name": "Shati Business School"
+  }
+};
 
 const Index = () => {
   return (
@@ -19,6 +48,9 @@ const Index = () => {
         <meta property="og:type" content="website" />
         <meta name="author" content="Pruthvirajsinh Makwana" />
         <link rel="canonical" href="https://pruthviraj.dev" />
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
@@ -27,6 +59,7 @@ const Index = () => {
           <HeroSection />
           <AboutSection />
           <ServicesSection />
+          <TestimonialsSection />
           <ContactSection />
         </main>
         <Footer />
