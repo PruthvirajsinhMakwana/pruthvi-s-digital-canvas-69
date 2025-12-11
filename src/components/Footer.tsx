@@ -1,7 +1,10 @@
 import { Heart, ArrowUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export const Footer = () => {
+  const { settings } = useSiteSettings();
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -15,10 +18,10 @@ export const Footer = () => {
           {/* Logo & Copyright */}
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-heading font-bold text-primary-foreground neon-glow">
-              P
+              {settings.name.charAt(0)}
             </div>
             <div>
-              <p className="font-heading font-semibold text-foreground">Pruthvirajsinh Makwana</p>
+              <p className="font-heading font-semibold text-foreground">{settings.name}</p>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
                 Made with <Heart className="w-3 h-3 text-destructive fill-destructive" /> in India
               </p>
@@ -46,7 +49,7 @@ export const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-border/30 text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Pruthvirajsinh Makwana. All rights reserved.
+            © {new Date().getFullYear()} {settings.name}. All rights reserved.
             {/* Hidden admin access - click the dot */}
             <Link 
               to="/auth" 

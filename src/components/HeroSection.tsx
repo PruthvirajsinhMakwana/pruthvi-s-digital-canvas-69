@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowDown, Code, Palette, Video, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import profileImage from '@/assets/profile-hero.png';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const FloatingCard = ({ icon: Icon, label, className }: { icon: any; label: string; className?: string }) => (
   <div className={`glass-card rounded-xl sm:rounded-2xl p-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 neon-glow ${className}`}>
@@ -13,9 +14,11 @@ const FloatingCard = ({ icon: Icon, label, className }: { icon: any; label: stri
 );
 
 export const HeroSection = () => {
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { settings } = useSiteSettings();
+  
+  const nameParts = settings.name.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20">
@@ -36,56 +39,62 @@ export const HeroSection = () => {
           <div className="text-center lg:text-left animate-fade-in-up order-2 lg:order-1">
             <div className="inline-flex items-center gap-2 glass-card rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs sm:text-sm text-muted-foreground">Available for freelance work</span>
+              <span className="text-xs sm:text-sm text-muted-foreground">{settings.availabilityStatus}</span>
             </div>
             
             <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-4 sm:mb-6">
               <span className="text-foreground">Hi, I'm</span>
               <br />
-              <span className="gradient-text">Pruthvirajsinh</span>
+              <span className="gradient-text">{firstName}</span>
               <br />
-              <span className="text-foreground">Makwana</span>
+              <span className="text-foreground">{lastName}</span>
             </h1>
             
             <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-3 sm:mb-4 leading-relaxed">
-              <span className="text-primary font-medium">IT Professional</span> | <span className="text-secondary font-medium">Web Developer</span> | <span className="text-primary font-medium">Creative Designer</span>
+              {settings.title.split(' | ').map((part, index) => (
+                <span key={index}>
+                  {index > 0 && ' | '}
+                  <span className={index % 2 === 0 ? 'text-primary font-medium' : 'text-secondary font-medium'}>{part}</span>
+                </span>
+              ))}
             </p>
             
             <p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-4 sm:mb-6 leading-relaxed">
-              I build responsive websites, engaging digital content, and modern brand experiences using technology, creativity, and innovation.
+              {settings.description}
             </p>
 
             <div className="flex flex-wrap gap-2 sm:gap-3 justify-center lg:justify-start mb-6 sm:mb-8">
-              <span className="glass-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-foreground">Web Development</span>
-              <span className="glass-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-foreground">Digital Marketing</span>
-              <span className="glass-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-foreground">Graphic Design</span>
-              <span className="glass-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-foreground">Video Editing</span>
+              {settings.skillTags.map((tag) => (
+                <span key={tag} className="glass-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium text-foreground">
+                  {tag}
+                </span>
+              ))}
             </div>
             
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
               <Button size="lg" className="w-full sm:w-auto" asChild>
-                <Link to="/contact">
-                  Hire Me
+                <Link to={settings.hireMeLink}>
+                  {settings.hireMeText}
                   <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="w-full sm:w-auto" asChild>
-                <Link to="/services">View Services</Link>
+                <Link to={settings.servicesLink}>{settings.servicesText}</Link>
               </Button>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border/30">
               <div className="text-center lg:text-left">
-                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">50+</div>
+                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">{settings.projectsDone}</div>
                 <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Projects Done</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">15+</div>
+                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">{settings.toolsMastered}</div>
                 <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Tools Mastered</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">3+</div>
+                <div className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">{settings.yearsLearning}</div>
                 <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Years Learning</div>
               </div>
             </div>
@@ -105,7 +114,7 @@ export const HeroSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/30" />
                 <img
                   src={profileImage}
-                  alt="Pruthvirajsinh Makwana"
+                  alt={settings.name}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
