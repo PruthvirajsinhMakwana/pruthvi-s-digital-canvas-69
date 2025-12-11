@@ -1,7 +1,7 @@
 import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
-
+import { Link } from 'react-router-dom';
 const itServices = [
   {
     icon: Globe,
@@ -216,11 +216,11 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
                 Let's discuss your requirements and create something amazing together. Get in touch for a free consultation.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="px-8">
-                  Get in Touch
+                <Button size="lg" className="px-8" asChild>
+                  <Link to="/contact">Get in Touch</Link>
                 </Button>
-                <Button variant="outline" size="lg" className="px-8">
-                  View Portfolio
+                <Button variant="outline" size="lg" className="px-8" asChild>
+                  <Link to="/">View Portfolio</Link>
                 </Button>
               </div>
             </div>
