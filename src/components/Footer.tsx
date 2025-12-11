@@ -1,0 +1,53 @@
+import { Heart, ArrowUp } from 'lucide-react';
+
+export const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <footer className="relative py-12 border-t border-border/30">
+      <div className="absolute inset-0 tech-grid opacity-10" />
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+          {/* Logo & Copyright */}
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-heading font-bold text-primary-foreground neon-glow">
+              P
+            </div>
+            <div>
+              <p className="font-heading font-semibold text-foreground">Pruthvirajsinh Makwana</p>
+              <p className="text-sm text-muted-foreground flex items-center gap-1">
+                Made with <Heart className="w-3 h-3 text-destructive fill-destructive" /> in India
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <a href="#home" className="hover:text-primary transition-colors">Home</a>
+            <a href="#about" className="hover:text-primary transition-colors">About</a>
+            <a href="#projects" className="hover:text-primary transition-colors">Projects</a>
+            <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
+          </div>
+
+          {/* Back to Top */}
+          <button
+            onClick={scrollToTop}
+            className="w-10 h-10 rounded-xl glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"
+            aria-label="Back to top"
+          >
+            <ArrowUp className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          </button>
+        </div>
+
+        <div className="mt-8 pt-8 border-t border-border/30 text-center">
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Pruthvirajsinh Makwana. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
