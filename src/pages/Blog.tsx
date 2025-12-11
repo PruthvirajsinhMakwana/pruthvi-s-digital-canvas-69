@@ -5,9 +5,10 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { supabase } from '@/integrations/supabase/client';
-import { Calendar, ArrowRight, Tag } from 'lucide-react';
+import { Calendar, ArrowRight, Tag, Search, BookOpen, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
+import { Input } from '@/components/ui/input';
 
 interface BlogPost {
   id: string;
@@ -28,6 +29,7 @@ const Blog = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,143 +64,274 @@ const Blog = () => {
     fetchData();
   }, []);
 
-  const filteredPosts = selectedCategory
-    ? posts.filter(post => post.blog_categories?.slug === selectedCategory)
-    : posts;
+  const filteredPosts = posts.filter(post => {
+    const matchesCategory = !selectedCategory || post.blog_categories?.slug === selectedCategory;
+    const matchesSearch = !searchQuery || 
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  const featuredPost = filteredPosts[0];
+  const otherPosts = filteredPosts.slice(1);
+
+  const estimateReadTime = (excerpt: string) => {
+    const wordsPerMinute = 200;
+    const words = excerpt?.split(' ').length || 0;
+    return Math.max(1, Math.ceil(words / wordsPerMinute)) + ' min read';
+  };
 
   return (
     <>
       <Helmet>
-        <title>Blog - Pruthvirajsinh Makwana | Tech, Design & Marketing Insights</title>
-        <meta name="description" content="Read articles about Web Development, Digital Marketing, Graphic Design, and Technology by Pruthvirajsinh Makwana." />
+        <title>Blog - Pruthvirajsinh Makwana | Tech, Design, Gaming & Marketing Insights</title>
+        <meta name="description" content="Read articles about Web Development, Digital Marketing, Graphic Design, Esports, and Technology by Pruthvirajsinh Makwana." />
       </Helmet>
 
       <div className="min-h-screen bg-background">
         <Navigation />
         
-        <main className="pt-24 pb-16">
-          <div className="container mx-auto px-6">
-            {/* Header */}
-            <ScrollReveal animation="fade-up">
-              <div className="text-center mb-12">
-                <span className="text-primary font-medium text-sm tracking-wider uppercase">Blog</span>
-                <h1 className="font-heading text-4xl md:text-5xl font-bold mt-3 mb-4">
-                  Latest <span className="gradient-text">Articles</span>
-                </h1>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Insights, tutorials, and thoughts on web development, design, and digital marketing.
-                </p>
-              </div>
-            </ScrollReveal>
+        <main className="pt-20">
+          {/* Hero Section */}
+          <section className="py-16 sm:py-20 relative overflow-hidden bg-gradient-to-b from-primary/5 to-background">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.1),transparent_50%)]" />
+            
+            <div className="container mx-auto px-6 relative z-10">
+              <ScrollReveal animation="fade-up">
+                <div className="text-center max-w-3xl mx-auto">
+                  <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
+                    📝 Blog & Articles
+                  </span>
+                  <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+                    Latest <span className="text-primary">Insights</span>
+                  </h1>
+                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Thoughts, tutorials, and stories about web development, design, gaming, and digital marketing.
+                  </p>
+                </div>
+              </ScrollReveal>
 
-            {/* Categories Filter */}
-            <ScrollReveal animation="fade-up" delay={100}>
-              <div className="flex flex-wrap justify-center gap-3 mb-12">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    !selectedCategory
-                      ? 'bg-primary text-primary-foreground neon-glow'
-                      : 'bg-muted text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  All
-                </button>
-                {categories.map((cat) => (
+              {/* Search Bar */}
+              <ScrollReveal animation="fade-up" delay={100}>
+                <div className="max-w-md mx-auto mt-8">
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Search articles..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 h-12 rounded-full bg-card border-border"
+                    />
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              {/* Categories Filter */}
+              <ScrollReveal animation="fade-up" delay={150}>
+                <div className="flex flex-wrap justify-center gap-3 mt-8">
                   <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.slug)}
+                    onClick={() => setSelectedCategory(null)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === cat.slug
-                        ? 'bg-primary text-primary-foreground neon-glow'
-                        : 'bg-muted text-muted-foreground hover:text-foreground'
+                      !selectedCategory
+                        ? 'bg-primary text-primary-foreground shadow-lg'
+                        : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/50'
                     }`}
                   >
-                    {cat.name}
+                    All Posts
                   </button>
-                ))}
-              </div>
-            </ScrollReveal>
-
-            {/* Posts Grid */}
-            {isLoading ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-              </div>
-            ) : filteredPosts.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredPosts.map((post, index) => (
-                  <ScrollReveal key={post.id} animation="fade-up" delay={index * 100}>
-                    <Link
-                      to={`/blog/${post.slug}`}
-                      className="group glass-card rounded-2xl overflow-hidden hover:neon-glow transition-all duration-500 block h-full"
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.slug)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                        selectedCategory === cat.slug
+                          ? 'bg-primary text-primary-foreground shadow-lg'
+                          : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/50'
+                      }`}
                     >
-                      {/* Image */}
-                      <div className="aspect-video bg-muted relative overflow-hidden">
-                        {post.featured_image ? (
-                          <img
-                            src={post.featured_image}
-                            alt={post.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                            <span className="font-heading text-4xl text-primary/30">{post.title[0]}</span>
-                          </div>
-                        )}
-                        {post.blog_categories && (
-                          <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary/90 text-primary-foreground text-xs font-medium">
-                            {post.blog_categories.name}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-6">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                          <Calendar className="w-4 h-4" />
-                          {format(new Date(post.published_at), 'MMM d, yyyy')}
-                        </div>
-                        
-                        <h2 className="font-heading text-xl font-bold mb-3 group-hover:gradient-text transition-all line-clamp-2">
-                          {post.title}
-                        </h2>
-                        
-                        {post.excerpt && (
-                          <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
-                            {post.excerpt}
-                          </p>
-                        )}
-
-                        {post.tags && post.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {post.tags.slice(0, 3).map((tag, i) => (
-                              <span key={i} className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <Tag className="w-3 h-3" />
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        <span className="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all">
-                          Read More <ArrowRight className="w-4 h-4" />
-                        </span>
-                      </div>
-                    </Link>
-                  </ScrollReveal>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-                  <Tag className="w-8 h-8 text-muted-foreground" />
+                      {cat.name}
+                    </button>
+                  ))}
                 </div>
-                <h3 className="font-heading text-xl font-bold mb-2">No posts yet</h3>
-                <p className="text-muted-foreground">Check back later for new content!</p>
-              </div>
-            )}
-          </div>
+              </ScrollReveal>
+            </div>
+          </section>
+
+          {/* Posts Section */}
+          <section className="py-16">
+            <div className="container mx-auto px-6">
+              {isLoading ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="w-10 h-10 border-3 border-primary/30 border-t-primary rounded-full animate-spin" />
+                </div>
+              ) : filteredPosts.length > 0 ? (
+                <>
+                  {/* Featured Post */}
+                  {featuredPost && (
+                    <ScrollReveal animation="fade-up">
+                      <Link
+                        to={`/blog/${featuredPost.slug}`}
+                        className="group block mb-16"
+                      >
+                        <div className="grid lg:grid-cols-2 gap-8 bg-card border border-border rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-300">
+                          {/* Image */}
+                          <div className="aspect-video lg:aspect-auto lg:h-full relative overflow-hidden">
+                            {featuredPost.featured_image ? (
+                              <img
+                                src={featuredPost.featured_image}
+                                alt={featuredPost.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                            ) : (
+                              <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                                <BookOpen className="w-16 h-16 text-primary/30" />
+                              </div>
+                            )}
+                            <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                              Featured
+                            </span>
+                          </div>
+
+                          {/* Content */}
+                          <div className="p-8 lg:p-10 flex flex-col justify-center">
+                            {featuredPost.blog_categories && (
+                              <span className="inline-block px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-medium w-fit mb-4">
+                                {featuredPost.blog_categories.name}
+                              </span>
+                            )}
+                            
+                            <h2 className="font-heading text-2xl lg:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
+                              {featuredPost.title}
+                            </h2>
+                            
+                            {featuredPost.excerpt && (
+                              <p className="text-muted-foreground mb-6 line-clamp-3">
+                                {featuredPost.excerpt}
+                              </p>
+                            )}
+
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                              <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4" />
+                                {format(new Date(featuredPost.published_at), 'MMM d, yyyy')}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Clock className="w-4 h-4" />
+                                {estimateReadTime(featuredPost.excerpt || '')}
+                              </div>
+                            </div>
+
+                            <span className="inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
+                              Read Article <ArrowRight className="w-4 h-4" />
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </ScrollReveal>
+                  )}
+
+                  {/* Other Posts Grid */}
+                  {otherPosts.length > 0 && (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {otherPosts.map((post, index) => (
+                        <ScrollReveal key={post.id} animation="fade-up" delay={index * 80}>
+                          <Link
+                            to={`/blog/${post.slug}`}
+                            className="group bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 block h-full"
+                          >
+                            {/* Image */}
+                            <div className="aspect-video relative overflow-hidden">
+                              {post.featured_image ? (
+                                <img
+                                  src={post.featured_image}
+                                  alt={post.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+                                  <BookOpen className="w-10 h-10 text-primary/20" />
+                                </div>
+                              )}
+                              {post.blog_categories && (
+                                <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-card/90 backdrop-blur-sm text-foreground text-xs font-medium">
+                                  {post.blog_categories.name}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-6">
+                              <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-3.5 h-3.5" />
+                                  {format(new Date(post.published_at), 'MMM d, yyyy')}
+                                </div>
+                                <span>•</span>
+                                <div className="flex items-center gap-1">
+                                  <Clock className="w-3.5 h-3.5" />
+                                  {estimateReadTime(post.excerpt || '')}
+                                </div>
+                              </div>
+                              
+                              <h3 className="font-heading text-lg font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                {post.title}
+                              </h3>
+                              
+                              {post.excerpt && (
+                                <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
+                                  {post.excerpt}
+                                </p>
+                              )}
+
+                              {post.tags && post.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                  {post.tags.slice(0, 2).map((tag, i) => (
+                                    <span key={i} className="flex items-center gap-1 text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
+                                      <Tag className="w-3 h-3" />
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+
+                              <span className="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all">
+                                Read More <ArrowRight className="w-4 h-4" />
+                              </span>
+                            </div>
+                          </Link>
+                        </ScrollReveal>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <ScrollReveal animation="fade-up">
+                  <div className="text-center py-20">
+                    <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
+                      <BookOpen className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                    <h3 className="font-heading text-2xl font-bold mb-3">No Articles Found</h3>
+                    <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                      {searchQuery 
+                        ? `No articles matching "${searchQuery}". Try a different search term.`
+                        : 'No articles have been published yet. Check back soon for new content!'
+                      }
+                    </p>
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="text-primary font-medium hover:underline"
+                      >
+                        Clear search
+                      </button>
+                    )}
+                  </div>
+                </ScrollReveal>
+              )}
+            </div>
+          </section>
         </main>
         
         <Footer />
