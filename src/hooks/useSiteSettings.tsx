@@ -52,28 +52,47 @@ const defaultSettings: SiteSettings = {
   skillTags: ['Web Development', 'Digital Marketing', 'Graphic Design', 'Video Editing'],
 };
 
+// Cache settings in memory to avoid repeated API calls
+let cachedSettings: SiteSettings | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 export const useSiteSettings = () => {
-  const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
-  const [isLoading, setIsLoading] = useState(true);
+  const [settings, setSettings] = useState<SiteSettings>(cachedSettings || defaultSettings);
+  const [isLoading, setIsLoading] = useState(!cachedSettings);
 
   useEffect(() => {
+    // Use cached settings if available and fresh
+    if (cachedSettings && Date.now() - cacheTimestamp < CACHE_DURATION) {
+      setSettings(cachedSettings);
+      setIsLoading(false);
+      return;
+    }
     fetchSettings();
   }, []);
 
   const fetchSettings = async () => {
     try {
+      // Use maybeSingle() to avoid 406 errors when no rows exist
       const { data, error } = await supabase
         .from('site_settings')
         .select('*')
         .eq('key', 'general_settings')
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         console.error('Error fetching settings:', error);
       }
 
       if (data?.value) {
-        setSettings({ ...defaultSettings, ...(data.value as unknown as SiteSettings) });
+        const newSettings = { ...defaultSettings, ...(data.value as unknown as SiteSettings) };
+        cachedSettings = newSettings;
+        cacheTimestamp = Date.now();
+        setSettings(newSettings);
+      } else {
+        // No settings in DB, use defaults
+        cachedSettings = defaultSettings;
+        cacheTimestamp = Date.now();
       }
     } catch (error) {
       console.error('Error:', error);
@@ -96,6 +115,9 @@ export const useSiteSettings = () => {
 
       if (error) throw error;
 
+      // Update cache
+      cachedSettings = updatedSettings;
+      cacheTimestamp = Date.now();
       setSettings(updatedSettings);
       toast.success('Settings saved successfully');
       return true;
@@ -106,5 +128,10 @@ export const useSiteSettings = () => {
     }
   };
 
-  return { settings, isLoading, updateSettings, refetch: fetchSettings };
+  const clearCache = () => {
+    cachedSettings = null;
+    cacheTimestamp = 0;
+  };
+
+  return { settings, isLoading, updateSettings, refetch: fetchSettings, clearCache };
 };
