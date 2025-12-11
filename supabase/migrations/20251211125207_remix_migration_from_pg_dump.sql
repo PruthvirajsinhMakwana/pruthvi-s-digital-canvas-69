@@ -42,6 +42,29 @@ CREATE TYPE public.app_role AS ENUM (
 
 
 --
+-- Name: link_button_shape; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.link_button_shape AS ENUM (
+    'pill',
+    'rounded',
+    'square'
+);
+
+
+--
+-- Name: link_button_style; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.link_button_style AS ENUM (
+    'solid',
+    'outline',
+    'neon',
+    'minimal'
+);
+
+
+--
 -- Name: handle_new_user(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -146,6 +169,40 @@ CREATE TABLE public.contact_messages (
 
 
 --
+-- Name: linktree_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.linktree_links (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    title text NOT NULL,
+    subtitle text,
+    url text NOT NULL,
+    icon text DEFAULT 'link'::text,
+    button_color text DEFAULT '#873CFF'::text,
+    button_shape public.link_button_shape DEFAULT 'pill'::public.link_button_shape,
+    button_style public.link_button_style DEFAULT 'solid'::public.link_button_style,
+    icon_color text DEFAULT '#FFFFFF'::text,
+    animation_enabled boolean DEFAULT true,
+    is_visible boolean DEFAULT true,
+    sort_order integer DEFAULT 0,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+
+--
+-- Name: linktree_settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.linktree_settings (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    key text NOT NULL,
+    value jsonb,
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+
+--
 -- Name: profiles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -232,6 +289,30 @@ ALTER TABLE ONLY public.contact_messages
 
 
 --
+-- Name: linktree_links linktree_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.linktree_links
+    ADD CONSTRAINT linktree_links_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: linktree_settings linktree_settings_key_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.linktree_settings
+    ADD CONSTRAINT linktree_settings_key_key UNIQUE (key);
+
+
+--
+-- Name: linktree_settings linktree_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.linktree_settings
+    ADD CONSTRAINT linktree_settings_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -276,6 +357,20 @@ ALTER TABLE ONLY public.user_roles
 --
 
 CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON public.blog_posts FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: linktree_links update_linktree_links_updated_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER update_linktree_links_updated_at BEFORE UPDATE ON public.linktree_links FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: linktree_settings update_linktree_settings_updated_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER update_linktree_settings_updated_at BEFORE UPDATE ON public.linktree_settings FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --
@@ -325,6 +420,13 @@ ALTER TABLE ONLY public.user_roles
 
 
 --
+-- Name: linktree_links Admins can manage all links; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Admins can manage all links" ON public.linktree_links USING (public.has_role(auth.uid(), 'admin'::public.app_role));
+
+
+--
 -- Name: blog_posts Admins can manage all posts; Type: POLICY; Schema: public; Owner: -
 --
 
@@ -336,6 +438,13 @@ CREATE POLICY "Admins can manage all posts" ON public.blog_posts TO authenticate
 --
 
 CREATE POLICY "Admins can manage categories" ON public.blog_categories TO authenticated USING (public.has_role(auth.uid(), 'admin'::public.app_role));
+
+
+--
+-- Name: linktree_settings Admins can manage linktree settings; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Admins can manage linktree settings" ON public.linktree_settings USING (public.has_role(auth.uid(), 'admin'::public.app_role));
 
 
 --
@@ -388,6 +497,13 @@ CREATE POLICY "Anyone can view categories" ON public.blog_categories FOR SELECT 
 
 
 --
+-- Name: linktree_settings Anyone can view linktree settings; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Anyone can view linktree settings" ON public.linktree_settings FOR SELECT USING (true);
+
+
+--
 -- Name: blog_posts Anyone can view published posts; Type: POLICY; Schema: public; Owner: -
 --
 
@@ -399,6 +515,13 @@ CREATE POLICY "Anyone can view published posts" ON public.blog_posts FOR SELECT 
 --
 
 CREATE POLICY "Anyone can view settings" ON public.site_settings FOR SELECT USING (true);
+
+
+--
+-- Name: linktree_links Anyone can view visible links; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Anyone can view visible links" ON public.linktree_links FOR SELECT USING ((is_visible = true));
 
 
 --
@@ -439,6 +562,18 @@ ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: linktree_links; Type: ROW SECURITY; Schema: public; Owner: -
+--
+
+ALTER TABLE public.linktree_links ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: linktree_settings; Type: ROW SECURITY; Schema: public; Owner: -
+--
+
+ALTER TABLE public.linktree_settings ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: profiles; Type: ROW SECURITY; Schema: public; Owner: -
