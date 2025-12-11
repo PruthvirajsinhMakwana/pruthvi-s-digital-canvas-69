@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Briefcase, GraduationCap, Award } from 'lucide-react';
+import { Download, Briefcase, GraduationCap, Award, Linkedin, Github, Instagram, Mail, MapPin, Calendar } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 
 const skills = [
-  { name: 'Web Development (HTML, CSS, JS, WordPress)', level: 90, color: 'from-primary to-secondary' },
-  { name: 'Digital Marketing & SEO', level: 85, color: 'from-secondary to-accent' },
-  { name: 'Graphic Design (Photoshop, Canva, Illustrator)', level: 85, color: 'from-accent to-primary' },
-  { name: 'Video Editing & Motion Graphics', level: 80, color: 'from-primary to-neon-blue' },
-  { name: 'UI/UX Design', level: 75, color: 'from-neon-blue to-secondary' },
-  { name: 'Automation & AI Tools', level: 80, color: 'from-secondary to-primary' },
+  { name: 'Web Development', level: 90, icon: '🌐' },
+  { name: 'Digital Marketing & SEO', level: 85, icon: '📈' },
+  { name: 'Graphic Design', level: 85, icon: '🎨' },
+  { name: 'Video Editing', level: 80, icon: '🎬' },
+  { name: 'UI/UX Design', level: 75, icon: '✨' },
+  { name: 'AI & Automation', level: 80, icon: '🤖' },
 ];
 
 const experiences = [
@@ -17,32 +17,33 @@ const experiences = [
     year: '2024 – Present',
     title: 'B.Voc in Information Technology',
     company: 'Shati Business School',
-    description: 'Learning IT fundamentals, development, networking, marketing, and creative digital tools.',
+    type: 'education',
   },
   {
     year: '2023 – Present',
     title: 'Freelance Digital Creator',
     company: 'Self-Employed',
-    description: 'Worked on multiple design, marketing, and video editing projects for local brands and businesses.',
+    type: 'work',
   },
   {
     year: '2023 – Present',
-    title: 'Web Development Projects',
-    company: 'Freelance',
-    description: 'Created personal and client-based web designs, landing pages, and business sites.',
-  },
-  {
-    year: '2022 – 2023',
-    title: 'Independent Learning & Skill Building',
-    company: 'Self-Learning',
-    description: 'Self-learned digital marketing, graphic design, and foundational programming.',
+    title: 'Web Developer',
+    company: 'Freelance Projects',
+    type: 'work',
   },
 ];
 
 const stats = [
-  { icon: Briefcase, value: 50, label: 'Projects Completed', suffix: '+' },
-  { icon: GraduationCap, value: 15, label: 'Tools Mastered', suffix: '+' },
-  { icon: Award, value: 3, label: 'Years Learning', suffix: '+' },
+  { icon: Briefcase, value: 50, label: 'Projects', suffix: '+' },
+  { icon: GraduationCap, value: 15, label: 'Tools', suffix: '+' },
+  { icon: Award, value: 3, label: 'Years', suffix: '+' },
+];
+
+const socialLinks = [
+  { icon: Linkedin, href: 'https://linkedin.com/in/pruthvirajsinh-makwana', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
+  { icon: Github, href: 'https://github.com/pruthvirajsinh-makwana', label: 'GitHub', color: 'hover:text-[#333] dark:hover:text-white' },
+  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh.makwana', label: 'Instagram', color: 'hover:text-[#e4405f]' },
+  { icon: Mail, href: 'mailto:contact@pruthviraj.dev', label: 'Email', color: 'hover:text-primary' },
 ];
 
 const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
@@ -78,7 +79,7 @@ const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: strin
   }, [value]);
 
   return (
-    <div ref={ref} className="font-heading text-4xl sm:text-5xl font-bold gradient-text">
+    <div ref={ref} className="font-heading text-3xl sm:text-4xl font-bold text-primary">
       {count}{suffix}
     </div>
   );
@@ -86,100 +87,189 @@ const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: strin
 
 export const AboutSection = () => {
   return (
-    <section id="about" className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 tech-grid opacity-20" />
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-secondary/10 rounded-full blur-[100px]" />
-
+    <section id="about" className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background">
+      {/* Decorative Elements */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+      
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <ScrollReveal animation="fade-up">
           <div className="text-center mb-16">
-            <span className="text-primary font-medium text-sm tracking-wider uppercase">About Me</span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
-              Interactive <span className="gradient-text">Resume</span>
+            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              Get to Know Me
+            </span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold">
+              About <span className="text-primary">Me</span>
             </h2>
-            <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              I'm Pruthvirajsinh Makwana, an aspiring IT Professional currently pursuing a Bachelor of Vocation (B.Voc) in Information Technology from Shati Business School. I specialize in Web Development, Digital Marketing, Graphic Design, Video Editing, and Brand Creation — bringing together both technical expertise and creative problem-solving to craft powerful digital experiences.
-            </p>
           </div>
         </ScrollReveal>
 
-        {/* Stats Row */}
-        <ScrollReveal animation="scale" delay={200}>
-          <div className="grid grid-cols-3 gap-6 mb-16">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="glass-card rounded-2xl p-6 text-center hover:neon-glow transition-all duration-300"
-              >
-                <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </ScrollReveal>
-
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Skills Matrix */}
-          <div className="glass-card rounded-3xl p-8">
-            <h3 className="font-heading text-2xl font-bold mb-8">Skills Matrix</h3>
-            <div className="space-y-6">
-              {skills.map((skill, index) => (
-                <div key={index} className="group">
-                  <div className="flex justify-between mb-2">
-                    <span className="font-medium text-foreground group-hover:text-primary transition-colors">
-                      {skill.name}
-                    </span>
-                    <span className="text-muted-foreground">{skill.level}%</span>
-                  </div>
-                  <div className="h-3 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className={`h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-1000 ease-out`}
-                      style={{ width: `${skill.level}%` }}
-                    />
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-5 gap-8 mb-16">
+          {/* Left Column - Profile Card */}
+          <ScrollReveal animation="fade-up" delay={100} className="lg:col-span-2">
+            <div className="bg-card border border-border rounded-3xl p-8 h-full">
+              <div className="text-center mb-6">
+                <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-secondary p-1">
+                  <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
+                    <span className="text-4xl font-heading font-bold text-primary">PM</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+                <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
+                <p className="text-primary font-medium">IT Professional & Creative Technologist</p>
+              </div>
 
-          {/* Experience Timeline */}
-          <div className="glass-card rounded-3xl p-8">
-            <h3 className="font-heading text-2xl font-bold mb-8">Experience Timeline</h3>
-            <div className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
-              
-              <div className="space-y-8">
-                {experiences.map((exp, index) => (
-                  <div key={index} className="relative pl-12 group">
-                    {/* Timeline Dot */}
-                    <div className="absolute left-0 top-1 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center neon-glow group-hover:scale-125 transition-transform duration-300">
-                      <div className="w-3 h-3 rounded-full bg-background" />
-                    </div>
-                    
-                    <div className="glass-card rounded-xl p-4 hover:neon-glow transition-all duration-300">
-                      <span className="text-primary font-semibold text-sm">{exp.year}</span>
-                      <h4 className="font-heading font-bold text-lg mt-1">{exp.title}</h4>
-                      <p className="text-muted-foreground text-sm">{exp.company}</p>
-                      <p className="text-muted-foreground text-sm mt-2">{exp.description}</p>
-                    </div>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  <span>Gujarat, India</span>
+                </div>
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>Available for Freelance</span>
+                </div>
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <GraduationCap className="w-4 h-4 text-primary" />
+                  <span>B.Voc IT Student</span>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div className="border-t border-border pt-6">
+                <p className="text-sm text-muted-foreground mb-4 text-center">Connect with me</p>
+                <div className="flex justify-center gap-3">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      className={`w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground transition-all duration-300 hover:scale-110 ${social.color}`}
+                    >
+                      <social.icon className="w-5 h-5" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Download Resume */}
+              <Button variant="default" size="lg" className="w-full mt-6 group">
+                <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
+                Download Resume
+              </Button>
+            </div>
+          </ScrollReveal>
+
+          {/* Right Column - Bio & Details */}
+          <ScrollReveal animation="fade-up" delay={200} className="lg:col-span-3">
+            <div className="space-y-6 h-full">
+              {/* Bio Card */}
+              <div className="bg-card border border-border rounded-3xl p-8">
+                <h3 className="font-heading text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">👋</span>
+                  Hello!
+                </h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  I'm <span className="text-foreground font-medium">Pruthvirajsinh Makwana</span>, a passionate IT Professional currently pursuing my Bachelor of Vocation (B.Voc) in Information Technology at Shati Business School.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  I specialize in creating digital experiences that combine <span className="text-primary font-medium">technical expertise</span> with <span className="text-primary font-medium">creative problem-solving</span>. From building responsive websites to crafting compelling brand identities, I bring ideas to life through code and design.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  My toolkit includes <span className="text-foreground">Web Development</span>, <span className="text-foreground">Digital Marketing</span>, <span className="text-foreground">Graphic Design</span>, <span className="text-foreground">Video Editing</span>, and <span className="text-foreground">AI-powered automation</span>. I'm always eager to learn new technologies and take on challenging projects.
+                </p>
+              </div>
+
+              {/* Stats Row */}
+              <div className="grid grid-cols-3 gap-4">
+                {stats.map((stat, index) => (
+                  <div
+                    key={index}
+                    className="bg-card border border-border rounded-2xl p-4 text-center hover:border-primary/50 transition-colors"
+                  >
+                    <stat.icon className="w-6 h-6 text-primary mx-auto mb-2" />
+                    <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                    <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
-        {/* Download Resume */}
-        <div className="text-center mt-12">
-          <Button variant="hero" size="xl" className="group">
-            <Download className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
-            Download Resume
-          </Button>
+        {/* Skills & Experience Grid */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Skills */}
+          <ScrollReveal animation="fade-up" delay={300}>
+            <div className="bg-card border border-border rounded-3xl p-8">
+              <h3 className="font-heading text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">⚡</span>
+                My Skills
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                {skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="group p-4 rounded-xl bg-muted/50 hover:bg-primary/10 transition-all duration-300 cursor-default"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-xl">{skill.icon}</span>
+                      <span className="font-medium text-sm group-hover:text-primary transition-colors">
+                        {skill.name}
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-700"
+                        style={{ width: `${skill.level}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1 block">{skill.level}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {/* Experience Timeline */}
+          <ScrollReveal animation="fade-up" delay={400}>
+            <div className="bg-card border border-border rounded-3xl p-8">
+              <h3 className="font-heading text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">📅</span>
+                Experience
+              </h3>
+              <div className="space-y-4">
+                {experiences.map((exp, index) => (
+                  <div
+                    key={index}
+                    className="relative pl-6 border-l-2 border-primary/30 hover:border-primary transition-colors"
+                  >
+                    <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary" />
+                    <span className="text-xs text-primary font-medium">{exp.year}</span>
+                    <h4 className="font-heading font-semibold text-foreground">{exp.title}</h4>
+                    <p className="text-sm text-muted-foreground">{exp.company}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Quick Facts */}
+              <div className="mt-8 pt-6 border-t border-border">
+                <h4 className="font-medium text-sm text-muted-foreground mb-3">Quick Facts</h4>
+                <div className="flex flex-wrap gap-2">
+                  {['Problem Solver', 'Quick Learner', 'Team Player', 'Detail Oriented'].map((tag, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
