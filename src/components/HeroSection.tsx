@@ -135,26 +135,26 @@ export const HeroSection = () => {
                 />
               </div>
               
-              {/* Floating Cards - All visible on lg screens, no floating animation */}
+              {/* Floating Cards - All visible on lg screens with smooth loop animations */}
               <FloatingCard
                 icon={Code}
                 label="Developer"
-                className="absolute -left-20 xl:-left-28 top-[10%] hidden lg:flex z-20"
+                className="absolute -left-20 xl:-left-28 top-[10%] hidden lg:flex z-20 animate-float-1"
               />
               <FloatingCard
                 icon={Palette}
                 label="Designer"
-                className="absolute -right-16 xl:-right-24 top-[20%] hidden lg:flex z-20"
+                className="absolute -right-16 xl:-right-24 top-[20%] hidden lg:flex z-20 animate-float-2"
               />
               <FloatingCard
                 icon={Video}
                 label="Editor"
-                className="absolute -left-16 xl:-left-24 bottom-[15%] hidden lg:flex z-20"
+                className="absolute -left-16 xl:-left-24 bottom-[15%] hidden lg:flex z-20 animate-float-3"
               />
               <FloatingCard
                 icon={Globe}
                 label="Marketer"
-                className="absolute -right-20 xl:-right-28 bottom-[25%] hidden lg:flex z-20"
+                className="absolute -right-20 xl:-right-28 bottom-[25%] hidden lg:flex z-20 animate-float-4"
               />
             </div>
           </div>

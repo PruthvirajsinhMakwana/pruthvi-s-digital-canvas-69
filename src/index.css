@@ -226,6 +226,83 @@
   }
 }
 
+/* Smooth floating animations for cards */
+@keyframes float-smooth-1 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-8px) translateX(3px);
+  }
+  50% {
+    transform: translateY(-12px) translateX(0px);
+  }
+  75% {
+    transform: translateY(-6px) translateX(-3px);
+  }
+}
+
+@keyframes float-smooth-2 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-6px) translateX(-4px);
+  }
+  50% {
+    transform: translateY(-10px) translateX(0px);
+  }
+  75% {
+    transform: translateY(-4px) translateX(4px);
+  }
+}
+
+@keyframes float-smooth-3 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-10px) translateX(2px);
+  }
+  50% {
+    transform: translateY(-6px) translateX(-2px);
+  }
+  75% {
+    transform: translateY(-14px) translateX(0px);
+  }
+}
+
+@keyframes float-smooth-4 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-5px) translateX(-3px);
+  }
+  50% {
+    transform: translateY(-15px) translateX(2px);
+  }
+  75% {
+    transform: translateY(-8px) translateX(-1px);
+  }
+}
+
+.animate-float-1 {
+  animation: float-smooth-1 4s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-smooth-2 5s ease-in-out infinite;
+}
+
+.animate-float-3 {
+  animation: float-smooth-3 4.5s ease-in-out infinite;
+}
+
+.animate-float-4 {
+  animation: float-smooth-4 5.5s ease-in-out infinite;
+}
+
 @keyframes glow-pulse {
   0%, 100% {
     box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
