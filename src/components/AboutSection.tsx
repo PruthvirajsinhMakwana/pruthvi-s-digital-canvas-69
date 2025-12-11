@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, Briefcase, GraduationCap, Award } from 'lucide-react';
+import { ScrollReveal } from '@/hooks/useScrollReveal';
 
 const skills = [
   { name: 'Web Development (HTML, CSS, JS, WordPress)', level: 90, color: 'from-primary to-secondary' },
@@ -93,29 +94,33 @@ export const AboutSection = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <span className="text-primary font-medium text-sm tracking-wider uppercase">About Me</span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
-            Interactive <span className="gradient-text">Resume</span>
-          </h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            I'm Pruthvirajsinh Makwana, an aspiring IT Professional currently pursuing a Bachelor of Vocation (B.Voc) in Information Technology from Shati Business School. I specialize in Web Development, Digital Marketing, Graphic Design, Video Editing, and Brand Creation — bringing together both technical expertise and creative problem-solving to craft powerful digital experiences.
-          </p>
-        </div>
+        <ScrollReveal animation="fade-up">
+          <div className="text-center mb-16">
+            <span className="text-primary font-medium text-sm tracking-wider uppercase">About Me</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
+              Interactive <span className="gradient-text">Resume</span>
+            </h2>
+            <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              I'm Pruthvirajsinh Makwana, an aspiring IT Professional currently pursuing a Bachelor of Vocation (B.Voc) in Information Technology from Shati Business School. I specialize in Web Development, Digital Marketing, Graphic Design, Video Editing, and Brand Creation — bringing together both technical expertise and creative problem-solving to craft powerful digital experiences.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-6 mb-16">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="glass-card rounded-2xl p-6 text-center hover:neon-glow transition-all duration-300"
-            >
-              <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
-              <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+        <ScrollReveal animation="scale" delay={200}>
+          <div className="grid grid-cols-3 gap-6 mb-16">
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+                className="glass-card rounded-2xl p-6 text-center hover:neon-glow transition-all duration-300"
+              >
+                <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Skills Matrix */}

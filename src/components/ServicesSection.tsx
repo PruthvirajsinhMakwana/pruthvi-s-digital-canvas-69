@@ -1,5 +1,6 @@
 import { Globe, Palette, Video, Megaphone, Layers, PenTool } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ScrollReveal } from '@/hooks/useScrollReveal';
 
 const services = [
   {
@@ -56,54 +57,57 @@ export const ServicesSection = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <span className="text-primary font-medium text-sm tracking-wider uppercase">What I Do</span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
-            My <span className="gradient-text">Services</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Comprehensive digital solutions tailored to help your brand stand out and succeed online.
-          </p>
-        </div>
+        <ScrollReveal animation="fade-up">
+          <div className="text-center mb-16">
+            <span className="text-primary font-medium text-sm tracking-wider uppercase">What I Do</span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
+              My <span className="gradient-text">Services</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Comprehensive digital solutions tailored to help your brand stand out and succeed online.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Services Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <div
-              key={index}
-              className="group relative glass-card rounded-3xl p-8 hover:neon-glow transition-all duration-500 hover:-translate-y-2"
-            >
-              {/* Gradient Border Effect */}
-              <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl`} />
-              
-              {/* Icon */}
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 neon-glow`}>
-                <service.icon className="w-8 h-8 text-primary-foreground" />
+            <ScrollReveal key={index} animation="fade-up" delay={index * 100}>
+              <div
+                className="group relative glass-card rounded-3xl p-8 hover:neon-glow transition-all duration-500 hover:-translate-y-2 h-full"
+              >
+                {/* Gradient Border Effect */}
+                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl`} />
+                
+                {/* Icon */}
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 neon-glow`}>
+                  <service.icon className="w-8 h-8 text-primary-foreground" />
+                </div>
+
+                {/* Content */}
+                <h3 className="font-heading text-xl font-bold mb-3 group-hover:gradient-text transition-all duration-300">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  {service.description}
+                </p>
+
+                {/* Deliverables */}
+                <div className="space-y-2 mb-6">
+                  {service.deliverables.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient}`} />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <Button variant="glass" size="sm" className="w-full group-hover:neon-glow">
+                  Learn More
+                </Button>
               </div>
-
-              {/* Content */}
-              <h3 className="font-heading text-xl font-bold mb-3 group-hover:gradient-text transition-all duration-300">
-                {service.title}
-              </h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                {service.description}
-              </p>
-
-              {/* Deliverables */}
-              <div className="space-y-2 mb-6">
-                {service.deliverables.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient}`} />
-                    {item}
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <Button variant="glass" size="sm" className="w-full group-hover:neon-glow">
-                Learn More
-              </Button>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
