@@ -46,6 +46,18 @@ export const ContactSection = () => {
         });
 
       if (error) throw error;
+
+      // Send Telegram notification (don't block on failure)
+      supabase.functions.invoke('send-telegram-notification', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          message: formData.message,
+        },
+      }).catch((err) => {
+        console.error('Telegram notification failed:', err);
+      });
       
       toast.success('Message sent successfully!', {
         description: "I'll get back to you as soon as possible.",
