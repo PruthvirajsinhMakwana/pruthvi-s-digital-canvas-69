@@ -42,16 +42,31 @@ export const HeroSection = () => {
               <span className="text-foreground">Makwana</span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
-              Helping Brands Grow With <span className="text-primary font-medium">Creativity</span>, <span className="text-secondary font-medium">Technology</span> & <span className="text-accent font-medium">Digital Innovation</span>.
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-4 leading-relaxed">
+              <span className="text-primary font-medium">IT Professional</span> | <span className="text-secondary font-medium">Web Developer</span> | <span className="text-accent font-medium">Digital Marketer</span> | <span className="text-primary font-medium">Creative Designer</span>
             </p>
             
+            <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed">
+              I build responsive websites, engaging digital content, and modern brand experiences using the power of technology, creativity, and innovation.
+            </p>
+
+            <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8">
+              <span className="glass-card px-3 py-1.5 rounded-full text-xs font-medium text-foreground">Web Development</span>
+              <span className="glass-card px-3 py-1.5 rounded-full text-xs font-medium text-foreground">Digital Marketing & SEO</span>
+              <span className="glass-card px-3 py-1.5 rounded-full text-xs font-medium text-foreground">Graphic Design</span>
+              <span className="glass-card px-3 py-1.5 rounded-full text-xs font-medium text-foreground">Video Editing</span>
+              <span className="glass-card px-3 py-1.5 rounded-full text-xs font-medium text-foreground">Branding & Automation</span>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button variant="hero" size="xl" className="group">
-                View Projects
+              <Button variant="hero" size="xl" className="group" onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}>
+                Hire Me
                 <ArrowDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
               </Button>
-              <Button variant="hero-outline" size="xl">
+              <Button variant="hero-outline" size="xl" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>
+                Explore My Work
+              </Button>
+              <Button variant="glass" size="xl" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
                 Contact Me
               </Button>
             </div>
@@ -63,12 +78,12 @@ export const HeroSection = () => {
                 <div className="text-sm text-muted-foreground mt-1">Projects Done</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="font-heading text-3xl sm:text-4xl font-bold gradient-text">30+</div>
-                <div className="text-sm text-muted-foreground mt-1">Happy Clients</div>
+                <div className="font-heading text-3xl sm:text-4xl font-bold gradient-text">15+</div>
+                <div className="text-sm text-muted-foreground mt-1">Tools Mastered</div>
               </div>
               <div className="text-center lg:text-left">
                 <div className="font-heading text-3xl sm:text-4xl font-bold gradient-text">3+</div>
-                <div className="text-sm text-muted-foreground mt-1">Years Experience</div>
+                <div className="text-sm text-muted-foreground mt-1">Years Learning</div>
               </div>
             </div>
           </div>

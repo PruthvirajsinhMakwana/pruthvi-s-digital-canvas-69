@@ -3,32 +3,38 @@ import { Button } from '@/components/ui/button';
 import { Download, Briefcase, GraduationCap, Award } from 'lucide-react';
 
 const skills = [
-  { name: 'Web Development', level: 90, color: 'from-primary to-secondary' },
-  { name: 'Graphic Design', level: 85, color: 'from-secondary to-accent' },
-  { name: 'Video Editing', level: 80, color: 'from-accent to-primary' },
-  { name: 'Digital Marketing', level: 85, color: 'from-primary to-neon-blue' },
+  { name: 'Web Development (HTML, CSS, JS, WordPress)', level: 90, color: 'from-primary to-secondary' },
+  { name: 'Digital Marketing & SEO', level: 85, color: 'from-secondary to-accent' },
+  { name: 'Graphic Design (Photoshop, Canva, Illustrator)', level: 85, color: 'from-accent to-primary' },
+  { name: 'Video Editing & Motion Graphics', level: 80, color: 'from-primary to-neon-blue' },
   { name: 'UI/UX Design', level: 75, color: 'from-neon-blue to-secondary' },
-  { name: 'SEO & Analytics', level: 80, color: 'from-secondary to-primary' },
+  { name: 'Automation & AI Tools', level: 80, color: 'from-secondary to-primary' },
 ];
 
 const experiences = [
   {
-    year: '2024',
-    title: 'Freelance IT Professional',
+    year: '2024 – Present',
+    title: 'B.Voc in Information Technology',
+    company: 'Shati Business School',
+    description: 'Learning IT fundamentals, development, networking, marketing, and creative digital tools.',
+  },
+  {
+    year: '2023 – Present',
+    title: 'Freelance Digital Creator',
     company: 'Self-Employed',
-    description: 'Providing comprehensive web development, design, and digital marketing services.',
+    description: 'Worked on multiple design, marketing, and video editing projects for local brands and businesses.',
   },
   {
-    year: '2023',
-    title: 'Digital Marketing Specialist',
-    company: 'Various Clients',
-    description: 'Managed social media campaigns and SEO strategies for multiple brands.',
-  },
-  {
-    year: '2022',
-    title: 'Web Developer & Designer',
+    year: '2023 – Present',
+    title: 'Web Development Projects',
     company: 'Freelance',
-    description: 'Started professional journey creating websites and brand identities.',
+    description: 'Created personal and client-based web designs, landing pages, and business sites.',
+  },
+  {
+    year: '2022 – 2023',
+    title: 'Independent Learning & Skill Building',
+    company: 'Self-Learning',
+    description: 'Self-learned digital marketing, graphic design, and foundational programming.',
   },
 ];
 
@@ -92,8 +98,8 @@ export const AboutSection = () => {
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-4">
             Interactive <span className="gradient-text">Resume</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            A passionate IT professional with expertise in web development, digital marketing, and creative design.
+          <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            I'm Pruthvirajsinh Makwana, an aspiring IT Professional currently pursuing a Bachelor of Vocation (B.Voc) in Information Technology from Shati Business School. I specialize in Web Development, Digital Marketing, Graphic Design, Video Editing, and Brand Creation — bringing together both technical expertise and creative problem-solving to craft powerful digital experiences.
           </p>
         </div>
 

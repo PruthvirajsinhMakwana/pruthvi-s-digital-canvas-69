@@ -11,12 +11,13 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Pruthvirajsinh Makwana | IT Professional - Web Developer, Digital Marketing & Design</title>
-        <meta name="description" content="Pruthvirajsinh Makwana is a skilled IT professional specializing in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding. Helping brands grow with creativity and innovation." />
-        <meta name="keywords" content="Pruthvirajsinh Makwana, Web Developer, Digital Marketing, Graphic Design, Video Editing, UI/UX Design, Branding, IT Professional, Gujarat, India" />
-        <meta property="og:title" content="Pruthvirajsinh Makwana | IT Professional" />
-        <meta property="og:description" content="Helping Brands Grow With Creativity, Technology & Digital Innovation." />
+        <title>Pruthvirajsinh Makwana | IT Professional - Web Developer, Digital Marketer, Creative Designer</title>
+        <meta name="description" content="I'm Pruthvirajsinh Makwana, an IT Professional with strong creative and technical skills in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding. I build modern, responsive websites and engaging digital content for brands and individuals." />
+        <meta name="keywords" content="Pruthvirajsinh Makwana, Pruthviraj Makwana, IT Professional, Web Developer India, Digital Marketer India, Graphic Designer, Video Editor, AI Tools Expert, Creative Technologist, Portfolio Website, SEO Optimization, Branding, Gujarat India" />
+        <meta property="og:title" content="Pruthvirajsinh Makwana | IT Professional & Creative Technologist" />
+        <meta property="og:description" content="I combine creativity, technology, and design to build digital experiences that make an impact. Web Development, Digital Marketing, Graphic Design, Video Editing & Branding." />
         <meta property="og:type" content="website" />
+        <meta name="author" content="Pruthvirajsinh Makwana" />
         <link rel="canonical" href="https://pruthviraj.dev" />
       </Helmet>
 

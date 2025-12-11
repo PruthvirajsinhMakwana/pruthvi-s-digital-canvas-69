@@ -6,16 +6,16 @@ import { Mail, Phone, MapPin, Send, Linkedin, Github, Instagram, Twitter } from 
 import { toast } from 'sonner';
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'hello@pruthviraj.dev', href: 'mailto:hello@pruthviraj.dev' },
-  { icon: Phone, label: 'Phone', value: '+91 XXXXX XXXXX', href: 'tel:+91XXXXXXXXXX' },
+  { icon: Mail, label: 'Email', value: 'pruthvirajsinh@example.com', href: 'mailto:pruthvirajsinh@example.com' },
+  { icon: Phone, label: 'Phone', value: 'WhatsApp Available', href: '#' },
   { icon: MapPin, label: 'Location', value: 'Gujarat, India', href: '#' },
 ];
 
 const socialLinks = [
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://linkedin.com/in/pruthvirajsinh', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/pruthvirajsinh', label: 'GitHub' },
+  { icon: Instagram, href: 'https://instagram.com/pruthvirajsinh', label: 'Instagram' },
+  { icon: Twitter, href: 'https://twitter.com/pruthvirajsinh', label: 'Twitter' },
 ];
 
 export const ContactSection = () => {
@@ -57,7 +57,7 @@ export const ContactSection = () => {
             Let's <span className="gradient-text">Connect</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Have a project in mind? Let's discuss how I can help bring your ideas to life.
+            I'm open to collaborations, freelance opportunities, internships, and full-time roles. Let's discuss how I can help bring your ideas to life.
           </p>
         </div>
 
