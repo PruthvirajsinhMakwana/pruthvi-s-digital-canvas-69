@@ -13,7 +13,8 @@ import {
   Home,
   ChevronLeft,
   Globe,
-  Link2
+  Link2,
+  Search
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -21,6 +22,7 @@ import { toast } from 'sonner';
 const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Site Content', href: '/admin/content', icon: Globe },
+  { name: 'SEO Settings', href: '/admin/seo', icon: Search },
   { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
   { name: 'Links Manager', href: '/admin/links', icon: Link2 },

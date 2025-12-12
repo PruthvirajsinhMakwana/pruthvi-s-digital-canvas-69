@@ -11,14 +11,16 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Pruthvirajsinh Makwana",
-  "alternateName": "Pruthviraj Makwana",
+  "alternateName": ["Pruthviraj Makwana", "Pruthvi Makwana", "Pruthvirajsinh"],
   "jobTitle": "IT Professional & Creative Technologist",
-  "description": "IT Professional specializing in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding",
-  "url": "https://pruthviraj.dev",
+  "description": "IT Professional specializing in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding from Gujarat, India",
+  "url": "https://pruthvirajsinh.com",
+  "image": "https://pruthvirajsinh.com/favicon.jpg",
   "sameAs": [
     "https://linkedin.com/in/pruthvirajsinh-makwana",
     "https://github.com/pruthvirajsinh-makwana",
-    "https://instagram.com/pruthvirajsinh.makwana"
+    "https://instagram.com/pruthvirajsinh.makwana",
+    "https://twitter.com/pruthvirajsinh"
   ],
   "knowsAbout": [
     "Web Development",
@@ -27,8 +29,14 @@ const structuredData = {
     "Video Editing",
     "SEO",
     "Branding",
-    "UI/UX Design"
+    "UI/UX Design",
+    "Esports Management"
   ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "Gujarat",
+    "addressCountry": "India"
+  },
   "alumniOf": {
     "@type": "EducationalOrganization",
     "name": "Shati Business School"
@@ -39,14 +47,21 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Pruthvirajsinh Makwana | IT Professional - Web Developer, Digital Marketer, Creative Designer</title>
-        <meta name="description" content="I'm Pruthvirajsinh Makwana, an IT Professional with strong creative and technical skills in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding. I build modern, responsive websites and engaging digital content for brands and individuals." />
-        <meta name="keywords" content="Pruthvirajsinh Makwana, Pruthviraj Makwana, IT Professional, Web Developer India, Digital Marketer India, Graphic Designer, Video Editor, AI Tools Expert, Creative Technologist, Portfolio Website, SEO Optimization, Branding, Gujarat India" />
+        <title>Pruthvirajsinh Makwana | IT Professional - Web Developer, Digital Marketing Expert Gujarat India</title>
+        <meta name="description" content="Pruthvirajsinh Makwana - Leading IT Professional, Web Developer, Digital Marketing Expert, Graphic Designer & Video Editor from Gujarat, India. Hire for Web Development, SEO, Branding & Creative Services." />
+        <meta name="keywords" content="Pruthvirajsinh Makwana, Pruthvirajsinh, Pruthviraj Makwana, Pruthvi Makwana, pruthvirajsinh makwana, Web Developer Gujarat, Digital Marketing Expert India, Graphic Designer, Video Editor, UI/UX Designer, Branding Specialist, IT Professional India, Freelance Web Developer Gujarat, Best Web Developer India, SEO Expert Gujarat" />
         <meta property="og:title" content="Pruthvirajsinh Makwana | IT Professional & Creative Technologist" />
-        <meta property="og:description" content="I combine creativity, technology, and design to build digital experiences that make an impact. Web Development, Digital Marketing, Graphic Design, Video Editing & Branding." />
+        <meta property="og:description" content="Helping Brands Grow With Creativity, Technology & Digital Innovation. Web Development, Digital Marketing, Graphic Design & Video Editing Services." />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pruthvirajsinh.com" />
+        <meta property="og:image" content="https://pruthvirajsinh.com/favicon.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@pruthvirajsinh" />
+        <meta name="twitter:title" content="Pruthvirajsinh Makwana | IT Professional" />
+        <meta name="twitter:description" content="Web Developer, Digital Marketing Expert & Creative Designer from Gujarat, India" />
         <meta name="author" content="Pruthvirajsinh Makwana" />
-        <link rel="canonical" href="https://pruthviraj.dev" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <link rel="canonical" href="https://pruthvirajsinh.com" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>
