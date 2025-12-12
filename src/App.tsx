@@ -20,6 +20,7 @@ import AdminBlogEditor from "./pages/admin/AdminBlogEditor";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLinks from "./pages/admin/AdminLinks";
+import AdminSEO from "./pages/admin/AdminSEO";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="blog/edit/:id" element={<AdminBlogEditor />} />
               <Route path="messages" element={<AdminMessages />} />
               <Route path="links" element={<AdminLinks />} />
+              <Route path="seo" element={<AdminSEO />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             
