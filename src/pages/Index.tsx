@@ -11,15 +11,24 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Pruthvirajsinh Makwana",
-  "alternateName": ["Pruthviraj Makwana", "Pruthvi Makwana", "Pruthvirajsinh"],
-  "jobTitle": "IT Professional & Creative Technologist",
-  "description": "IT Professional specializing in Web Development, Digital Marketing, Graphic Design, Video Editing, and Branding from Gujarat, India",
+  "alternateName": [
+    "Pruthviraj",
+    "Pruthviraj Makwana",
+    "Pruthvirajsinh",
+    "Makwana Pruthviraj",
+    "Makwana Pruthvirajsinh",
+    "Pruthvi Makwana",
+    "Pruthvi"
+  ],
+  "jobTitle": "Web Developer & IT Professional",
+  "description": "Pruthvirajsinh Makwana is an IT Professional from Gujarat, India, specializing in Web Development, Digital Marketing, Graphic Design, and Video Editing.",
   "url": "https://pruthvirajsinh.com",
   "image": "https://pruthvirajsinh.com/favicon.jpg",
   "sameAs": [
-    "https://linkedin.com/in/pruthvirajsinh-makwana",
-    "https://github.com/pruthvirajsinh-makwana",
-    "https://instagram.com/pruthvirajsinh.makwana",
+    "https://www.linkedin.com/in/pruthvirajsinh-makwana-635974393/",
+    "https://github.com/pruthvirajsinh",
+    "https://www.facebook.com/pruthvirajsinh.makwana.12",
+    "https://www.instagram.com/pruthvi.this.ae",
     "https://twitter.com/pruthvirajsinh"
   ],
   "knowsAbout": [
@@ -28,12 +37,15 @@ const structuredData = {
     "Graphic Design",
     "Video Editing",
     "SEO",
-    "Branding",
+    "IT Tools",
+    "Content Creation",
     "UI/UX Design",
+    "Branding",
     "Esports Management"
   ],
   "address": {
     "@type": "PostalAddress",
+    "addressLocality": "Gujarat",
     "addressRegion": "Gujarat",
     "addressCountry": "India"
   },
@@ -47,18 +59,20 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Pruthvirajsinh Makwana | IT Professional - Web Developer, Digital Marketing Expert Gujarat India</title>
-        <meta name="description" content="Pruthvirajsinh Makwana - Leading IT Professional, Web Developer, Digital Marketing Expert, Graphic Designer & Video Editor from Gujarat, India. Hire for Web Development, SEO, Branding & Creative Services." />
-        <meta name="keywords" content="Pruthvirajsinh Makwana, Pruthvirajsinh, Pruthviraj Makwana, Pruthvi Makwana, pruthvirajsinh makwana, Web Developer Gujarat, Digital Marketing Expert India, Graphic Designer, Video Editor, UI/UX Designer, Branding Specialist, IT Professional India, Freelance Web Developer Gujarat, Best Web Developer India, SEO Expert Gujarat" />
-        <meta property="og:title" content="Pruthvirajsinh Makwana | IT Professional & Creative Technologist" />
-        <meta property="og:description" content="Helping Brands Grow With Creativity, Technology & Digital Innovation. Web Development, Digital Marketing, Graphic Design & Video Editing Services." />
+        <title>Pruthvirajsinh Makwana – Web Developer & IT Professional</title>
+        <meta name="description" content="Official portfolio of Pruthvirajsinh Makwana, an IT Professional, Web Developer, Digital Marketer, Graphic Designer, and Video Editor from Gujarat, India. Explore his skills, portfolio, services, and projects." />
+        <meta name="keywords" content="Pruthvirajsinh Makwana, Pruthviraj Makwana, Makwana Pruthviraj, Makwana Pruthvirajsinh, Pruthvirajsinh, Pruthviraj, Web Developer Gujarat, IT Professional Gujarat, Portfolio Website India, Freelance Web Developer, Graphic Designer Gujarat, Video Editor Gujarat, Digital Marketing Freelancer, B.Voc IT Student, pruthvi makwana, pruthvi, best web developer gujarat" />
+        <meta property="og:title" content="Portfolio of Pruthvirajsinh Makwana – Web Developer & IT Professional" />
+        <meta property="og:description" content="Explore the official portfolio of Pruthvirajsinh Makwana including web development, digital marketing, graphic design, and creative projects from Gujarat, India." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://pruthvirajsinh.com" />
         <meta property="og:image" content="https://pruthvirajsinh.com/favicon.jpg" />
+        <meta property="og:site_name" content="Pruthvirajsinh Makwana Portfolio" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@pruthvirajsinh" />
-        <meta name="twitter:title" content="Pruthvirajsinh Makwana | IT Professional" />
-        <meta name="twitter:description" content="Web Developer, Digital Marketing Expert & Creative Designer from Gujarat, India" />
+        <meta name="twitter:title" content="Pruthvirajsinh Makwana – Web Developer & IT Professional" />
+        <meta name="twitter:description" content="Official portfolio of IT Professional and Web Developer Pruthvirajsinh Makwana showcasing projects, skills, and services." />
+        <meta name="twitter:image" content="https://pruthvirajsinh.com/favicon.jpg" />
         <meta name="author" content="Pruthvirajsinh Makwana" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <link rel="canonical" href="https://pruthvirajsinh.com" />
