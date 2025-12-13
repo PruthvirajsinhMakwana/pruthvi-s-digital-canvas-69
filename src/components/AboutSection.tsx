@@ -159,10 +159,17 @@ export const AboutSection = () => {
               </div>
 
               {/* Download Resume */}
-              <Button variant="default" size="lg" className="w-full mt-6 group">
-                <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
-                Download Resume
-              </Button>
+              <a 
+                href="https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full"
+              >
+                <Button variant="default" size="lg" className="w-full mt-6 group">
+                  <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
+                  Download Resume
+                </Button>
+              </a>
             </div>
           </ScrollReveal>
 
