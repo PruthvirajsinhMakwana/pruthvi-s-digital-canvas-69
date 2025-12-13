@@ -13,6 +13,7 @@ import {
   Home,
   ChevronLeft,
   Globe,
+  BarChart3,
   Link2,
   Search
 } from 'lucide-react';
@@ -21,6 +22,7 @@ import { toast } from 'sonner';
 
 const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Site Content', href: '/admin/content', icon: Globe },
   { name: 'SEO Settings', href: '/admin/seo', icon: Search },
   { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
