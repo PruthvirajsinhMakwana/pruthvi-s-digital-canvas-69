@@ -50,11 +50,29 @@ const VisitorTracker = () => {
       }
       
       try {
+        const visitorId = getVisitorId();
+        
+        // Get location data from edge function
+        let locationData = { ip: 'unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown' };
+        try {
+          const response = await supabase.functions.invoke('get-visitor-location');
+          console.log('Location response:', response);
+          if (response.data) {
+            locationData = response.data;
+          }
+        } catch (locError) {
+          console.error('Error fetching location:', locError);
+        }
+        
         await supabase.from('page_views').insert({
           page_path: location.pathname,
           user_agent: navigator.userAgent,
           referrer: document.referrer || null,
-          visitor_ip: getVisitorId(),
+          visitor_ip: visitorId,
+          real_ip: locationData.ip,
+          country: locationData.country,
+          city: locationData.city,
+          region: locationData.region,
         });
       } catch (error) {
         console.error('Error tracking visit:', error);
