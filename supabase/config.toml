@@ -2,3 +2,6 @@ project_id = "shimscplufjsefntkdre"
 
 [functions.send-telegram-notification]
 verify_jwt = false
+
+[functions.get-visitor-location]
+verify_jwt = false
