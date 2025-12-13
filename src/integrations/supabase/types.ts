@@ -210,26 +210,38 @@ export type Database = {
       }
       page_views: {
         Row: {
+          city: string | null
+          country: string | null
           created_at: string
           id: string
           page_path: string
+          real_ip: string | null
           referrer: string | null
+          region: string | null
           user_agent: string | null
           visitor_ip: string | null
         }
         Insert: {
+          city?: string | null
+          country?: string | null
           created_at?: string
           id?: string
           page_path: string
+          real_ip?: string | null
           referrer?: string | null
+          region?: string | null
           user_agent?: string | null
           visitor_ip?: string | null
         }
         Update: {
+          city?: string | null
+          country?: string | null
           created_at?: string
           id?: string
           page_path?: string
+          real_ip?: string | null
           referrer?: string | null
+          region?: string | null
           user_agent?: string | null
           visitor_ip?: string | null
         }

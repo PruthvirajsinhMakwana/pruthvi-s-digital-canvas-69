@@ -20,11 +20,26 @@ export const useVisitorTracking = () => {
       try {
         const visitorId = getVisitorId();
         
+        // Get location data from edge function
+        let locationData = { ip: 'unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown' };
+        try {
+          const response = await supabase.functions.invoke('get-visitor-location');
+          if (response.data) {
+            locationData = response.data;
+          }
+        } catch (locError) {
+          console.error('Error fetching location:', locError);
+        }
+        
         const { error } = await supabase.from('page_views').insert({
           page_path: window.location.pathname,
           user_agent: navigator.userAgent,
           referrer: document.referrer || null,
-          visitor_ip: visitorId, // Using visitor_ip field for unique visitor ID
+          visitor_ip: visitorId,
+          real_ip: locationData.ip,
+          country: locationData.country,
+          city: locationData.city,
+          region: locationData.region,
         });
 
         if (error) {
@@ -174,5 +189,43 @@ export const useVisitorStats = () => {
     }));
   };
 
-  return { fetchStats, fetchDailyStats, fetchHourlyStats };
+  const fetchLocationStats = async () => {
+    const last30Days = new Date();
+    last30Days.setDate(last30Days.getDate() - 30);
+
+    const { data } = await supabase
+      .from('page_views')
+      .select('country, city, real_ip')
+      .gte('created_at', last30Days.toISOString())
+      .not('country', 'is', null);
+
+    // Group by country
+    const countryStats: Record<string, number> = {};
+    const cityStats: Record<string, number> = {};
+    const uniqueIps = new Set<string>();
+
+    data?.forEach((view) => {
+      if (view.country && view.country !== 'Unknown') {
+        countryStats[view.country] = (countryStats[view.country] || 0) + 1;
+      }
+      if (view.city && view.city !== 'Unknown') {
+        cityStats[view.city] = (cityStats[view.city] || 0) + 1;
+      }
+      if (view.real_ip && view.real_ip !== 'unknown') {
+        uniqueIps.add(view.real_ip);
+      }
+    });
+
+    return {
+      countryStats: Object.entries(countryStats)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10),
+      cityStats: Object.entries(cityStats)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10),
+      trackedIps: uniqueIps.size,
+    };
+  };
+
+  return { fetchStats, fetchDailyStats, fetchHourlyStats, fetchLocationStats };
 };

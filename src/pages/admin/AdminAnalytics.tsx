@@ -15,7 +15,7 @@ import {
   AreaChart,
   Area
 } from 'recharts';
-import { Eye, Users, TrendingUp, Clock, Calendar, Activity } from 'lucide-react';
+import { Eye, Users, TrendingUp, Clock, Calendar, Activity, Globe, MapPin } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface DailyData {
@@ -40,24 +40,33 @@ interface Stats {
   pageStats: Record<string, number>;
 }
 
+interface LocationStats {
+  countryStats: [string, number][];
+  cityStats: [string, number][];
+  trackedIps: number;
+}
+
 const AdminAnalytics = () => {
-  const { fetchStats, fetchDailyStats, fetchHourlyStats } = useVisitorStats();
+  const { fetchStats, fetchDailyStats, fetchHourlyStats, fetchLocationStats } = useVisitorStats();
   const [stats, setStats] = useState<Stats | null>(null);
   const [dailyData, setDailyData] = useState<DailyData[]>([]);
   const [hourlyData, setHourlyData] = useState<HourlyData[]>([]);
+  const [locationData, setLocationData] = useState<LocationStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [statsData, daily, hourly] = await Promise.all([
+        const [statsData, daily, hourly, location] = await Promise.all([
           fetchStats(),
           fetchDailyStats(30),
           fetchHourlyStats(),
+          fetchLocationStats(),
         ]);
         setStats(statsData);
         setDailyData(daily);
         setHourlyData(hourly);
+        setLocationData(location);
       } catch (error) {
         console.error('Error loading analytics:', error);
       } finally {
@@ -339,6 +348,84 @@ const AdminAnalytics = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Geographic Stats */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Globe className="w-5 h-5 text-primary" />
+              <CardTitle className="text-lg">Top Countries</CardTitle>
+            </div>
+            <CardDescription>Visitor locations by country (Last 30 Days)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {locationData?.countryStats && locationData.countryStats.length > 0 ? (
+              <div className="space-y-3">
+                {locationData.countryStats.map(([country, count], index) => (
+                  <div key={country} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-xs font-medium text-blue-500">
+                        {index + 1}
+                      </span>
+                      <span className="font-medium text-sm">{country}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">{count} visits</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-8">No location data available yet</p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-primary" />
+              <CardTitle className="text-lg">Top Cities</CardTitle>
+            </div>
+            <CardDescription>Visitor locations by city (Last 30 Days)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {locationData?.cityStats && locationData.cityStats.length > 0 ? (
+              <div className="space-y-3">
+                {locationData.cityStats.map(([city, count], index) => (
+                  <div key={city} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center text-xs font-medium text-green-500">
+                        {index + 1}
+                      </span>
+                      <span className="font-medium text-sm">{city}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">{count} visits</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-8">No city data available yet</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tracked IPs Info */}
+      {locationData && (
+        <Card className="border-primary/20">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Globe className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-medium">{locationData.trackedIps} Unique IPs Tracked</p>
+                <p className="text-sm text-muted-foreground">From the last 30 days with geolocation data</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Top Pages */}
       <Card>
