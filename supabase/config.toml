@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.get-visitor-location]
 verify_jwt = false
+
+[functions.check-traffic-alerts]
+verify_jwt = false
