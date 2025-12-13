@@ -159,10 +159,12 @@ export const EsportsAboutSection = () => {
               </div>
 
               {/* Contact Button */}
-              <Button variant="secondary" size="lg" className="w-full mt-6 group">
-                <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                Book for Events
-              </Button>
+              <a href="/contact" className="w-full block">
+                <Button variant="secondary" size="lg" className="w-full mt-6 group">
+                  <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                  Book for Events
+                </Button>
+              </a>
             </div>
           </ScrollReveal>
 
