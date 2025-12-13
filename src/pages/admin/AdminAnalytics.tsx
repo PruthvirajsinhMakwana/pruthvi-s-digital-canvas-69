@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useVisitorStats } from '@/hooks/useVisitorTracking';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { 
   LineChart, 
   Line, 
@@ -15,7 +18,7 @@ import {
   AreaChart,
   Area
 } from 'recharts';
-import { Eye, Users, TrendingUp, Clock, Calendar, Activity, Globe, MapPin, Wifi } from 'lucide-react';
+import { Eye, Users, TrendingUp, Clock, Calendar, Activity, Globe, MapPin, Wifi, Bell, Send } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -66,6 +69,37 @@ const AdminAnalytics = () => {
   const [locationData, setLocationData] = useState<LocationStats | null>(null);
   const [recentVisitors, setRecentVisitors] = useState<RecentVisitor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSendingAlert, setIsSendingAlert] = useState(false);
+  const { toast } = useToast();
+
+  const sendTrafficAlert = async () => {
+    setIsSendingAlert(true);
+    try {
+      const response = await supabase.functions.invoke('check-traffic-alerts', {
+        body: { manual: true }
+      });
+      
+      if (response.error) {
+        throw response.error;
+      }
+
+      toast({
+        title: response.data.alertSent ? "Alert Sent!" : "Check Complete",
+        description: response.data.alertSent 
+          ? "Traffic summary sent to Telegram" 
+          : response.data.message,
+      });
+    } catch (error) {
+      console.error('Error sending alert:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send traffic alert",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSendingAlert(false);
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -151,9 +185,28 @@ const AdminAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-heading font-bold">Analytics Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Track your website traffic and visitor insights</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold">Analytics Dashboard</h1>
+          <p className="text-muted-foreground mt-1">Track your website traffic and visitor insights</p>
+        </div>
+        <Button 
+          onClick={sendTrafficAlert} 
+          disabled={isSendingAlert}
+          className="gap-2"
+        >
+          {isSendingAlert ? (
+            <>
+              <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+              Sending...
+            </>
+          ) : (
+            <>
+              <Send className="w-4 h-4" />
+              Send Traffic Report
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Stats Grid */}
