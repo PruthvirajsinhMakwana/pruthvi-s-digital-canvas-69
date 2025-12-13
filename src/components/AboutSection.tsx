@@ -158,18 +158,26 @@ export const AboutSection = () => {
                 </div>
               </div>
 
-              {/* Download Resume */}
-              <a 
-                href="https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full"
-              >
-                <Button variant="default" size="lg" className="w-full mt-6 group">
-                  <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
-                  Download Resume
-                </Button>
-              </a>
+              {/* Action Buttons */}
+              <div className="space-y-3 mt-6">
+                <a 
+                  href="https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full block"
+                >
+                  <Button variant="default" size="lg" className="w-full group">
+                    <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
+                    Download Resume
+                  </Button>
+                </a>
+                <a href="/contact" className="w-full block">
+                  <Button variant="outline" size="lg" className="w-full group">
+                    <Calendar className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                    Book for Events
+                  </Button>
+                </a>
+              </div>
             </div>
           </ScrollReveal>
 
