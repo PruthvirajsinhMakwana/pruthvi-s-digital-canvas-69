@@ -208,6 +208,33 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          id: string
+          page_path: string
+          referrer: string | null
+          user_agent: string | null
+          visitor_ip: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_path: string
+          referrer?: string | null
+          user_agent?: string | null
+          visitor_ip?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_path?: string
+          referrer?: string | null
+          user_agent?: string | null
+          visitor_ip?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -274,6 +301,30 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      visitor_stats: {
+        Row: {
+          date: string
+          id: string
+          total_views: number
+          unique_visitors: number
+          updated_at: string
+        }
+        Insert: {
+          date: string
+          id?: string
+          total_views?: number
+          unique_visitors?: number
+          updated_at?: string
+        }
+        Update: {
+          date?: string
+          id?: string
+          total_views?: number
+          unique_visitors?: number
+          updated_at?: string
         }
         Relationships: []
       }

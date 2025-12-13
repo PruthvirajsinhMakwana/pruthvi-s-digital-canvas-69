@@ -2,8 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -25,6 +27,34 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Visitor tracking component
+const VisitorTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const trackVisit = async () => {
+      // Don't track admin pages
+      if (location.pathname.startsWith('/admin') || location.pathname === '/auth') {
+        return;
+      }
+      
+      try {
+        await supabase.from('page_views').insert({
+          page_path: location.pathname,
+          user_agent: navigator.userAgent,
+          referrer: document.referrer || null,
+        });
+      } catch (error) {
+        console.error('Error tracking visit:', error);
+      }
+    };
+
+    trackVisit();
+  }, [location.pathname]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
@@ -32,6 +62,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <VisitorTracker />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
