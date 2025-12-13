@@ -227,5 +227,17 @@ export const useVisitorStats = () => {
     };
   };
 
-  return { fetchStats, fetchDailyStats, fetchHourlyStats, fetchLocationStats };
+  const fetchRecentVisitors = async (limit: number = 50) => {
+    const { data } = await supabase
+      .from('page_views')
+      .select('id, real_ip, country, city, region, page_path, user_agent, created_at')
+      .not('real_ip', 'is', null)
+      .neq('real_ip', 'unknown')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    return data || [];
+  };
+
+  return { fetchStats, fetchDailyStats, fetchHourlyStats, fetchLocationStats, fetchRecentVisitors };
 };

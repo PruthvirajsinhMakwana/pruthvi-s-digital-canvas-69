@@ -15,7 +15,8 @@ import {
   AreaChart,
   Area
 } from 'recharts';
-import { Eye, Users, TrendingUp, Clock, Calendar, Activity, Globe, MapPin } from 'lucide-react';
+import { Eye, Users, TrendingUp, Clock, Calendar, Activity, Globe, MapPin, Wifi } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface DailyData {
@@ -46,27 +47,41 @@ interface LocationStats {
   trackedIps: number;
 }
 
+interface RecentVisitor {
+  id: string;
+  real_ip: string;
+  country: string | null;
+  city: string | null;
+  region: string | null;
+  page_path: string;
+  user_agent: string | null;
+  created_at: string;
+}
+
 const AdminAnalytics = () => {
-  const { fetchStats, fetchDailyStats, fetchHourlyStats, fetchLocationStats } = useVisitorStats();
+  const { fetchStats, fetchDailyStats, fetchHourlyStats, fetchLocationStats, fetchRecentVisitors } = useVisitorStats();
   const [stats, setStats] = useState<Stats | null>(null);
   const [dailyData, setDailyData] = useState<DailyData[]>([]);
   const [hourlyData, setHourlyData] = useState<HourlyData[]>([]);
   const [locationData, setLocationData] = useState<LocationStats | null>(null);
+  const [recentVisitors, setRecentVisitors] = useState<RecentVisitor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [statsData, daily, hourly, location] = await Promise.all([
+        const [statsData, daily, hourly, location, visitors] = await Promise.all([
           fetchStats(),
           fetchDailyStats(30),
           fetchHourlyStats(),
           fetchLocationStats(),
+          fetchRecentVisitors(50),
         ]);
         setStats(statsData);
         setDailyData(daily);
         setHourlyData(hourly);
         setLocationData(location);
+        setRecentVisitors(visitors);
       } catch (error) {
         console.error('Error loading analytics:', error);
       } finally {
@@ -450,6 +465,53 @@ const AdminAnalytics = () => {
             </div>
           ) : (
             <p className="text-muted-foreground text-center py-8">No page data available yet</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Recent Visitors with IP */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Wifi className="w-5 h-5 text-primary" />
+            <CardTitle className="text-lg">Recent Visitors (Real IP)</CardTitle>
+          </div>
+          <CardDescription>Last 50 visitors with tracked IP addresses and locations</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {recentVisitors.length > 0 ? (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>IP Address</TableHead>
+                    <TableHead>Country</TableHead>
+                    <TableHead>City</TableHead>
+                    <TableHead>Region</TableHead>
+                    <TableHead>Page</TableHead>
+                    <TableHead>Time</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentVisitors.map((visitor) => (
+                    <TableRow key={visitor.id}>
+                      <TableCell className="font-mono text-sm font-medium text-primary">
+                        {visitor.real_ip}
+                      </TableCell>
+                      <TableCell>{visitor.country || '-'}</TableCell>
+                      <TableCell>{visitor.city || '-'}</TableCell>
+                      <TableCell>{visitor.region || '-'}</TableCell>
+                      <TableCell className="text-muted-foreground">{visitor.page_path}</TableCell>
+                      <TableCell className="text-muted-foreground text-xs">
+                        {new Date(visitor.created_at).toLocaleString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-center py-8">No IP data tracked yet. Visit a public page to start tracking.</p>
           )}
         </CardContent>
       </Card>
