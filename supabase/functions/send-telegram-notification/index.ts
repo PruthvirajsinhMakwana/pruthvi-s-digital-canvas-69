@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
 const TELEGRAM_CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID");
@@ -8,12 +9,26 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface ContactMessage {
-  name: string;
-  email: string;
-  phone?: string;
-  message: string;
-}
+// Input validation schema
+const contactSchema = z.object({
+  name: z.string()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters")
+    .transform(s => s.trim()),
+  email: z.string()
+    .email("Invalid email address")
+    .max(255, "Email must be less than 255 characters")
+    .transform(s => s.trim().toLowerCase()),
+  phone: z.string()
+    .max(20, "Phone must be less than 20 characters")
+    .optional()
+    .nullable()
+    .transform(s => s?.trim() || null),
+  message: z.string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must be less than 2000 characters")
+    .transform(s => s.trim()),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -27,8 +42,26 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Telegram credentials not configured");
     }
 
-    const { name, email, phone, message }: ContactMessage = await req.json();
-    console.log("Received contact message from:", name, email);
+    // Parse and validate input
+    const rawBody = await req.json();
+    const parseResult = contactSchema.safeParse(rawBody);
+    
+    if (!parseResult.success) {
+      console.log("Validation failed:", parseResult.error.errors);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input data", 
+          details: parseResult.error.errors.map(e => e.message) 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    const { name, email, phone, message } = parseResult.data;
+    console.log("Received validated contact message from:", name, email);
 
     // Format the message for Telegram
     const telegramMessage = `
@@ -77,7 +110,7 @@ ${escapeMarkdown(message)}
   } catch (error: any) {
     console.error("Error in send-telegram-notification:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Failed to process request" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

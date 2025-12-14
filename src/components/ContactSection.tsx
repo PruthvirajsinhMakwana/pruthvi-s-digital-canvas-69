@@ -33,16 +33,44 @@ export const ContactSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Client-side validation
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedPhone = formData.phone.trim();
+    const trimmedMessage = formData.message.trim();
+    
+    if (trimmedName.length > 100) {
+      toast.error('Name is too long (max 100 characters)');
+      return;
+    }
+    if (trimmedEmail.length > 255) {
+      toast.error('Email is too long (max 255 characters)');
+      return;
+    }
+    if (trimmedPhone.length > 20) {
+      toast.error('Phone number is too long (max 20 characters)');
+      return;
+    }
+    if (trimmedMessage.length < 10) {
+      toast.error('Message is too short (min 10 characters)');
+      return;
+    }
+    if (trimmedMessage.length > 2000) {
+      toast.error('Message is too long (max 2000 characters)');
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
       const { error } = await supabase
         .from('contact_messages')
         .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null,
-          message: formData.message,
+          name: trimmedName,
+          email: trimmedEmail,
+          phone: trimmedPhone || null,
+          message: trimmedMessage,
         });
 
       if (error) throw error;
@@ -50,10 +78,10 @@ export const ContactSection = () => {
       // Send Telegram notification (don't block on failure)
       supabase.functions.invoke('send-telegram-notification', {
         body: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null,
-          message: formData.message,
+          name: trimmedName,
+          email: trimmedEmail,
+          phone: trimmedPhone || null,
+          message: trimmedMessage,
         },
       }).catch((err) => {
         console.error('Telegram notification failed:', err);
