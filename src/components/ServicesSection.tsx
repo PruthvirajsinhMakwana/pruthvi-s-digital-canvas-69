@@ -1,8 +1,28 @@
-import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, ExternalLink, Briefcase } from 'lucide-react';
+import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, ExternalLink, Briefcase, Dribbble, Github, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
-import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { useSiteSettings, PortfolioLink } from '@/hooks/useSiteSettings';
+
+// Icon mapping for portfolio links
+const iconMap: Record<string, LucideIcon> = {
+  briefcase: Briefcase,
+  palette: Palette,
+  dribbble: Dribbble,
+  github: Github,
+  globe: Globe,
+  'file-image': FileImage,
+  code: Code,
+  youtube: Youtube,
+  instagram: Instagram,
+  linkedin: Linkedin,
+  twitter: Twitter,
+  'external-link': ExternalLink,
+};
+
+const getPortfolioIcon = (iconName?: string): LucideIcon => {
+  return iconMap[iconName || 'briefcase'] || Briefcase;
+};
 const itServices = [
   {
     icon: Globe,
@@ -230,19 +250,22 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
                   {portfolioLinks.length > 0 ? (
-                    portfolioLinks.map((link) => (
-                      <Button key={link.id} size="lg" className="px-8 group" asChild>
-                        <a 
-                          href={link.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                        >
-                          <Briefcase className="w-5 h-5 mr-2" />
-                          {link.title || 'View My Work'}
-                          <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        </a>
-                      </Button>
-                    ))
+                    portfolioLinks.map((link) => {
+                      const IconComponent = getPortfolioIcon(link.icon);
+                      return (
+                        <Button key={link.id} size="lg" className="px-8 group" asChild>
+                          <a 
+                            href={link.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            <IconComponent className="w-5 h-5 mr-2" />
+                            {link.title || 'View My Work'}
+                            <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                          </a>
+                        </Button>
+                      );
+                    })
                   ) : (
                     <Button size="lg" className="px-8 group" asChild>
                       <a 
