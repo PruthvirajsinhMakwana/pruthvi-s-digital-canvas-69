@@ -1,4 +1,4 @@
-import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar } from 'lucide-react';
+import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, ExternalLink, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
@@ -205,23 +205,41 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
           </>
         )}
 
-        {/* CTA Section */}
+        {/* Portfolio CTA Section */}
         <ScrollReveal animation="fade-up" delay={200}>
-          <div className="mt-16 text-center">
-            <div className="bg-card border border-border rounded-3xl p-8 sm:p-12 max-w-3xl mx-auto">
-              <h3 className="font-heading text-2xl sm:text-3xl font-bold mb-4">
-                Ready to Start a Project?
-              </h3>
-              <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                Let's discuss your requirements and create something amazing together. Get in touch for a free consultation.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="px-8" asChild>
-                  <Link to="/contact">Get in Touch</Link>
-                </Button>
-                <Button variant="outline" size="lg" className="px-8" asChild>
-                  <Link to="/">View Portfolio</Link>
-                </Button>
+          <div className="mt-16">
+            <div className="bg-gradient-to-br from-primary/5 via-card to-secondary/5 border border-border rounded-3xl p-8 sm:p-12 max-w-4xl mx-auto relative overflow-hidden">
+              {/* Background decoration */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-secondary/10 rounded-full blur-2xl" />
+              
+              <div className="relative z-10 text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
+                  <Briefcase className="w-4 h-4" />
+                  My Portfolio
+                </div>
+                <h3 className="font-heading text-2xl sm:text-3xl font-bold mb-4">
+                  Want to See My Work?
+                </h3>
+                <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+                  Check out my portfolio to see real projects I've delivered. From websites to designs, explore the work that speaks for itself.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button size="lg" className="px-8 group" asChild>
+                    <a 
+                      href="https://www.behance.net/jaypatel351" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <Briefcase className="w-5 h-5 mr-2" />
+                      View My Work
+                      <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="lg" className="px-8" asChild>
+                    <Link to="/contact">Get in Touch</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
