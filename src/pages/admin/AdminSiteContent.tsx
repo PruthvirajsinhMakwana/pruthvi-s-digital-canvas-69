@@ -4,8 +4,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Save, BarChart3, User, Link2, MousePointer, Tags, Plus, X, Briefcase, Trash2, Palette, Github, Dribbble, Globe, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, ExternalLink } from 'lucide-react';
-import { useSiteSettings, PortfolioLink } from '@/hooks/useSiteSettings';
+import { Save, BarChart3, User, Link2, MousePointer, Tags, Plus, X, Briefcase, Trash2, Palette, Github, Dribbble, Globe, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, ExternalLink, ArrowRight } from 'lucide-react';
+import { useSiteSettings, PortfolioLink, ServiceLink } from '@/hooks/useSiteSettings';
+
+// Service names for arrow button links
+const serviceNames = [
+  'Web Development',
+  'Digital Marketing', 
+  'Graphic Design',
+  'Video Editing',
+  'UI/UX Design',
+  'IT Support',
+  'Esports Commentary',
+  'Event Hosting',
+  'Tournament Organization',
+  'Gaming Content',
+  'Team Management',
+  'Community Events',
+];
 
 // Icon options for portfolio links
 const portfolioIconOptions = [
@@ -82,6 +98,27 @@ const AdminSiteContent = () => {
       ...formData,
       portfolioLinks: (formData.portfolioLinks || []).filter(link => link.id !== id),
     });
+  };
+
+  const updateServiceLink = (serviceName: string, url: string) => {
+    const currentLinks = formData.serviceLinks || [];
+    const existingIndex = currentLinks.findIndex(l => l.serviceName === serviceName);
+    
+    if (existingIndex >= 0) {
+      const updatedLinks = [...currentLinks];
+      updatedLinks[existingIndex] = { serviceName, url };
+      setFormData({ ...formData, serviceLinks: updatedLinks });
+    } else {
+      setFormData({ 
+        ...formData, 
+        serviceLinks: [...currentLinks, { serviceName, url }] 
+      });
+    }
+  };
+
+  const getServiceLinkUrl = (serviceName: string): string => {
+    const link = (formData.serviceLinks || []).find(l => l.serviceName === serviceName);
+    return link?.url || '/links';
   };
 
   if (isLoading) {
@@ -424,6 +461,39 @@ const AdminSiteContent = () => {
               })
             )}
           </div>
+        </div>
+
+        {/* Service Arrow Links Section */}
+        <div className="glass-card rounded-2xl p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+              <ArrowRight className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-heading font-bold">Service Arrow Links</h3>
+              <p className="text-sm text-muted-foreground">Where the arrow button on each service card redirects to</p>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {serviceNames.map((serviceName) => (
+              <div key={serviceName} className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+                <div className="flex-1">
+                  <Label className="text-xs text-muted-foreground">{serviceName}</Label>
+                  <Input
+                    value={getServiceLinkUrl(serviceName)}
+                    onChange={(e) => updateServiceLink(serviceName, e.target.value)}
+                    placeholder="/links or https://..."
+                    className="mt-1 bg-background border-border/50 h-9 text-sm"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <p className="text-xs text-muted-foreground mt-4">
+            💡 Tip: Use "/links" for your linktree page, or add external URLs like "https://behance.net/yourname"
+          </p>
         </div>
 
         {/* Skill Tags Section */}
