@@ -5,6 +5,9 @@ import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
+import { useState, useRef, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { 
   Bold, 
   Italic, 
@@ -22,29 +25,31 @@ import {
   Code,
   Link as LinkIcon,
   Image as ImageIcon,
+  Upload,
   Undo,
-  Redo
+  Redo,
+  Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useCallback } from 'react';
 
 interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
-  onImageUpload?: () => void;
 }
 
 const MenuButton = ({ 
   onClick, 
   isActive, 
   children,
-  title 
+  title,
+  disabled
 }: { 
   onClick: () => void; 
   isActive?: boolean; 
   children: React.ReactNode;
   title: string;
+  disabled?: boolean;
 }) => (
   <Button
     type="button"
@@ -52,6 +57,7 @@ const MenuButton = ({
     size="sm"
     onClick={onClick}
     title={title}
+    disabled={disabled}
     className={cn(
       "h-8 w-8 p-0",
       isActive && "bg-primary/20 text-primary"
@@ -61,7 +67,10 @@ const MenuButton = ({
   </Button>
 );
 
-export const RichTextEditor = ({ content, onChange, onImageUpload }: RichTextEditorProps) => {
+export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -71,7 +80,7 @@ export const RichTextEditor = ({ content, onChange, onImageUpload }: RichTextEdi
       }),
       Image.configure({
         HTMLAttributes: {
-          class: 'rounded-lg max-w-full h-auto',
+          class: 'rounded-lg max-w-full h-auto my-4',
         },
       }),
       Link.configure({
@@ -109,7 +118,7 @@ export const RichTextEditor = ({ content, onChange, onImageUpload }: RichTextEdi
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   }, [editor]);
 
-  const addImage = useCallback(() => {
+  const addImageUrl = useCallback(() => {
     if (!editor) return;
     
     const url = window.prompt('Enter image URL:');
@@ -118,12 +127,71 @@ export const RichTextEditor = ({ content, onChange, onImageUpload }: RichTextEdi
     }
   }, [editor]);
 
+  const handleImageUpload = async (file: File) => {
+    if (!file || !editor) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be less than 5MB');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `content/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      editor.chain().focus().setImage({ src: publicUrl }).run();
+      toast.success('Image inserted!');
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast.error(error.message || 'Failed to upload image');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+      e.target.value = '';
+    }
+  };
+
   if (!editor) {
     return null;
   }
 
   return (
     <div className="border border-border/50 rounded-lg overflow-hidden bg-muted/30">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="hidden"
+      />
+
       {/* Toolbar */}
       <div className="border-b border-border/50 p-2 flex flex-wrap gap-1 bg-card/50">
         {/* History */}
@@ -255,7 +323,7 @@ export const RichTextEditor = ({ content, onChange, onImageUpload }: RichTextEdi
         </div>
 
         {/* Insert */}
-        <div className="flex gap-0.5">
+        <div className="flex gap-0.5 items-center">
           <MenuButton
             onClick={addLink}
             isActive={editor.isActive('link')}
@@ -263,20 +331,25 @@ export const RichTextEditor = ({ content, onChange, onImageUpload }: RichTextEdi
           >
             <LinkIcon className="w-4 h-4" />
           </MenuButton>
-          <MenuButton onClick={addImage} title="Add Image URL">
+          <MenuButton onClick={addImageUrl} title="Add Image URL">
             <ImageIcon className="w-4 h-4" />
           </MenuButton>
-          {onImageUpload && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={onImageUpload}
-              className="h-8 text-xs"
-            >
-              Upload Image
-            </Button>
-          )}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+            className="h-8 text-xs gap-1"
+            title="Upload Image"
+          >
+            {isUploading ? (
+              <Loader2 className="w-3 h-3 animate-spin" />
+            ) : (
+              <Upload className="w-3 h-3" />
+            )}
+            Upload
+          </Button>
         </div>
       </div>
 

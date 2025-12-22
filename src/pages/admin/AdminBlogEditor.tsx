@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Save, Eye } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Edit3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import { ImageUploader } from '@/components/admin/ImageUploader';
@@ -23,6 +23,7 @@ const AdminBlogEditor = () => {
   
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   
   const [formData, setFormData] = useState({
@@ -170,7 +171,7 @@ const AdminBlogEditor = () => {
   return (
     <div className="space-y-6 max-w-4xl">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate('/admin/blog')}>
             <ArrowLeft className="w-5 h-5" />
@@ -182,144 +183,198 @@ const AdminBlogEditor = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button 
+            variant={isPreview ? "default" : "outline"} 
+            onClick={() => setIsPreview(!isPreview)}
+            className="gap-2"
+          >
+            {isPreview ? <Edit3 className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {isPreview ? 'Edit' : 'Preview'}
+          </Button>
           <Button variant="glass" onClick={() => handleSave(false)} disabled={isSaving}>
             <Save className="w-4 h-4 mr-2" />
             Save Draft
           </Button>
           <Button variant="hero" onClick={() => handleSave(true)} disabled={isSaving}>
-            <Eye className="w-4 h-4 mr-2" />
             Publish
           </Button>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="space-y-6">
-        {/* Title & Slug */}
-        <div className="glass-card rounded-2xl p-6 space-y-4">
-          <div>
-            <Label htmlFor="title">Title *</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              placeholder="Enter post title"
-              className="mt-2 bg-muted/50 border-border/50"
-            />
-          </div>
-          <div>
-            <Label htmlFor="slug">URL Slug</Label>
-            <Input
-              id="slug"
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              placeholder="post-url-slug"
-              className="mt-2 bg-muted/50 border-border/50"
-            />
-          </div>
-        </div>
-
-        {/* Featured Image */}
-        <div className="glass-card rounded-2xl p-6">
-          <Label>Featured Image</Label>
-          <div className="mt-2">
-            <ImageUploader
-              value={formData.featured_image}
-              onChange={(url) => setFormData({ ...formData, featured_image: url })}
-            />
-          </div>
-        </div>
-
-        {/* Content with Rich Text Editor */}
-        <div className="glass-card rounded-2xl p-6">
-          <Label htmlFor="content">Content</Label>
-          <div className="mt-2">
-            <RichTextEditor
-              content={formData.content}
-              onChange={(content) => setFormData({ ...formData, content })}
-            />
-          </div>
-        </div>
-
-        {/* Excerpt */}
-        <div className="glass-card rounded-2xl p-6">
-          <div>
-            <Label htmlFor="excerpt">Excerpt</Label>
-            <Textarea
-              id="excerpt"
-              value={formData.excerpt}
-              onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-              placeholder="Short description for previews"
-              className="mt-2 bg-muted/50 border-border/50"
-              rows={3}
-            />
-          </div>
-        </div>
-
-        {/* Category & Tags */}
-        <div className="glass-card rounded-2xl p-6 space-y-4">
-          <div>
-            <Label htmlFor="category">Category</Label>
-            <select
-              id="category"
-              value={formData.category_id}
-              onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-              className="mt-2 w-full bg-muted/50 border border-border/50 rounded-md p-2 text-foreground"
-            >
-              <option value="">Select category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
+      {/* Preview Mode */}
+      {isPreview ? (
+        <div className="glass-card rounded-2xl p-8 space-y-6">
+          <div className="text-sm text-muted-foreground">Preview Mode</div>
+          
+          {formData.featured_image && (
+            <div className="aspect-video rounded-xl overflow-hidden">
+              <img 
+                src={formData.featured_image} 
+                alt={formData.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+          
+          <h1 className="font-heading text-4xl font-bold">{formData.title || 'Untitled Post'}</h1>
+          
+          {formData.excerpt && (
+            <p className="text-lg text-muted-foreground">{formData.excerpt}</p>
+          )}
+          
+          <div 
+            className="prose prose-lg dark:prose-invert max-w-none
+              prose-headings:font-heading prose-headings:font-bold
+              prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
+              prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3
+              prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2
+              prose-p:leading-relaxed prose-p:mb-4
+              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic
+              prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+              prose-img:rounded-lg prose-img:my-6"
+            dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-muted-foreground">No content yet...</p>' }}
+          />
+          
+          {formData.tags && (
+            <div className="flex flex-wrap gap-2 pt-4 border-t border-border/50">
+              {formData.tags.split(',').map((tag, i) => (
+                <span key={i} className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                  {tag.trim()}
+                </span>
               ))}
-            </select>
-          </div>
-          <div>
-            <Label htmlFor="tags">Tags</Label>
-            <Input
-              id="tags"
-              value={formData.tags}
-              onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-              placeholder="web, design, tutorial (comma separated)"
-              className="mt-2 bg-muted/50 border-border/50"
-            />
-          </div>
+            </div>
+          )}
         </div>
+      ) : (
+        /* Edit Mode */
+        <div className="space-y-6">
+          {/* Title & Slug */}
+          <div className="glass-card rounded-2xl p-6 space-y-4">
+            <div>
+              <Label htmlFor="title">Title *</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) => handleTitleChange(e.target.value)}
+                placeholder="Enter post title"
+                className="mt-2 bg-muted/50 border-border/50"
+              />
+            </div>
+            <div>
+              <Label htmlFor="slug">URL Slug</Label>
+              <Input
+                id="slug"
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                placeholder="post-url-slug"
+                className="mt-2 bg-muted/50 border-border/50"
+              />
+            </div>
+          </div>
 
-        {/* SEO */}
-        <div className="glass-card rounded-2xl p-6 space-y-4">
-          <h3 className="font-heading font-bold text-lg">SEO Settings</h3>
-          <div>
-            <Label htmlFor="meta_title">Meta Title</Label>
-            <Input
-              id="meta_title"
-              value={formData.meta_title}
-              onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
-              placeholder="SEO title (defaults to post title)"
-              className="mt-2 bg-muted/50 border-border/50"
-            />
+          {/* Featured Image */}
+          <div className="glass-card rounded-2xl p-6">
+            <Label>Featured Image</Label>
+            <div className="mt-2">
+              <ImageUploader
+                value={formData.featured_image}
+                onChange={(url) => setFormData({ ...formData, featured_image: url })}
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="meta_description">Meta Description</Label>
-            <Textarea
-              id="meta_description"
-              value={formData.meta_description}
-              onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
-              placeholder="SEO description (max 160 characters)"
-              className="mt-2 bg-muted/50 border-border/50"
-              rows={2}
-            />
+
+          {/* Content with Rich Text Editor */}
+          <div className="glass-card rounded-2xl p-6">
+            <Label htmlFor="content">Content</Label>
+            <div className="mt-2">
+              <RichTextEditor
+                content={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="meta_keywords">Meta Keywords</Label>
-            <Input
-              id="meta_keywords"
-              value={formData.meta_keywords}
-              onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
-              placeholder="keyword1, keyword2, keyword3"
-              className="mt-2 bg-muted/50 border-border/50"
-            />
+
+          {/* Excerpt */}
+          <div className="glass-card rounded-2xl p-6">
+            <div>
+              <Label htmlFor="excerpt">Excerpt</Label>
+              <Textarea
+                id="excerpt"
+                value={formData.excerpt}
+                onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                placeholder="Short description for previews"
+                className="mt-2 bg-muted/50 border-border/50"
+                rows={3}
+              />
+            </div>
+          </div>
+
+          {/* Category & Tags */}
+          <div className="glass-card rounded-2xl p-6 space-y-4">
+            <div>
+              <Label htmlFor="category">Category</Label>
+              <select
+                id="category"
+                value={formData.category_id}
+                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                className="mt-2 w-full bg-muted/50 border border-border/50 rounded-md p-2 text-foreground"
+              >
+                <option value="">Select category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <Label htmlFor="tags">Tags</Label>
+              <Input
+                id="tags"
+                value={formData.tags}
+                onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                placeholder="web, design, tutorial (comma separated)"
+                className="mt-2 bg-muted/50 border-border/50"
+              />
+            </div>
+          </div>
+
+          {/* SEO */}
+          <div className="glass-card rounded-2xl p-6 space-y-4">
+            <h3 className="font-heading font-bold text-lg">SEO Settings</h3>
+            <div>
+              <Label htmlFor="meta_title">Meta Title</Label>
+              <Input
+                id="meta_title"
+                value={formData.meta_title}
+                onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
+                placeholder="SEO title (defaults to post title)"
+                className="mt-2 bg-muted/50 border-border/50"
+              />
+            </div>
+            <div>
+              <Label htmlFor="meta_description">Meta Description</Label>
+              <Textarea
+                id="meta_description"
+                value={formData.meta_description}
+                onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
+                placeholder="SEO description (max 160 characters)"
+                className="mt-2 bg-muted/50 border-border/50"
+                rows={2}
+              />
+            </div>
+            <div>
+              <Label htmlFor="meta_keywords">Meta Keywords</Label>
+              <Input
+                id="meta_keywords"
+                value={formData.meta_keywords}
+                onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
+                placeholder="keyword1, keyword2, keyword3"
+                className="mt-2 bg-muted/50 border-border/50"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
