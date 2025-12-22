@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Save, Eye } from 'lucide-react';
 import { toast } from 'sonner';
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
+import { ImageUploader } from '@/components/admin/ImageUploader';
 
 interface Category {
   id: string;
@@ -217,20 +219,30 @@ const AdminBlogEditor = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Featured Image */}
         <div className="glass-card rounded-2xl p-6">
-          <Label htmlFor="content">Content</Label>
-          <Textarea
-            id="content"
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            placeholder="Write your post content here... (Supports Markdown)"
-            className="mt-2 bg-muted/50 border-border/50 min-h-[300px]"
-          />
+          <Label>Featured Image</Label>
+          <div className="mt-2">
+            <ImageUploader
+              value={formData.featured_image}
+              onChange={(url) => setFormData({ ...formData, featured_image: url })}
+            />
+          </div>
         </div>
 
-        {/* Excerpt & Featured Image */}
-        <div className="glass-card rounded-2xl p-6 space-y-4">
+        {/* Content with Rich Text Editor */}
+        <div className="glass-card rounded-2xl p-6">
+          <Label htmlFor="content">Content</Label>
+          <div className="mt-2">
+            <RichTextEditor
+              content={formData.content}
+              onChange={(content) => setFormData({ ...formData, content })}
+            />
+          </div>
+        </div>
+
+        {/* Excerpt */}
+        <div className="glass-card rounded-2xl p-6">
           <div>
             <Label htmlFor="excerpt">Excerpt</Label>
             <Textarea
@@ -240,16 +252,6 @@ const AdminBlogEditor = () => {
               placeholder="Short description for previews"
               className="mt-2 bg-muted/50 border-border/50"
               rows={3}
-            />
-          </div>
-          <div>
-            <Label htmlFor="featured_image">Featured Image URL</Label>
-            <Input
-              id="featured_image"
-              value={formData.featured_image}
-              onChange={(e) => setFormData({ ...formData, featured_image: e.target.value })}
-              placeholder="https://example.com/image.jpg"
-              className="mt-2 bg-muted/50 border-border/50"
             />
           </div>
         </div>
