@@ -1,3 +1,4 @@
+// WhatsApp floating button component
 import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
