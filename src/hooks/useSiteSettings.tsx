@@ -3,6 +3,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Json } from '@/integrations/supabase/types';
 
+export interface PortfolioLink {
+  id: string;
+  title: string;
+  url: string;
+  icon?: string;
+}
+
 export interface SiteSettings {
   // Stats
   projectsDone: string;
@@ -28,6 +35,8 @@ export interface SiteSettings {
   servicesText: string;
   // Skills Tags
   skillTags: string[];
+  // Portfolio Links
+  portfolioLinks: PortfolioLink[];
 }
 
 const defaultSettings: SiteSettings = {
@@ -50,6 +59,9 @@ const defaultSettings: SiteSettings = {
   servicesLink: '/services',
   servicesText: 'View Services',
   skillTags: ['Web Development', 'Digital Marketing', 'Graphic Design', 'Video Editing'],
+  portfolioLinks: [
+    { id: '1', title: 'Behance', url: 'https://www.behance.net/jaypatel351', icon: 'palette' },
+  ],
 };
 
 // Cache settings in memory to avoid repeated API calls

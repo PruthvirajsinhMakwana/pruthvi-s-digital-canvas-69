@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Save, BarChart3, User, Link2, MousePointer, Tags, Plus, X } from 'lucide-react';
-import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { Save, BarChart3, User, Link2, MousePointer, Tags, Plus, X, Briefcase, Trash2 } from 'lucide-react';
+import { useSiteSettings, PortfolioLink } from '@/hooks/useSiteSettings';
 
 const AdminSiteContent = () => {
   const { settings, isLoading, updateSettings } = useSiteSettings();
@@ -36,6 +36,35 @@ const AdminSiteContent = () => {
 
   const removeTag = (tag: string) => {
     setFormData({ ...formData, skillTags: formData.skillTags.filter(t => t !== tag) });
+  };
+
+  const addPortfolioLink = () => {
+    const newLink: PortfolioLink = {
+      id: Date.now().toString(),
+      title: '',
+      url: '',
+      icon: 'link',
+    };
+    setFormData({ 
+      ...formData, 
+      portfolioLinks: [...(formData.portfolioLinks || []), newLink] 
+    });
+  };
+
+  const updatePortfolioLink = (id: string, field: keyof PortfolioLink, value: string) => {
+    setFormData({
+      ...formData,
+      portfolioLinks: (formData.portfolioLinks || []).map(link =>
+        link.id === id ? { ...link, [field]: value } : link
+      ),
+    });
+  };
+
+  const removePortfolioLink = (id: string) => {
+    setFormData({
+      ...formData,
+      portfolioLinks: (formData.portfolioLinks || []).filter(link => link.id !== id),
+    });
   };
 
   if (isLoading) {
@@ -287,6 +316,67 @@ const AdminSiteContent = () => {
                 className="mt-2 bg-muted/50 border-border/50"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Portfolio Links Section */}
+        <div className="glass-card rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-heading font-bold">Portfolio Links</h3>
+                <p className="text-sm text-muted-foreground">Links to showcase your work (Behance, Dribbble, GitHub, etc.)</p>
+              </div>
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={addPortfolioLink}>
+              <Plus className="w-4 h-4 mr-1" />
+              Add Link
+            </Button>
+          </div>
+
+          <div className="space-y-4">
+            {(formData.portfolioLinks || []).length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                No portfolio links added yet. Click "Add Link" to add one.
+              </p>
+            ) : (
+              (formData.portfolioLinks || []).map((link) => (
+                <div key={link.id} className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
+                  <div className="flex-1 grid sm:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Button Text</Label>
+                      <Input
+                        value={link.title}
+                        onChange={(e) => updatePortfolioLink(link.id, 'title', e.target.value)}
+                        placeholder="e.g., Behance, Dribbble"
+                        className="mt-1 bg-background border-border/50 h-9"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">URL</Label>
+                      <Input
+                        value={link.url}
+                        onChange={(e) => updatePortfolioLink(link.id, 'url', e.target.value)}
+                        placeholder="https://behance.net/username"
+                        className="mt-1 bg-background border-border/50 h-9"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-destructive mt-5"
+                    onClick={() => removePortfolioLink(link.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
