@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, forwardRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface UseScrollRevealOptions {
   threshold?: number;
@@ -46,14 +46,14 @@ interface ScrollRevealProps {
   duration?: number;
 }
 
-export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(({
+export function ScrollReveal({
   children,
   className = '',
   animation = 'fade-up',
   delay = 0,
   duration = 600,
-}, forwardedRef) => {
-  const { ref: scrollRef, isVisible } = useScrollReveal();
+}: ScrollRevealProps) {
+  const { ref, isVisible } = useScrollReveal();
 
   const getAnimationStyles = () => {
     const baseStyles = {
@@ -81,21 +81,9 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(({
     return { ...baseStyles, opacity: 1, transform: 'translateY(0) translateX(0) scale(1)' };
   };
 
-  // Combine refs
-  const setRefs = (element: HTMLDivElement | null) => {
-    (scrollRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
-    if (typeof forwardedRef === 'function') {
-      forwardedRef(element);
-    } else if (forwardedRef) {
-      forwardedRef.current = element;
-    }
-  };
-
   return (
-    <div ref={setRefs} className={className} style={getAnimationStyles()}>
+    <div ref={ref} className={className} style={getAnimationStyles()}>
       {children}
     </div>
   );
-});
-
-ScrollReveal.displayName = 'ScrollReveal';
+}

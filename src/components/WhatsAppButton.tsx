@@ -1,8 +1,8 @@
-import { useState, forwardRef } from 'react';
+import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
-export const WhatsAppButton = forwardRef<HTMLDivElement>((_, ref) => {
+export function WhatsAppButton() {
   const [isHovered, setIsHovered] = useState(false);
   const { settings } = useSiteSettings();
   
@@ -12,7 +12,7 @@ export const WhatsAppButton = forwardRef<HTMLDivElement>((_, ref) => {
     : `https://wa.me/${settings.whatsappNumber.replace(/[^\d]/g, '')}?text=${encodeURIComponent("Hi! I'm interested in your services.")}`;
 
   return (
-    <div ref={ref} className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50">
       {/* Tooltip */}
       <div
         className={`absolute bottom-full right-0 mb-3 glass-card rounded-xl p-3 transition-all duration-300 ${
@@ -43,6 +43,4 @@ export const WhatsAppButton = forwardRef<HTMLDivElement>((_, ref) => {
       </a>
     </div>
   );
-});
-
-WhatsAppButton.displayName = 'WhatsAppButton';
+}
