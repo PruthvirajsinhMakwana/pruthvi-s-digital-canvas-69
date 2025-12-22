@@ -10,6 +10,11 @@ export interface PortfolioLink {
   icon?: string;
 }
 
+export interface ServiceLink {
+  serviceName: string;
+  url: string;
+}
+
 export interface SiteSettings {
   // Stats
   projectsDone: string;
@@ -37,6 +42,8 @@ export interface SiteSettings {
   skillTags: string[];
   // Portfolio Links
   portfolioLinks: PortfolioLink[];
+  // Service Links (where arrow buttons redirect)
+  serviceLinks: ServiceLink[];
 }
 
 const defaultSettings: SiteSettings = {
@@ -61,6 +68,20 @@ const defaultSettings: SiteSettings = {
   skillTags: ['Web Development', 'Digital Marketing', 'Graphic Design', 'Video Editing'],
   portfolioLinks: [
     { id: '1', title: 'Behance', url: 'https://www.behance.net/jaypatel351', icon: 'palette' },
+  ],
+  serviceLinks: [
+    { serviceName: 'Web Development', url: '/links' },
+    { serviceName: 'Digital Marketing', url: '/links' },
+    { serviceName: 'Graphic Design', url: '/links' },
+    { serviceName: 'Video Editing', url: '/links' },
+    { serviceName: 'UI/UX Design', url: '/links' },
+    { serviceName: 'IT Support', url: '/links' },
+    { serviceName: 'Esports Commentary', url: '/links' },
+    { serviceName: 'Event Hosting', url: '/links' },
+    { serviceName: 'Tournament Organization', url: '/links' },
+    { serviceName: 'Gaming Content', url: '/links' },
+    { serviceName: 'Team Management', url: '/links' },
+    { serviceName: 'Community Events', url: '/links' },
   ],
 };
 

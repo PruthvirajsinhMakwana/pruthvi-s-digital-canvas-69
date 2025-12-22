@@ -129,49 +129,66 @@ const esportsServices = [
 interface ServiceCardProps {
   service: typeof itServices[0];
   index: number;
+  linkUrl?: string;
 }
 
-const ServiceCard = ({ service, index }: ServiceCardProps) => (
-  <ScrollReveal animation="fade-up" delay={index * 100}>
-    <div className="group relative h-full">
-      {/* Card */}
-      <div className={`relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 lg:p-7 h-full transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 hover:shadow-2xl ${service.shadowColor}`}>
-        {/* Gradient overlay on hover */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-[0.03] rounded-2xl transition-opacity duration-500`} />
-        
-        {/* Icon with gradient background */}
-        <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-          <service.icon className="w-7 h-7 text-white" strokeWidth={1.5} />
-        </div>
+const ServiceCard = ({ service, index, linkUrl }: ServiceCardProps) => {
+  const handleArrowClick = () => {
+    if (linkUrl) {
+      if (linkUrl.startsWith('http')) {
+        window.open(linkUrl, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = linkUrl;
+      }
+    }
+  };
 
-        {/* Content */}
-        <h3 className="font-heading text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
-          {service.title}
-        </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-          {service.description}
-        </p>
-
-        {/* Deliverables with checkmarks */}
-        <div className="space-y-2.5">
-          {service.deliverables.slice(0, 4).map((item, i) => (
-            <div key={i} className="flex items-center gap-2.5 text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors">
-              <CheckCircle2 className={`w-4 h-4 flex-shrink-0 bg-gradient-to-br ${service.gradient} bg-clip-text text-transparent`} style={{ color: `var(--tw-gradient-from)` }} />
-              <span>{item}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Hover arrow indicator */}
-        <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}>
-            <ArrowRight className="w-5 h-5 text-white" />
+  return (
+    <ScrollReveal animation="fade-up" delay={index * 100}>
+      <div className="group relative h-full">
+        {/* Card */}
+        <div className={`relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 lg:p-7 h-full transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 hover:shadow-2xl ${service.shadowColor}`}>
+          {/* Gradient overlay on hover */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-[0.03] rounded-2xl transition-opacity duration-500`} />
+          
+          {/* Icon with gradient background */}
+          <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+            <service.icon className="w-7 h-7 text-white" strokeWidth={1.5} />
           </div>
+
+          {/* Content */}
+          <h3 className="font-heading text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
+            {service.title}
+          </h3>
+          <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+            {service.description}
+          </p>
+
+          {/* Deliverables with checkmarks */}
+          <div className="space-y-2.5 pb-14">
+            {service.deliverables.slice(0, 4).map((item, i) => (
+              <div key={i} className="flex items-center gap-2.5 text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors">
+                <CheckCircle2 className={`w-4 h-4 flex-shrink-0`} style={{ color: service.gradient.includes('blue') ? '#3b82f6' : service.gradient.includes('green') ? '#22c55e' : service.gradient.includes('pink') ? '#ec4899' : service.gradient.includes('red') ? '#ef4444' : service.gradient.includes('purple') ? '#a855f7' : service.gradient.includes('orange') ? '#f97316' : service.gradient.includes('violet') ? '#8b5cf6' : service.gradient.includes('cyan') ? '#06b6d4' : service.gradient.includes('amber') ? '#f59e0b' : service.gradient.includes('emerald') ? '#10b981' : service.gradient.includes('rose') ? '#f43f5e' : service.gradient.includes('indigo') ? '#6366f1' : '#8b5cf6' }} />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Clickable arrow button */}
+          {linkUrl && (
+            <button
+              onClick={handleArrowClick}
+              className="absolute bottom-6 right-6 w-11 h-11 rounded-xl bg-gradient-to-br from-primary/80 to-primary flex items-center justify-center shadow-lg hover:scale-110 hover:shadow-xl transition-all duration-300 cursor-pointer group/btn"
+              aria-label={`View ${service.title} projects`}
+            >
+              <ArrowRight className="w-5 h-5 text-white group-hover/btn:translate-x-0.5 transition-transform" />
+            </button>
+          )}
         </div>
       </div>
-    </div>
-  </ScrollReveal>
-);
+    </ScrollReveal>
+  );
+};
 
 interface ServicesSectionProps {
   showBothCategories?: boolean;
@@ -180,6 +197,12 @@ interface ServicesSectionProps {
 export const ServicesSection = ({ showBothCategories = false }: ServicesSectionProps) => {
   const { settings } = useSiteSettings();
   const portfolioLinks = settings.portfolioLinks || [];
+  const serviceLinks = settings.serviceLinks || [];
+
+  const getServiceLink = (serviceName: string): string | undefined => {
+    const link = serviceLinks.find(l => l.serviceName === serviceName);
+    return link?.url;
+  };
 
   return (
     <section id="services" className="py-24 lg:py-32 relative overflow-hidden">
@@ -209,7 +232,7 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
         {/* IT Services Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-24">
           {itServices.map((service, index) => (
-            <ServiceCard key={index} service={service} index={index} />
+            <ServiceCard key={index} service={service} index={index} linkUrl={getServiceLink(service.title)} />
           ))}
         </div>
 
@@ -243,10 +266,9 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
               </div>
             </ScrollReveal>
 
-            {/* Esports Services Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {esportsServices.map((service, index) => (
-                <ServiceCard key={index} service={service} index={index} />
+                <ServiceCard key={index} service={service} index={index} linkUrl={getServiceLink(service.title)} />
               ))}
             </div>
           </>
