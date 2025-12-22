@@ -3,8 +3,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Save, BarChart3, User, Link2, MousePointer, Tags, Plus, X, Briefcase, Trash2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Save, BarChart3, User, Link2, MousePointer, Tags, Plus, X, Briefcase, Trash2, Palette, Github, Dribbble, Globe, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, ExternalLink } from 'lucide-react';
 import { useSiteSettings, PortfolioLink } from '@/hooks/useSiteSettings';
+
+// Icon options for portfolio links
+const portfolioIconOptions = [
+  { value: 'briefcase', label: 'Briefcase', icon: Briefcase },
+  { value: 'palette', label: 'Behance/Design', icon: Palette },
+  { value: 'dribbble', label: 'Dribbble', icon: Dribbble },
+  { value: 'github', label: 'GitHub', icon: Github },
+  { value: 'globe', label: 'Website', icon: Globe },
+  { value: 'file-image', label: 'Portfolio', icon: FileImage },
+  { value: 'code', label: 'Code', icon: Code },
+  { value: 'youtube', label: 'YouTube', icon: Youtube },
+  { value: 'instagram', label: 'Instagram', icon: Instagram },
+  { value: 'linkedin', label: 'LinkedIn', icon: Linkedin },
+  { value: 'twitter', label: 'Twitter', icon: Twitter },
+  { value: 'external-link', label: 'External Link', icon: ExternalLink },
+];
 
 const AdminSiteContent = () => {
   const { settings, isLoading, updateSettings } = useSiteSettings();
@@ -343,39 +360,68 @@ const AdminSiteContent = () => {
                 No portfolio links added yet. Click "Add Link" to add one.
               </p>
             ) : (
-              (formData.portfolioLinks || []).map((link) => (
-                <div key={link.id} className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
-                  <div className="flex-1 grid sm:grid-cols-2 gap-3">
-                    <div>
-                      <Label className="text-xs">Button Text</Label>
-                      <Input
-                        value={link.title}
-                        onChange={(e) => updatePortfolioLink(link.id, 'title', e.target.value)}
-                        placeholder="e.g., Behance, Dribbble"
-                        className="mt-1 bg-background border-border/50 h-9"
-                      />
+              (formData.portfolioLinks || []).map((link) => {
+                const IconComponent = portfolioIconOptions.find(opt => opt.value === link.icon)?.icon || Briefcase;
+                return (
+                  <div key={link.id} className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
+                    <div className="flex-1 grid sm:grid-cols-3 gap-3">
+                      <div>
+                        <Label className="text-xs">Icon</Label>
+                        <Select
+                          value={link.icon || 'briefcase'}
+                          onValueChange={(value) => updatePortfolioLink(link.id, 'icon', value)}
+                        >
+                          <SelectTrigger className="mt-1 bg-background border-border/50 h-9">
+                            <SelectValue>
+                              <div className="flex items-center gap-2">
+                                <IconComponent className="w-4 h-4" />
+                                <span className="text-xs">{portfolioIconOptions.find(opt => opt.value === link.icon)?.label || 'Briefcase'}</span>
+                              </div>
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {portfolioIconOptions.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                <div className="flex items-center gap-2">
+                                  <option.icon className="w-4 h-4" />
+                                  <span>{option.label}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label className="text-xs">Button Text</Label>
+                        <Input
+                          value={link.title}
+                          onChange={(e) => updatePortfolioLink(link.id, 'title', e.target.value)}
+                          placeholder="e.g., Behance, Dribbble"
+                          className="mt-1 bg-background border-border/50 h-9"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs">URL</Label>
+                        <Input
+                          value={link.url}
+                          onChange={(e) => updatePortfolioLink(link.id, 'url', e.target.value)}
+                          placeholder="https://behance.net/username"
+                          className="mt-1 bg-background border-border/50 h-9"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Label className="text-xs">URL</Label>
-                      <Input
-                        value={link.url}
-                        onChange={(e) => updatePortfolioLink(link.id, 'url', e.target.value)}
-                        placeholder="https://behance.net/username"
-                        className="mt-1 bg-background border-border/50 h-9"
-                      />
-                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-destructive mt-5"
+                      onClick={() => removePortfolioLink(link.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive mt-5"
-                    onClick={() => removePortfolioLink(link.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
