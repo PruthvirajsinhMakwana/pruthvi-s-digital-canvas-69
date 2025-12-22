@@ -1,5 +1,5 @@
+// Scroll reveal animation hook and component
 import { useEffect, useRef, useState } from 'react';
-
 interface UseScrollRevealOptions {
   threshold?: number;
   rootMargin?: string;
