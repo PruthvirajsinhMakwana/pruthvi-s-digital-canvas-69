@@ -2,6 +2,7 @@ import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 const itServices = [
   {
     icon: Globe,
@@ -143,6 +144,9 @@ interface ServicesSectionProps {
 }
 
 export const ServicesSection = ({ showBothCategories = false }: ServicesSectionProps) => {
+  const { settings } = useSiteSettings();
+  const portfolioLinks = settings.portfolioLinks || [];
+
   return (
     <section id="services" className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-muted/20 to-background">
       {/* Background */}
@@ -224,18 +228,34 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
                 <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
                   Check out my portfolio to see real projects I've delivered. From websites to designs, explore the work that speaks for itself.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" className="px-8 group" asChild>
-                    <a 
-                      href="https://www.behance.net/jaypatel351" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                      <Briefcase className="w-5 h-5 mr-2" />
-                      View My Work
-                      <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </a>
-                  </Button>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
+                  {portfolioLinks.length > 0 ? (
+                    portfolioLinks.map((link) => (
+                      <Button key={link.id} size="lg" className="px-8 group" asChild>
+                        <a 
+                          href={link.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <Briefcase className="w-5 h-5 mr-2" />
+                          {link.title || 'View My Work'}
+                          <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        </a>
+                      </Button>
+                    ))
+                  ) : (
+                    <Button size="lg" className="px-8 group" asChild>
+                      <a 
+                        href="https://www.behance.net/jaypatel351" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <Briefcase className="w-5 h-5 mr-2" />
+                        View My Work
+                        <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      </a>
+                    </Button>
+                  )}
                   <Button variant="outline" size="lg" className="px-8" asChild>
                     <Link to="/contact">Get in Touch</Link>
                   </Button>
