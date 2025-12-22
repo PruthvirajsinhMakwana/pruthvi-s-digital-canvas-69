@@ -72,7 +72,9 @@ const BlogPost = () => {
 
   const estimateReadTime = (content: string) => {
     const wordsPerMinute = 200;
-    const words = content?.split(' ').length || 0;
+    // Strip HTML tags for accurate word count
+    const strippedContent = content?.replace(/<[^>]*>/g, '') || '';
+    const words = strippedContent.split(/\s+/).length || 0;
     return Math.max(1, Math.ceil(words / wordsPerMinute));
   };
 
@@ -203,16 +205,27 @@ const BlogPost = () => {
                 </ScrollReveal>
               )}
 
-              {/* Content */}
+              {/* Content - Render HTML properly */}
               <ScrollReveal animation="fade-up" delay={100}>
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <div 
-                    className="text-foreground leading-relaxed whitespace-pre-wrap"
-                    style={{ fontSize: '1.125rem', lineHeight: '1.9' }}
-                  >
-                    {post.content}
-                  </div>
-                </div>
+                <div 
+                  className="prose prose-lg dark:prose-invert max-w-none
+                    prose-headings:font-heading prose-headings:font-bold prose-headings:text-foreground
+                    prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
+                    prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3
+                    prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2
+                    prose-p:text-foreground prose-p:leading-relaxed prose-p:mb-4
+                    prose-a:text-primary prose-a:underline hover:prose-a:text-primary/80
+                    prose-strong:text-foreground prose-strong:font-semibold
+                    prose-em:italic
+                    prose-ul:list-disc prose-ul:pl-6 prose-ul:my-4
+                    prose-ol:list-decimal prose-ol:pl-6 prose-ol:my-4
+                    prose-li:text-foreground prose-li:my-1
+                    prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground
+                    prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+                    prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
+                    prose-img:rounded-lg prose-img:shadow-lg prose-img:my-6"
+                  dangerouslySetInnerHTML={{ __html: post.content || '' }}
+                />
               </ScrollReveal>
 
               {/* Tags */}
