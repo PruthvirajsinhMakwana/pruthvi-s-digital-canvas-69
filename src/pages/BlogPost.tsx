@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { toast } from 'sonner';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface BlogPostData {
   id: string;
@@ -218,7 +219,7 @@ const BlogPost = () => {
                   prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8 prose-img:border prose-img:border-border/50
                   
                   prose-hr:border-border prose-hr:my-10"
-                dangerouslySetInnerHTML={{ __html: post.content || '' }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content || '') }}
               />
             </ScrollReveal>
 
