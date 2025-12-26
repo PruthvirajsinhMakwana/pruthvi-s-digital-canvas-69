@@ -9,6 +9,7 @@ import { ArrowLeft, Save, Eye, Edit3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import { ImageUploader } from '@/components/admin/ImageUploader';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface Category {
   id: string;
@@ -233,7 +234,7 @@ const AdminBlogEditor = () => {
               prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic
               prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
               prose-img:rounded-lg prose-img:my-6"
-            dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-muted-foreground">No content yet...</p>' }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(formData.content || '<p class="text-muted-foreground">No content yet...</p>') }}
           />
           
           {formData.tags && (

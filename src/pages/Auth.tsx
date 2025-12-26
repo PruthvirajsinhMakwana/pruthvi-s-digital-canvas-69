@@ -12,17 +12,12 @@ const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
-
-// Default admin credentials
-const DEFAULT_ADMIN_EMAIL = 'pruthviraj.admin@example.com';
-const DEFAULT_ADMIN_PASSWORD = 'Pruthvi!01';
-
 const Auth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: DEFAULT_ADMIN_EMAIL,
-    password: DEFAULT_ADMIN_PASSWORD,
+    email: '',
+    password: '',
   });
 
   useEffect(() => {
