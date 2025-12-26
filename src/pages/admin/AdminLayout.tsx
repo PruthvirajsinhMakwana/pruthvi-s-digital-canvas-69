@@ -46,6 +46,21 @@ const AdminLayout = () => {
         return;
       }
       
+      // Verify admin role - defense in depth alongside RLS
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', session.user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+      
+      if (roleError || !roleData) {
+        toast.error('Admin access required');
+        await supabase.auth.signOut();
+        navigate('/');
+        return;
+      }
+      
       setIsLoading(false);
     };
 

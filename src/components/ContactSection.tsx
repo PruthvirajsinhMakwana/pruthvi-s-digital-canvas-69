@@ -17,6 +17,10 @@ export const ContactSection = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastSubmitTime, setLastSubmitTime] = useState<number>(0);
+
+  // Rate limit: 1 submission per 60 seconds
+  const RATE_LIMIT_MS = 60000;
 
   const contactInfo = [
     { icon: Mail, label: 'Email', value: settings.email, href: `mailto:${settings.email}` },
@@ -33,6 +37,14 @@ export const ContactSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Rate limiting check
+    const now = Date.now();
+    if (now - lastSubmitTime < RATE_LIMIT_MS) {
+      const remainingSeconds = Math.ceil((RATE_LIMIT_MS - (now - lastSubmitTime)) / 1000);
+      toast.error(`Please wait ${remainingSeconds} seconds before submitting again`);
+      return;
+    }
     
     // Client-side validation
     const trimmedName = formData.name.trim();
@@ -62,6 +74,7 @@ export const ContactSection = () => {
     }
     
     setIsSubmitting(true);
+    setLastSubmitTime(now);
     
     try {
       const { error } = await supabase
