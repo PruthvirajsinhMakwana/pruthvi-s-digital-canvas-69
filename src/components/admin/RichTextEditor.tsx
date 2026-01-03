@@ -18,9 +18,11 @@ import {
   AlignLeft, 
   AlignCenter, 
   AlignRight,
+  AlignJustify,
   Heading1,
   Heading2,
   Heading3,
+  Heading4,
   Quote,
   Code,
   Link as LinkIcon,
@@ -28,10 +30,13 @@ import {
   Upload,
   Undo,
   Redo,
-  Loader2
+  Loader2,
+  Minus,
+  Highlighter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 interface RichTextEditorProps {
   content: string;
@@ -59,8 +64,8 @@ const MenuButton = ({
     title={title}
     disabled={disabled}
     className={cn(
-      "h-8 w-8 p-0",
-      isActive && "bg-primary/20 text-primary"
+      "h-9 w-9 p-0 hover:bg-primary/10",
+      isActive && "bg-primary/20 text-primary hover:bg-primary/25"
     )}
   >
     {children}
@@ -75,18 +80,18 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
     extensions: [
       StarterKit.configure({
         heading: {
-          levels: [1, 2, 3],
+          levels: [1, 2, 3, 4],
         },
       }),
       Image.configure({
         HTMLAttributes: {
-          class: 'rounded-lg max-w-full h-auto my-4',
+          class: 'rounded-xl max-w-full h-auto my-6 shadow-lg',
         },
       }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-primary underline',
+          class: 'text-primary font-semibold border-b-2 border-primary/30 hover:border-primary transition-colors',
         },
       }),
       TextAlign.configure({
@@ -94,12 +99,17 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
       }),
       Underline,
       Placeholder.configure({
-        placeholder: 'Start writing your blog post...',
+        placeholder: 'Start writing your blog post here...',
       }),
     ],
     content: content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'focus:outline-none',
+      },
     },
   });
 
@@ -183,7 +193,7 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
   }
 
   return (
-    <div className="border border-border/50 rounded-lg overflow-hidden bg-muted/30">
+    <div className="border border-border/50 rounded-xl overflow-hidden bg-card shadow-sm">
       <input
         ref={fileInputRef}
         type="file"
@@ -192,20 +202,22 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
         className="hidden"
       />
 
-      {/* Toolbar */}
-      <div className="border-b border-border/50 p-2 flex flex-wrap gap-1 bg-card/50">
+      {/* Enhanced Toolbar */}
+      <div className="border-b border-border/50 p-3 flex flex-wrap gap-1 bg-muted/30">
         {/* History */}
-        <div className="flex gap-0.5 border-r border-border/50 pr-2 mr-1">
-          <MenuButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
+        <div className="flex gap-0.5 pr-2 mr-1">
+          <MenuButton onClick={() => editor.chain().focus().undo().run()} title="Undo (Ctrl+Z)">
             <Undo className="w-4 h-4" />
           </MenuButton>
-          <MenuButton onClick={() => editor.chain().focus().redo().run()} title="Redo">
+          <MenuButton onClick={() => editor.chain().focus().redo().run()} title="Redo (Ctrl+Shift+Z)">
             <Redo className="w-4 h-4" />
           </MenuButton>
         </div>
 
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
         {/* Headings */}
-        <div className="flex gap-0.5 border-r border-border/50 pr-2 mr-1">
+        <div className="flex gap-0.5 pr-2 mr-1">
           <MenuButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             isActive={editor.isActive('heading', { level: 1 })}
@@ -227,28 +239,37 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           >
             <Heading3 className="w-4 h-4" />
           </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+            isActive={editor.isActive('heading', { level: 4 })}
+            title="Heading 4"
+          >
+            <Heading4 className="w-4 h-4" />
+          </MenuButton>
         </div>
 
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
         {/* Text formatting */}
-        <div className="flex gap-0.5 border-r border-border/50 pr-2 mr-1">
+        <div className="flex gap-0.5 pr-2 mr-1">
           <MenuButton
             onClick={() => editor.chain().focus().toggleBold().run()}
             isActive={editor.isActive('bold')}
-            title="Bold"
+            title="Bold (Ctrl+B)"
           >
             <Bold className="w-4 h-4" />
           </MenuButton>
           <MenuButton
             onClick={() => editor.chain().focus().toggleItalic().run()}
             isActive={editor.isActive('italic')}
-            title="Italic"
+            title="Italic (Ctrl+I)"
           >
             <Italic className="w-4 h-4" />
           </MenuButton>
           <MenuButton
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             isActive={editor.isActive('underline')}
-            title="Underline"
+            title="Underline (Ctrl+U)"
           >
             <UnderlineIcon className="w-4 h-4" />
           </MenuButton>
@@ -259,10 +280,19 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           >
             <Strikethrough className="w-4 h-4" />
           </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().toggleCode().run()}
+            isActive={editor.isActive('code')}
+            title="Inline Code"
+          >
+            <Highlighter className="w-4 h-4" />
+          </MenuButton>
         </div>
 
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
         {/* Lists */}
-        <div className="flex gap-0.5 border-r border-border/50 pr-2 mr-1">
+        <div className="flex gap-0.5 pr-2 mr-1">
           <MenuButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             isActive={editor.isActive('bulletList')}
@@ -279,8 +309,10 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           </MenuButton>
         </div>
 
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
         {/* Alignment */}
-        <div className="flex gap-0.5 border-r border-border/50 pr-2 mr-1">
+        <div className="flex gap-0.5 pr-2 mr-1">
           <MenuButton
             onClick={() => editor.chain().focus().setTextAlign('left').run()}
             isActive={editor.isActive({ textAlign: 'left' })}
@@ -302,14 +334,23 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           >
             <AlignRight className="w-4 h-4" />
           </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+            isActive={editor.isActive({ textAlign: 'justify' })}
+            title="Justify"
+          >
+            <AlignJustify className="w-4 h-4" />
+          </MenuButton>
         </div>
 
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
         {/* Block elements */}
-        <div className="flex gap-0.5 border-r border-border/50 pr-2 mr-1">
+        <div className="flex gap-0.5 pr-2 mr-1">
           <MenuButton
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             isActive={editor.isActive('blockquote')}
-            title="Quote"
+            title="Blockquote"
           >
             <Quote className="w-4 h-4" />
           </MenuButton>
@@ -320,14 +361,22 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           >
             <Code className="w-4 h-4" />
           </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().setHorizontalRule().run()}
+            title="Horizontal Line"
+          >
+            <Minus className="w-4 h-4" />
+          </MenuButton>
         </div>
+
+        <Separator orientation="vertical" className="h-9 mx-1" />
 
         {/* Insert */}
         <div className="flex gap-0.5 items-center">
           <MenuButton
             onClick={addLink}
             isActive={editor.isActive('link')}
-            title="Add Link"
+            title="Add Link (Ctrl+K)"
           >
             <LinkIcon className="w-4 h-4" />
           </MenuButton>
@@ -340,23 +389,45 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
             size="sm"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="h-8 text-xs gap-1"
+            className="h-9 text-xs gap-1.5 ml-1"
             title="Upload Image"
           >
             {isUploading ? (
-              <Loader2 className="w-3 h-3 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Upload className="w-3 h-3" />
+              <Upload className="w-3.5 h-3.5" />
             )}
-            Upload
+            Upload Image
           </Button>
         </div>
       </div>
 
-      {/* Editor */}
+      {/* Editor Content */}
       <EditorContent 
         editor={editor} 
-        className="prose prose-sm dark:prose-invert max-w-none min-h-[300px] p-4 focus:outline-none [&_.ProseMirror]:min-h-[280px] [&_.ProseMirror]:outline-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none"
+        className="prose prose-base dark:prose-invert max-w-none min-h-[400px] p-6 focus:outline-none bg-background
+          [&_.ProseMirror]:min-h-[380px] [&_.ProseMirror]:outline-none
+          [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground/60
+          [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]
+          [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left
+          [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0
+          [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
+          [&_.ProseMirror_p.is-editor-empty:first-child::before]:italic
+          
+          prose-headings:font-heading prose-headings:font-bold
+          prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
+          prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/50
+          prose-h3:text-xl prose-h3:mt-5 prose-h3:mb-2
+          prose-h4:text-lg prose-h4:mt-4 prose-h4:mb-2
+          prose-p:leading-relaxed prose-p:mb-4
+          prose-a:text-primary prose-a:font-semibold
+          prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/50 prose-blockquote:pl-4 prose-blockquote:py-2 prose-blockquote:rounded-r-lg
+          prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+          prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:p-4
+          prose-img:rounded-xl prose-img:shadow-lg
+          prose-ul:list-disc prose-ul:pl-6
+          prose-ol:list-decimal prose-ol:pl-6
+          prose-li:leading-relaxed"
       />
     </div>
   );

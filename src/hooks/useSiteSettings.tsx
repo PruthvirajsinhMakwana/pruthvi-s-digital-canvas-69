@@ -15,35 +15,56 @@ export interface ServiceLink {
   url: string;
 }
 
+export interface CustomService {
+  id: string;
+  title: string;
+  description: string;
+  deliverables: string[];
+  linkUrl: string;
+  category: 'it' | 'esports';
+  icon: string;
+  gradient: string;
+  isVisible: boolean;
+  order: number;
+}
+
 export interface SiteSettings {
   // Stats
   projectsDone: string;
   toolsMastered: string;
   yearsLearning: string;
-  // Personal Info
+  
+  // Personal
   name: string;
   title: string;
-  subtitle: string;
   description: string;
   availabilityStatus: string;
+  
   // Social Links
-  whatsappNumber: string;
   email: string;
+  whatsappNumber: string;
   linkedinUrl: string;
   githubUrl: string;
   twitterUrl: string;
   instagramUrl: string;
-  // CTA Links
-  hireMeLink: string;
+  
+  // CTA
   hireMeText: string;
-  servicesLink: string;
+  hireMeLink: string;
   servicesText: string;
-  // Skills Tags
+  servicesLink: string;
+  
+  // Skills
   skillTags: string[];
+  
   // Portfolio Links
   portfolioLinks: PortfolioLink[];
-  // Service Links (where arrow buttons redirect)
+  
+  // Service Links (for default services)
   serviceLinks: ServiceLink[];
+  
+  // Custom Services
+  customServices: CustomService[];
 }
 
 const defaultSettings: SiteSettings = {
@@ -52,40 +73,25 @@ const defaultSettings: SiteSettings = {
   yearsLearning: '3+',
   name: 'Pruthvirajsinh Makwana',
   title: 'IT Professional | Web Developer | Creative Designer',
-  subtitle: 'IT Professional',
-  description: 'I build responsive websites, engaging digital content, and modern brand experiences using technology, creativity, and innovation.',
+  description: 'Passionate about creating digital experiences that make a difference.',
   availabilityStatus: 'Available for freelance work',
-  whatsappNumber: 'https://wa.link/ldny59',
-  email: 'pruthvirajsinhpvt@gmail.com',
-  linkedinUrl: 'https://www.linkedin.com/in/pruthvirajsinh-makwana-635974393/',
-  githubUrl: 'https://github.com/PruthvirajsinhMakwana',
-  twitterUrl: 'https://twitter.com',
-  instagramUrl: 'https://www.instagram.com/pruthvirajsinh__makwana/',
-  hireMeLink: '/contact',
+  email: 'contact@example.com',
+  whatsappNumber: '+919876543210',
+  linkedinUrl: 'https://linkedin.com/in/username',
+  githubUrl: 'https://github.com/username',
+  twitterUrl: 'https://twitter.com/username',
+  instagramUrl: 'https://instagram.com/username',
   hireMeText: 'Hire Me',
-  servicesLink: '/services',
+  hireMeLink: '/contact',
   servicesText: 'View Services',
-  skillTags: ['Web Development', 'Digital Marketing', 'Graphic Design', 'Video Editing'],
-  portfolioLinks: [
-    { id: '1', title: 'Behance', url: 'https://www.behance.net/jaypatel351', icon: 'palette' },
-  ],
-  serviceLinks: [
-    { serviceName: 'Web Development', url: '/links' },
-    { serviceName: 'Digital Marketing', url: '/links' },
-    { serviceName: 'Graphic Design', url: '/links' },
-    { serviceName: 'Video Editing', url: '/links' },
-    { serviceName: 'UI/UX Design', url: '/links' },
-    { serviceName: 'IT Support', url: '/links' },
-    { serviceName: 'Esports Commentary', url: '/links' },
-    { serviceName: 'Event Hosting', url: '/links' },
-    { serviceName: 'Tournament Organization', url: '/links' },
-    { serviceName: 'Gaming Content', url: '/links' },
-    { serviceName: 'Team Management', url: '/links' },
-    { serviceName: 'Community Events', url: '/links' },
-  ],
+  servicesLink: '/services',
+  skillTags: ['Web Development', 'UI/UX Design', 'Digital Marketing', 'Video Editing'],
+  portfolioLinks: [],
+  serviceLinks: [],
+  customServices: [],
 };
 
-// Cache settings in memory to avoid repeated API calls
+// Simple in-memory cache
 let cachedSettings: SiteSettings | null = null;
 let cacheTimestamp: number = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes

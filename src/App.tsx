@@ -17,6 +17,7 @@ import Links from "./pages/Links";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminSiteContent from "./pages/admin/AdminSiteContent";
+import AdminServices from "./pages/admin/AdminServices";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminBlogEditor from "./pages/admin/AdminBlogEditor";
 import AdminMessages from "./pages/admin/AdminMessages";
@@ -109,6 +110,7 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="content" element={<AdminSiteContent />} />
+              <Route path="services" element={<AdminServices />} />
               <Route path="blog" element={<AdminBlog />} />
               <Route path="blog/new" element={<AdminBlogEditor />} />
               <Route path="blog/edit/:id" element={<AdminBlogEditor />} />
