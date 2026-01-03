@@ -160,8 +160,8 @@ const Blog = () => {
           </section>
 
           {/* Posts Section */}
-          <section className="py-16">
-            <div className="container mx-auto px-4 sm:px-6">
+          <section className="py-20 lg:py-24">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
               {isLoading ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="w-10 h-10 border-3 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -173,58 +173,59 @@ const Blog = () => {
                     <ScrollReveal animation="fade-up">
                       <Link
                         to={`/blog/${featuredPost.slug}`}
-                        className="group block mb-16"
+                        className="group block mb-20"
                       >
-                        <div className="grid lg:grid-cols-2 gap-8 bg-card border border-border rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-300">
+                        <div className="grid lg:grid-cols-2 gap-0 bg-card border border-border rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5">
                           {/* Image */}
-                          <div className="aspect-video lg:aspect-auto lg:h-full relative overflow-hidden">
+                          <div className="aspect-[4/3] lg:aspect-auto lg:h-full relative overflow-hidden">
                             {featuredPost.featured_image ? (
                               <img
                                 src={featuredPost.featured_image}
                                 alt={featuredPost.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                               />
                             ) : (
-                              <div className="w-full h-full min-h-[300px] bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                                <BookOpen className="w-16 h-16 text-primary/30" />
+                              <div className="w-full h-full min-h-[350px] bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                                <BookOpen className="w-20 h-20 text-primary/30" />
                               </div>
                             )}
-                            <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                            <span className="absolute top-5 left-5 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold tracking-wide uppercase">
                               Featured
                             </span>
                           </div>
 
                           {/* Content */}
-                          <div className="p-8 lg:p-10 flex flex-col justify-center">
+                          <div className="p-8 lg:p-12 xl:p-14 flex flex-col justify-center">
                             {featuredPost.blog_categories && (
-                              <span className="inline-block px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-medium w-fit mb-4">
+                              <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-xs font-semibold tracking-wide uppercase w-fit mb-5">
                                 {featuredPost.blog_categories.name}
                               </span>
                             )}
                             
-                            <h2 className="font-heading text-2xl lg:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
+                            <h2 className="font-heading text-2xl lg:text-3xl xl:text-4xl font-bold mb-5 leading-tight group-hover:text-primary transition-colors duration-300">
                               {featuredPost.title}
                             </h2>
                             
                             {featuredPost.excerpt && (
-                              <p className="text-muted-foreground mb-6 line-clamp-3">
+                              <p className="text-muted-foreground text-base lg:text-lg mb-6 line-clamp-3 leading-relaxed">
                                 {featuredPost.excerpt}
                               </p>
                             )}
 
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                            <div className="flex items-center gap-5 text-sm text-muted-foreground mb-8">
                               <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4" />
-                                {format(new Date(featuredPost.published_at), 'MMM d, yyyy')}
+                                <Calendar className="w-4 h-4 text-primary/60" />
+                                <span>{format(new Date(featuredPost.published_at), 'MMMM d, yyyy')}</span>
                               </div>
+                              <div className="w-1 h-1 rounded-full bg-border" />
                               <div className="flex items-center gap-2">
-                                <Clock className="w-4 h-4" />
-                                {estimateReadTime(featuredPost.excerpt || '')}
+                                <Clock className="w-4 h-4 text-primary/60" />
+                                <span>{estimateReadTime(featuredPost.excerpt || '')}</span>
                               </div>
                             </div>
 
-                            <span className="inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
-                              Read Article <ArrowRight className="w-4 h-4" />
+                            <span className="inline-flex items-center gap-3 text-primary font-semibold text-base group-hover:gap-4 transition-all duration-300">
+                              Read Full Article <ArrowRight className="w-5 h-5" />
                             </span>
                           </div>
                         </div>
@@ -234,61 +235,61 @@ const Blog = () => {
 
                   {/* Other Posts Grid */}
                   {otherPosts.length > 0 && (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                       {otherPosts.map((post, index) => (
                         <ScrollReveal key={post.id} animation="fade-up" delay={index * 80}>
                           <Link
                             to={`/blog/${post.slug}`}
-                            className="group bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 block h-full"
+                            className="group bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/5 block h-full flex flex-col"
                           >
                             {/* Image */}
-                            <div className="aspect-video relative overflow-hidden">
+                            <div className="aspect-[16/10] relative overflow-hidden">
                               {post.featured_image ? (
                                 <img
                                   src={post.featured_image}
                                   alt={post.title}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
                               ) : (
                                 <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-                                  <BookOpen className="w-10 h-10 text-primary/20" />
+                                  <BookOpen className="w-12 h-12 text-primary/20" />
                                 </div>
                               )}
                               {post.blog_categories && (
-                                <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-card/90 backdrop-blur-sm text-foreground text-xs font-medium">
+                                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-card/95 backdrop-blur-sm text-foreground text-xs font-medium">
                                   {post.blog_categories.name}
                                 </span>
                               )}
                             </div>
 
                             {/* Content */}
-                            <div className="p-6">
-                              <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-                                <div className="flex items-center gap-1">
+                            <div className="p-6 lg:p-7 flex flex-col flex-1">
+                              <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
+                                <div className="flex items-center gap-1.5">
                                   <Calendar className="w-3.5 h-3.5" />
-                                  {format(new Date(post.published_at), 'MMM d, yyyy')}
+                                  <span>{format(new Date(post.published_at), 'MMM d, yyyy')}</span>
                                 </div>
-                                <span>•</span>
-                                <div className="flex items-center gap-1">
+                                <div className="w-1 h-1 rounded-full bg-border" />
+                                <div className="flex items-center gap-1.5">
                                   <Clock className="w-3.5 h-3.5" />
-                                  {estimateReadTime(post.excerpt || '')}
+                                  <span>{estimateReadTime(post.excerpt || '')}</span>
                                 </div>
                               </div>
                               
-                              <h3 className="font-heading text-lg font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                              <h3 className="font-heading text-lg lg:text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-snug">
                                 {post.title}
                               </h3>
                               
                               {post.excerpt && (
-                                <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
+                                <p className="text-muted-foreground text-sm line-clamp-2 mb-5 leading-relaxed flex-1">
                                   {post.excerpt}
                                 </p>
                               )}
 
                               {post.tags && post.tags.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mb-4">
+                                <div className="flex flex-wrap gap-2 mb-5">
                                   {post.tags.slice(0, 2).map((tag, i) => (
-                                    <span key={i} className="flex items-center gap-1 text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
+                                    <span key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/80 px-2.5 py-1 rounded-md">
                                       <Tag className="w-3 h-3" />
                                       {tag}
                                     </span>
@@ -296,8 +297,8 @@ const Blog = () => {
                                 </div>
                               )}
 
-                              <span className="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all">
-                                Read More <ArrowRight className="w-4 h-4" />
+                              <span className="inline-flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all mt-auto">
+                                Read Article <ArrowRight className="w-4 h-4" />
                               </span>
                             </div>
                           </Link>
@@ -308,12 +309,12 @@ const Blog = () => {
                 </>
               ) : (
                 <ScrollReveal animation="fade-up">
-                  <div className="text-center py-20">
-                    <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
-                      <BookOpen className="w-10 h-10 text-muted-foreground" />
+                  <div className="text-center py-24">
+                    <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mx-auto mb-8">
+                      <BookOpen className="w-12 h-12 text-muted-foreground" />
                     </div>
-                    <h3 className="font-heading text-2xl font-bold mb-3">No Articles Found</h3>
-                    <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    <h3 className="font-heading text-2xl font-bold mb-4">No Articles Found</h3>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto text-lg">
                       {searchQuery 
                         ? `No articles matching "${searchQuery}". Try a different search term.`
                         : 'No articles have been published yet. Check back soon for new content!'
@@ -322,7 +323,7 @@ const Blog = () => {
                     {searchQuery && (
                       <button
                         onClick={() => setSearchQuery('')}
-                        className="text-primary font-medium hover:underline"
+                        className="text-primary font-semibold hover:underline text-lg"
                       >
                         Clear search
                       </button>
