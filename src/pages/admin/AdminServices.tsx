@@ -4,18 +4,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { 
   Save, Plus, Trash2, GripVertical, Eye, EyeOff, ExternalLink, FolderOpen,
   Globe, Palette, Video, Megaphone, Layers, PenTool, 
   Mic, Trophy, Gamepad2, Radio, Users, Calendar,
   Code, Smartphone, Database, Cloud, Shield, Zap,
   Image, Film, Sparkles, PlayCircle, FileVideo, Clapperboard,
-  MonitorPlay, Camera, Brush, Type, Layout
+  MonitorPlay, Camera, Brush, Type, Layout, Building2, Upload, X
 } from 'lucide-react';
-import { useSiteSettings, CustomService, PortfolioCategory } from '@/hooks/useSiteSettings';
+import { useSiteSettings, CustomService, PortfolioCategory, CompanyLogo } from '@/hooks/useSiteSettings';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { supabase } from '@/integrations/supabase/client';
 
 const iconOptions = [
   { value: 'globe', label: 'Globe', icon: Globe },
@@ -76,9 +76,11 @@ const AdminServices = () => {
   const { settings, isLoading, updateSettings } = useSiteSettings();
   const [services, setServices] = useState<CustomService[]>([]);
   const [portfolioCategories, setPortfolioCategories] = useState<PortfolioCategory[]>([]);
+  const [companyLogos, setCompanyLogos] = useState<CompanyLogo[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingPortfolioId, setEditingPortfolioId] = useState<string | null>(null);
+  const [uploadingLogoId, setUploadingLogoId] = useState<string | null>(null);
 
   useEffect(() => {
     if (settings.customServices) {
@@ -87,13 +89,17 @@ const AdminServices = () => {
     if (settings.portfolioCategories) {
       setPortfolioCategories(settings.portfolioCategories);
     }
-  }, [settings.customServices, settings.portfolioCategories]);
+    if (settings.companyLogos) {
+      setCompanyLogos(settings.companyLogos);
+    }
+  }, [settings.customServices, settings.portfolioCategories, settings.companyLogos]);
 
   const handleSave = async () => {
     setIsSaving(true);
     const success = await updateSettings({ 
       customServices: services,
-      portfolioCategories: portfolioCategories
+      portfolioCategories: portfolioCategories,
+      companyLogos: companyLogos
     });
     if (success) {
       toast.success('All changes saved successfully!');
@@ -176,6 +182,77 @@ const AdminServices = () => {
     setPortfolioCategories(portfolioCategories.map(p => 
       p.id === id ? { ...p, isVisible: !p.isVisible } : p
     ));
+  };
+
+  // Company Logo functions
+  const addCompanyLogo = () => {
+    const newLogo: CompanyLogo = {
+      id: Date.now().toString(),
+      name: '',
+      imageUrl: '',
+      websiteUrl: '',
+      isVisible: true,
+      order: companyLogos.length,
+    };
+    setCompanyLogos([...companyLogos, newLogo]);
+  };
+
+  const updateCompanyLogo = (id: string, field: keyof CompanyLogo, value: any) => {
+    setCompanyLogos(companyLogos.map(l => 
+      l.id === id ? { ...l, [field]: value } : l
+    ));
+  };
+
+  const deleteCompanyLogo = async (id: string) => {
+    const logo = companyLogos.find(l => l.id === id);
+    // Try to delete from storage if it's a supabase URL
+    if (logo?.imageUrl?.includes('supabase')) {
+      try {
+        const urlParts = logo.imageUrl.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        await supabase.storage.from('logos').remove([fileName]);
+      } catch (error) {
+        console.error('Error deleting image:', error);
+      }
+    }
+    setCompanyLogos(companyLogos.filter(l => l.id !== id));
+  };
+
+  const toggleLogoVisibility = (id: string) => {
+    setCompanyLogos(companyLogos.map(l => 
+      l.id === id ? { ...l, isVisible: !l.isVisible } : l
+    ));
+  };
+
+  const handleLogoUpload = async (id: string, file: File) => {
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload an image file');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image must be less than 2MB');
+      return;
+    }
+
+    setUploadingLogoId(id);
+    try {
+      const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
+      const { data, error } = await supabase.storage
+        .from('logos')
+        .upload(fileName, file, { upsert: true });
+
+      if (error) throw error;
+
+      const { data: urlData } = supabase.storage.from('logos').getPublicUrl(data.path);
+      updateCompanyLogo(id, 'imageUrl', urlData.publicUrl);
+      toast.success('Logo uploaded!');
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast.error(error.message || 'Failed to upload logo');
+    } finally {
+      setUploadingLogoId(null);
+    }
   };
 
   const itServices = services.filter(s => s.category === 'it');
@@ -470,12 +547,98 @@ const AdminServices = () => {
     );
   };
 
+  const renderLogoCard = (logo: CompanyLogo) => {
+    const isUploading = uploadingLogoId === logo.id;
+
+    return (
+      <div 
+        key={logo.id} 
+        className={`glass-card rounded-xl p-4 transition-all ${!logo.isVisible ? 'opacity-50' : ''}`}
+      >
+        <div className="flex items-center gap-4">
+          {/* Logo Image */}
+          <div className="relative w-20 h-14 bg-muted rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+            {logo.imageUrl ? (
+              <img 
+                src={logo.imageUrl} 
+                alt={logo.name} 
+                className="w-full h-full object-contain p-1"
+              />
+            ) : (
+              <Building2 className="w-8 h-8 text-muted-foreground/40" />
+            )}
+            {isUploading && (
+              <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+              </div>
+            )}
+          </div>
+
+          {/* Logo Details */}
+          <div className="flex-1 min-w-0 space-y-2">
+            <Input
+              value={logo.name}
+              onChange={(e) => updateCompanyLogo(logo.id, 'name', e.target.value)}
+              placeholder="Company Name"
+              className="h-8 text-sm font-medium"
+            />
+            <div className="flex gap-2">
+              <Input
+                value={logo.websiteUrl || ''}
+                onChange={(e) => updateCompanyLogo(logo.id, 'websiteUrl', e.target.value)}
+                placeholder="Website URL (optional)"
+                className="h-7 text-xs flex-1"
+              />
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleLogoUpload(logo.id, file);
+                  }}
+                />
+                <Button variant="outline" size="sm" className="h-7 text-xs" asChild>
+                  <span>
+                    <Upload className="w-3 h-3 mr-1" />
+                    Upload
+                  </span>
+                </Button>
+              </label>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => toggleLogoVisibility(logo.id)}
+            >
+              {logo.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-destructive"
+              onClick={() => deleteCompanyLogo(logo.id)}
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="font-heading text-2xl font-bold">Services & Portfolio</h2>
-          <p className="text-muted-foreground">Manage your services and portfolio work categories</p>
+          <p className="text-muted-foreground">Manage your services, portfolio, and company logos</p>
         </div>
         <Button onClick={handleSave} variant="hero" disabled={isSaving}>
           <Save className="w-4 h-4 mr-2" />
@@ -484,14 +647,18 @@ const AdminServices = () => {
       </div>
 
       <Tabs defaultValue="portfolio" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
+        <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="portfolio" className="flex items-center gap-2">
             <FolderOpen className="w-4 h-4" />
-            My Work / Portfolio
+            My Work
+          </TabsTrigger>
+          <TabsTrigger value="logos" className="flex items-center gap-2">
+            <Building2 className="w-4 h-4" />
+            Company Logos
           </TabsTrigger>
           <TabsTrigger value="services" className="flex items-center gap-2">
             <Layers className="w-4 h-4" />
-            Custom Services
+            Services
           </TabsTrigger>
         </TabsList>
 
@@ -543,6 +710,60 @@ const AdminServices = () => {
                 <p className="text-xs text-muted-foreground">
                   Add work categories with Google Drive folder links or any portfolio URL. 
                   Visitors can click on each category to view your work samples directly.
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Company Logos Tab */}
+        <TabsContent value="logos" className="space-y-6">
+          <div className="glass-card rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold">Companies & Clients</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Show logos of companies you've worked with
+                  </p>
+                </div>
+              </div>
+              <Button variant="outline" size="sm" onClick={addCompanyLogo}>
+                <Plus className="w-4 h-4 mr-1" />
+                Add Logo
+              </Button>
+            </div>
+
+            <div className="grid gap-4">
+              {companyLogos.length === 0 ? (
+                <div className="text-center py-12 border border-dashed border-border/50 rounded-xl">
+                  <Building2 className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+                  <h4 className="font-medium mb-2">No company logos added yet</h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Add logos of companies and clients you've worked with
+                  </p>
+                  <Button variant="outline" size="sm" onClick={addCompanyLogo}>
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add Your First Logo
+                  </Button>
+                </div>
+              ) : (
+                companyLogos.map(renderLogoCard)
+              )}
+            </div>
+          </div>
+
+          <div className="glass-card rounded-xl p-4 bg-secondary/5 border-secondary/20">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-secondary mt-0.5" />
+              <div>
+                <h4 className="font-medium text-sm mb-1">Scrolling Logo Bar</h4>
+                <p className="text-xs text-muted-foreground">
+                  Logos will appear in a smooth scrolling marquee on the Services page, 
+                  showing "Trusted by Companies & Creators". Transparent PNG logos work best!
                 </p>
               </div>
             </div>
@@ -612,7 +833,7 @@ const AdminServices = () => {
       </Tabs>
 
       <p className="text-xs text-muted-foreground text-center">
-        💡 Tip: Portfolio categories will appear in a dedicated section. Custom services appear alongside default services.
+        💡 Tip: Upload transparent PNG logos for best results. Changes are saved when you click "Save All".
       </p>
     </div>
   );

@@ -39,6 +39,15 @@ export interface PortfolioCategory {
   order: number;
 }
 
+export interface CompanyLogo {
+  id: string;
+  name: string;
+  imageUrl: string;
+  websiteUrl?: string;
+  isVisible: boolean;
+  order: number;
+}
+
 export interface SiteSettings {
   // Stats
   projectsDone: string;
@@ -79,6 +88,9 @@ export interface SiteSettings {
   
   // Portfolio Categories (Work Showcase)
   portfolioCategories: PortfolioCategory[];
+  
+  // Company Logos (Clients/Partners)
+  companyLogos: CompanyLogo[];
 }
 
 const defaultSettings: SiteSettings = {
@@ -104,6 +116,7 @@ const defaultSettings: SiteSettings = {
   serviceLinks: [],
   customServices: [],
   portfolioCategories: [],
+  companyLogos: [],
 };
 
 // Simple in-memory cache
