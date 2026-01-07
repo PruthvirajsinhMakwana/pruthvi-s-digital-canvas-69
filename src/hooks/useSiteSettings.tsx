@@ -28,6 +28,17 @@ export interface CustomService {
   order: number;
 }
 
+export interface PortfolioCategory {
+  id: string;
+  title: string;
+  description: string;
+  driveLink: string;
+  icon: string;
+  gradient: string;
+  isVisible: boolean;
+  order: number;
+}
+
 export interface SiteSettings {
   // Stats
   projectsDone: string;
@@ -65,6 +76,9 @@ export interface SiteSettings {
   
   // Custom Services
   customServices: CustomService[];
+  
+  // Portfolio Categories (Work Showcase)
+  portfolioCategories: PortfolioCategory[];
 }
 
 const defaultSettings: SiteSettings = {
@@ -89,6 +103,7 @@ const defaultSettings: SiteSettings = {
   portfolioLinks: [],
   serviceLinks: [],
   customServices: [],
+  portfolioCategories: [],
 };
 
 // Simple in-memory cache
