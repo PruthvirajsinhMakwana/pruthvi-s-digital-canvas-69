@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ServicesSection } from '@/components/ServicesSection';
+import { PortfolioShowcase } from '@/components/PortfolioShowcase';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 
@@ -51,6 +52,9 @@ const Services = () => {
               </ScrollReveal>
             </div>
           </section>
+
+          {/* Portfolio Showcase Section - Work Categories with Drive Links */}
+          <PortfolioShowcase />
 
           {/* Services Section - Show Both IT and Esports */}
           <ServicesSection showBothCategories={true} />
