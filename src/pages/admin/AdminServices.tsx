@@ -10,12 +10,29 @@ import {
   Mic, Trophy, Gamepad2, Radio, Users, Calendar,
   Code, Smartphone, Database, Cloud, Shield, Zap,
   Image, Film, Sparkles, PlayCircle, FileVideo, Clapperboard,
-  MonitorPlay, Camera, Brush, Type, Layout, Building2, Upload, X
+  MonitorPlay, Camera, Brush, Type, Layout, Building2, Upload
 } from 'lucide-react';
 import { useSiteSettings, CustomService, PortfolioCategory, CompanyLogo } from '@/hooks/useSiteSettings';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const iconOptions = [
   { value: 'globe', label: 'Globe', icon: Globe },
@@ -72,6 +89,266 @@ const gradientOptions = [
   { value: 'from-indigo-500 to-blue-500', label: 'Indigo Blue' },
 ];
 
+// Sortable Portfolio Card Component
+const SortablePortfolioCard = ({ 
+  category, 
+  isEditing, 
+  onEdit, 
+  onToggleVisibility, 
+  onDelete, 
+  onUpdate
+}: {
+  category: PortfolioCategory;
+  isEditing: boolean;
+  onEdit: () => void;
+  onToggleVisibility: () => void;
+  onDelete: () => void;
+  onUpdate: (field: keyof PortfolioCategory, value: any) => void;
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: category.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  const IconComponent = portfolioIconOptions.find(i => i.value === category.icon)?.icon || Image;
+
+  return (
+    <div 
+      ref={setNodeRef}
+      style={style}
+      className={`glass-card rounded-xl p-4 transition-all ${!category.isVisible ? 'opacity-50' : ''} ${isDragging ? 'z-50 shadow-xl' : ''}`}
+    >
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3">
+          <button
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded touch-none"
+          >
+            <GripVertical className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.gradient} flex items-center justify-center`}>
+            <IconComponent className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            {isEditing ? (
+              <Input
+                value={category.title}
+                onChange={(e) => onUpdate('title', e.target.value)}
+                placeholder="Category Title (e.g., Posters)"
+                className="h-8 text-sm font-semibold"
+              />
+            ) : (
+              <h4 className="font-semibold text-sm truncate">{category.title || 'Untitled Category'}</h4>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onToggleVisibility}>
+            {category.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onEdit}>
+            <PenTool className="w-4 h-4" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={onDelete}>
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      {isEditing && (
+        <div className="space-y-4 pt-2 border-t border-border/50">
+          <div>
+            <Label className="text-xs">Description</Label>
+            <Textarea
+              value={category.description}
+              onChange={(e) => onUpdate('description', e.target.value)}
+              placeholder="Brief description (e.g., Social media posters and banners)"
+              rows={2}
+              className="mt-1 text-sm"
+            />
+          </div>
+
+          <div>
+            <Label className="text-xs flex items-center gap-2">
+              <FolderOpen className="w-3.5 h-3.5" />
+              Google Drive / Folder Link
+            </Label>
+            <Input
+              value={category.driveLink}
+              onChange={(e) => onUpdate('driveLink', e.target.value)}
+              placeholder="https://drive.google.com/drive/folders/..."
+              className="mt-1 h-9 text-sm"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Paste your Google Drive folder link or any portfolio URL
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Icon</Label>
+              <Select value={category.icon} onValueChange={(v) => onUpdate('icon', v)}>
+                <SelectTrigger className="mt-1 h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {portfolioIconOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      <div className="flex items-center gap-2">
+                        <opt.icon className="w-4 h-4" />
+                        <span>{opt.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs">Color</Label>
+              <Select value={category.gradient} onValueChange={(v) => onUpdate('gradient', v)}>
+                <SelectTrigger className="mt-1 h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {gradientOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-4 h-4 rounded bg-gradient-to-r ${opt.value}`} />
+                        <span>{opt.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Sortable Logo Card Component
+const SortableLogoCard = ({ 
+  logo, 
+  isUploading, 
+  onToggleVisibility, 
+  onDelete, 
+  onUpdate,
+  onUpload
+}: {
+  logo: CompanyLogo;
+  isUploading: boolean;
+  onToggleVisibility: () => void;
+  onDelete: () => void;
+  onUpdate: (field: keyof CompanyLogo, value: any) => void;
+  onUpload: (file: File) => void;
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: logo.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div 
+      ref={setNodeRef}
+      style={style}
+      className={`glass-card rounded-xl p-4 transition-all ${!logo.isVisible ? 'opacity-50' : ''} ${isDragging ? 'z-50 shadow-xl' : ''}`}
+    >
+      <div className="flex items-center gap-4">
+        {/* Drag Handle */}
+        <button
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded touch-none flex-shrink-0"
+        >
+          <GripVertical className="w-5 h-5 text-muted-foreground" />
+        </button>
+
+        {/* Logo Image */}
+        <div className="relative w-20 h-14 bg-muted rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+          {logo.imageUrl ? (
+            <img src={logo.imageUrl} alt={logo.name} className="w-full h-full object-contain p-1" />
+          ) : (
+            <Building2 className="w-8 h-8 text-muted-foreground/40" />
+          )}
+          {isUploading && (
+            <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
+              <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+
+        {/* Logo Details */}
+        <div className="flex-1 min-w-0 space-y-2">
+          <Input
+            value={logo.name}
+            onChange={(e) => onUpdate('name', e.target.value)}
+            placeholder="Company Name"
+            className="h-8 text-sm font-medium"
+          />
+          <div className="flex gap-2">
+            <Input
+              value={logo.websiteUrl || ''}
+              onChange={(e) => onUpdate('websiteUrl', e.target.value)}
+              placeholder="Website URL (optional)"
+              className="h-7 text-xs flex-1"
+            />
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) onUpload(file);
+                }}
+              />
+              <Button variant="outline" size="sm" className="h-7 text-xs" asChild>
+                <span>
+                  <Upload className="w-3 h-3 mr-1" />
+                  Upload
+                </span>
+              </Button>
+            </label>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onToggleVisibility}>
+            {logo.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={onDelete}>
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AdminServices = () => {
   const { settings, isLoading, updateSettings } = useSiteSettings();
   const [services, setServices] = useState<CustomService[]>([]);
@@ -81,6 +358,17 @@ const AdminServices = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingPortfolioId, setEditingPortfolioId] = useState<string | null>(null);
   const [uploadingLogoId, setUploadingLogoId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
     if (settings.customServices) {
@@ -98,13 +386,36 @@ const AdminServices = () => {
     setIsSaving(true);
     const success = await updateSettings({ 
       customServices: services,
-      portfolioCategories: portfolioCategories,
-      companyLogos: companyLogos
+      portfolioCategories: portfolioCategories.map((p, i) => ({ ...p, order: i })),
+      companyLogos: companyLogos.map((l, i) => ({ ...l, order: i }))
     });
     if (success) {
       toast.success('All changes saved successfully!');
     }
     setIsSaving(false);
+  };
+
+  // Drag and drop handlers
+  const handlePortfolioDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setPortfolioCategories((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const handleLogoDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setCompanyLogos((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
   };
 
   // Service functions
@@ -126,9 +437,7 @@ const AdminServices = () => {
   };
 
   const updateService = (id: string, field: keyof CustomService, value: any) => {
-    setServices(services.map(s => 
-      s.id === id ? { ...s, [field]: value } : s
-    ));
+    setServices(services.map(s => s.id === id ? { ...s, [field]: value } : s));
   };
 
   const updateDeliverable = (id: string, index: number, value: string) => {
@@ -147,9 +456,7 @@ const AdminServices = () => {
   };
 
   const toggleServiceVisibility = (id: string) => {
-    setServices(services.map(s => 
-      s.id === id ? { ...s, isVisible: !s.isVisible } : s
-    ));
+    setServices(services.map(s => s.id === id ? { ...s, isVisible: !s.isVisible } : s));
   };
 
   // Portfolio Category functions
@@ -169,9 +476,7 @@ const AdminServices = () => {
   };
 
   const updatePortfolioCategory = (id: string, field: keyof PortfolioCategory, value: any) => {
-    setPortfolioCategories(portfolioCategories.map(p => 
-      p.id === id ? { ...p, [field]: value } : p
-    ));
+    setPortfolioCategories(portfolioCategories.map(p => p.id === id ? { ...p, [field]: value } : p));
   };
 
   const deletePortfolioCategory = (id: string) => {
@@ -179,9 +484,7 @@ const AdminServices = () => {
   };
 
   const togglePortfolioVisibility = (id: string) => {
-    setPortfolioCategories(portfolioCategories.map(p => 
-      p.id === id ? { ...p, isVisible: !p.isVisible } : p
-    ));
+    setPortfolioCategories(portfolioCategories.map(p => p.id === id ? { ...p, isVisible: !p.isVisible } : p));
   };
 
   // Company Logo functions
@@ -198,14 +501,11 @@ const AdminServices = () => {
   };
 
   const updateCompanyLogo = (id: string, field: keyof CompanyLogo, value: any) => {
-    setCompanyLogos(companyLogos.map(l => 
-      l.id === id ? { ...l, [field]: value } : l
-    ));
+    setCompanyLogos(companyLogos.map(l => l.id === id ? { ...l, [field]: value } : l));
   };
 
   const deleteCompanyLogo = async (id: string) => {
     const logo = companyLogos.find(l => l.id === id);
-    // Try to delete from storage if it's a supabase URL
     if (logo?.imageUrl?.includes('supabase')) {
       try {
         const urlParts = logo.imageUrl.split('/');
@@ -219,9 +519,7 @@ const AdminServices = () => {
   };
 
   const toggleLogoVisibility = (id: string) => {
-    setCompanyLogos(companyLogos.map(l => 
-      l.id === id ? { ...l, isVisible: !l.isVisible } : l
-    ));
+    setCompanyLogos(companyLogos.map(l => l.id === id ? { ...l, isVisible: !l.isVisible } : l));
   };
 
   const handleLogoUpload = async (id: string, file: File) => {
@@ -257,10 +555,6 @@ const AdminServices = () => {
 
   const itServices = services.filter(s => s.category === 'it');
   const esportsServices = services.filter(s => s.category === 'esports');
-
-  const getPortfolioIcon = (iconName: string) => {
-    return portfolioIconOptions.find(i => i.value === iconName)?.icon || Image;
-  };
 
   if (isLoading) {
     return (
@@ -298,28 +592,13 @@ const AdminServices = () => {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => toggleServiceVisibility(service.id)}
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toggleServiceVisibility(service.id)}>
               {service.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setEditingId(isEditing ? null : service.id)}
-            >
-              <GripVertical className="w-4 h-4" />
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditingId(isEditing ? null : service.id)}>
+              <PenTool className="w-4 h-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-destructive"
-              onClick={() => deleteService(service.id)}
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => deleteService(service.id)}>
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -341,10 +620,7 @@ const AdminServices = () => {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs">Icon</Label>
-                <Select
-                  value={service.icon}
-                  onValueChange={(v) => updateService(service.id, 'icon', v)}
-                >
+                <Select value={service.icon} onValueChange={(v) => updateService(service.id, 'icon', v)}>
                   <SelectTrigger className="mt-1 h-9">
                     <SelectValue />
                   </SelectTrigger>
@@ -362,10 +638,7 @@ const AdminServices = () => {
               </div>
               <div>
                 <Label className="text-xs">Color Gradient</Label>
-                <Select
-                  value={service.gradient}
-                  onValueChange={(v) => updateService(service.id, 'gradient', v)}
-                >
+                <Select value={service.gradient} onValueChange={(v) => updateService(service.id, 'gradient', v)}>
                   <SelectTrigger className="mt-1 h-9">
                     <SelectValue />
                   </SelectTrigger>
@@ -413,226 +686,6 @@ const AdminServices = () => {
     );
   };
 
-  const renderPortfolioCard = (category: PortfolioCategory) => {
-    const isEditing = editingPortfolioId === category.id;
-    const IconComponent = getPortfolioIcon(category.icon);
-
-    return (
-      <div 
-        key={category.id} 
-        className={`glass-card rounded-xl p-4 transition-all ${!category.isVisible ? 'opacity-50' : ''}`}
-      >
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.gradient} flex items-center justify-center`}>
-              <IconComponent className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              {isEditing ? (
-                <Input
-                  value={category.title}
-                  onChange={(e) => updatePortfolioCategory(category.id, 'title', e.target.value)}
-                  placeholder="Category Title (e.g., Posters)"
-                  className="h-8 text-sm font-semibold"
-                />
-              ) : (
-                <h4 className="font-semibold text-sm truncate">{category.title || 'Untitled Category'}</h4>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => togglePortfolioVisibility(category.id)}
-            >
-              {category.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setEditingPortfolioId(isEditing ? null : category.id)}
-            >
-              <GripVertical className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-destructive"
-              onClick={() => deletePortfolioCategory(category.id)}
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-
-        {isEditing && (
-          <div className="space-y-4 pt-2 border-t border-border/50">
-            <div>
-              <Label className="text-xs">Description</Label>
-              <Textarea
-                value={category.description}
-                onChange={(e) => updatePortfolioCategory(category.id, 'description', e.target.value)}
-                placeholder="Brief description (e.g., Social media posters and banners)"
-                rows={2}
-                className="mt-1 text-sm"
-              />
-            </div>
-
-            <div>
-              <Label className="text-xs flex items-center gap-2">
-                <FolderOpen className="w-3.5 h-3.5" />
-                Google Drive / Folder Link
-              </Label>
-              <Input
-                value={category.driveLink}
-                onChange={(e) => updatePortfolioCategory(category.id, 'driveLink', e.target.value)}
-                placeholder="https://drive.google.com/drive/folders/..."
-                className="mt-1 h-9 text-sm"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                Paste your Google Drive folder link or any portfolio URL
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label className="text-xs">Icon</Label>
-                <Select
-                  value={category.icon}
-                  onValueChange={(v) => updatePortfolioCategory(category.id, 'icon', v)}
-                >
-                  <SelectTrigger className="mt-1 h-9">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {portfolioIconOptions.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        <div className="flex items-center gap-2">
-                          <opt.icon className="w-4 h-4" />
-                          <span>{opt.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label className="text-xs">Color</Label>
-                <Select
-                  value={category.gradient}
-                  onValueChange={(v) => updatePortfolioCategory(category.id, 'gradient', v)}
-                >
-                  <SelectTrigger className="mt-1 h-9">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {gradientOptions.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-4 h-4 rounded bg-gradient-to-r ${opt.value}`} />
-                          <span>{opt.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const renderLogoCard = (logo: CompanyLogo) => {
-    const isUploading = uploadingLogoId === logo.id;
-
-    return (
-      <div 
-        key={logo.id} 
-        className={`glass-card rounded-xl p-4 transition-all ${!logo.isVisible ? 'opacity-50' : ''}`}
-      >
-        <div className="flex items-center gap-4">
-          {/* Logo Image */}
-          <div className="relative w-20 h-14 bg-muted rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
-            {logo.imageUrl ? (
-              <img 
-                src={logo.imageUrl} 
-                alt={logo.name} 
-                className="w-full h-full object-contain p-1"
-              />
-            ) : (
-              <Building2 className="w-8 h-8 text-muted-foreground/40" />
-            )}
-            {isUploading && (
-              <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-              </div>
-            )}
-          </div>
-
-          {/* Logo Details */}
-          <div className="flex-1 min-w-0 space-y-2">
-            <Input
-              value={logo.name}
-              onChange={(e) => updateCompanyLogo(logo.id, 'name', e.target.value)}
-              placeholder="Company Name"
-              className="h-8 text-sm font-medium"
-            />
-            <div className="flex gap-2">
-              <Input
-                value={logo.websiteUrl || ''}
-                onChange={(e) => updateCompanyLogo(logo.id, 'websiteUrl', e.target.value)}
-                placeholder="Website URL (optional)"
-                className="h-7 text-xs flex-1"
-              />
-              <label className="cursor-pointer">
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleLogoUpload(logo.id, file);
-                  }}
-                />
-                <Button variant="outline" size="sm" className="h-7 text-xs" asChild>
-                  <span>
-                    <Upload className="w-3 h-3 mr-1" />
-                    Upload
-                  </span>
-                </Button>
-              </label>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-1 flex-shrink-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => toggleLogoVisibility(logo.id)}
-            >
-              {logo.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-destructive"
-              onClick={() => deleteCompanyLogo(logo.id)}
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center justify-between">
@@ -673,7 +726,7 @@ const AdminServices = () => {
                 <div>
                   <h3 className="font-heading font-bold">Work Categories</h3>
                   <p className="text-sm text-muted-foreground">
-                    Add categories like Posters, Ads, Videos with Drive links
+                    Drag to reorder • Add categories with Drive links
                   </p>
                 </div>
               </div>
@@ -683,23 +736,37 @@ const AdminServices = () => {
               </Button>
             </div>
 
-            <div className="grid gap-4">
-              {portfolioCategories.length === 0 ? (
-                <div className="text-center py-12 border border-dashed border-border/50 rounded-xl">
-                  <FolderOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
-                  <h4 className="font-medium mb-2">No work categories added yet</h4>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Add categories to showcase your work (Posters, Ads, Videos, etc.)
-                  </p>
-                  <Button variant="outline" size="sm" onClick={addPortfolioCategory}>
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Your First Category
-                  </Button>
-                </div>
-              ) : (
-                portfolioCategories.map(renderPortfolioCard)
-              )}
-            </div>
+            {portfolioCategories.length === 0 ? (
+              <div className="text-center py-12 border border-dashed border-border/50 rounded-xl">
+                <FolderOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+                <h4 className="font-medium mb-2">No work categories added yet</h4>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Add categories to showcase your work (Posters, Ads, Videos, etc.)
+                </p>
+                <Button variant="outline" size="sm" onClick={addPortfolioCategory}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Your First Category
+                </Button>
+              </div>
+            ) : (
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handlePortfolioDragEnd}>
+                <SortableContext items={portfolioCategories.map(p => p.id)} strategy={verticalListSortingStrategy}>
+                  <div className="grid gap-4">
+                    {portfolioCategories.map((category) => (
+                      <SortablePortfolioCard
+                        key={category.id}
+                        category={category}
+                        isEditing={editingPortfolioId === category.id}
+                        onEdit={() => setEditingPortfolioId(editingPortfolioId === category.id ? null : category.id)}
+                        onToggleVisibility={() => togglePortfolioVisibility(category.id)}
+                        onDelete={() => deletePortfolioCategory(category.id)}
+                        onUpdate={(field, value) => updatePortfolioCategory(category.id, field, value)}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            )}
           </div>
 
           <div className="glass-card rounded-xl p-4 bg-primary/5 border-primary/20">
@@ -727,7 +794,7 @@ const AdminServices = () => {
                 <div>
                   <h3 className="font-heading font-bold">Companies & Clients</h3>
                   <p className="text-sm text-muted-foreground">
-                    Show logos of companies you've worked with
+                    Drag to reorder • Upload logos of companies you've worked with
                   </p>
                 </div>
               </div>
@@ -737,23 +804,37 @@ const AdminServices = () => {
               </Button>
             </div>
 
-            <div className="grid gap-4">
-              {companyLogos.length === 0 ? (
-                <div className="text-center py-12 border border-dashed border-border/50 rounded-xl">
-                  <Building2 className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
-                  <h4 className="font-medium mb-2">No company logos added yet</h4>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Add logos of companies and clients you've worked with
-                  </p>
-                  <Button variant="outline" size="sm" onClick={addCompanyLogo}>
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Your First Logo
-                  </Button>
-                </div>
-              ) : (
-                companyLogos.map(renderLogoCard)
-              )}
-            </div>
+            {companyLogos.length === 0 ? (
+              <div className="text-center py-12 border border-dashed border-border/50 rounded-xl">
+                <Building2 className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+                <h4 className="font-medium mb-2">No company logos added yet</h4>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Add logos of companies and clients you've worked with
+                </p>
+                <Button variant="outline" size="sm" onClick={addCompanyLogo}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Your First Logo
+                </Button>
+              </div>
+            ) : (
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleLogoDragEnd}>
+                <SortableContext items={companyLogos.map(l => l.id)} strategy={verticalListSortingStrategy}>
+                  <div className="grid gap-4">
+                    {companyLogos.map((logo) => (
+                      <SortableLogoCard
+                        key={logo.id}
+                        logo={logo}
+                        isUploading={uploadingLogoId === logo.id}
+                        onToggleVisibility={() => toggleLogoVisibility(logo.id)}
+                        onDelete={() => deleteCompanyLogo(logo.id)}
+                        onUpdate={(field, value) => updateCompanyLogo(logo.id, field, value)}
+                        onUpload={(file) => handleLogoUpload(logo.id, file)}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            )}
           </div>
 
           <div className="glass-card rounded-xl p-4 bg-secondary/5 border-secondary/20">
@@ -833,7 +914,7 @@ const AdminServices = () => {
       </Tabs>
 
       <p className="text-xs text-muted-foreground text-center">
-        💡 Tip: Upload transparent PNG logos for best results. Changes are saved when you click "Save All".
+        💡 Tip: Drag items to reorder. Upload transparent PNG logos for best results. Changes are saved when you click "Save All".
       </p>
     </div>
   );
