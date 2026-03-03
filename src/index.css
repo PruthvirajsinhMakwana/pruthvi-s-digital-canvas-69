@@ -487,3 +487,14 @@
   background: hsl(var(--primary) / 0.3);
   color: hsl(var(--foreground));
 }
+
+/* Blog content: preserve empty paragraphs as spacing */
+.prose p:empty {
+  min-height: 1.5em;
+}
+
+.prose p br {
+  display: block;
+  content: "";
+  margin-top: 0.5em;
+}
