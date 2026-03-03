@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, Briefcase, GraduationCap, Award, Linkedin, Github, Instagram, Mail, MapPin, Calendar, Code, Palette } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 import profileIT from '@/assets/profile-it.jpg';
 
 const skills = [
@@ -87,6 +88,7 @@ const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: strin
 };
 
 export const AboutSection = () => {
+  const { settings } = useSiteSettings();
   return (
     <section id="about" className="py-24 relative overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background">
       {/* Decorative Elements */}
@@ -160,7 +162,7 @@ export const AboutSection = () => {
 
               {/* Download Resume */}
               <a 
-                href="https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing" 
+                href={settings.resumeLink || 'https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing'} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-full block mt-6"
