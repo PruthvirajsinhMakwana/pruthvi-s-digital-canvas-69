@@ -197,6 +197,8 @@ const BlogPost = () => {
                   prose-h4:text-lg sm:prose-h4:text-xl prose-h4:mt-6 prose-h4:mb-3
                   
                   prose-p:text-foreground/85 prose-p:leading-[1.8] prose-p:mb-6 prose-p:text-base sm:prose-p:text-lg
+                  [&_p:empty]:min-h-[1.8em] [&_p:empty]:mb-6
+                  [&_p>br]:block [&_p>br]:content-[''] [&_p>br]:mt-[1.8em]
                   
                   prose-a:text-primary prose-a:font-semibold prose-a:no-underline prose-a:border-b-2 prose-a:border-primary/30 hover:prose-a:border-primary hover:prose-a:text-primary/80 prose-a:transition-colors
                   
