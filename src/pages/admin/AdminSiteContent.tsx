@@ -370,6 +370,17 @@ const AdminSiteContent = () => {
                 className="mt-2 bg-muted/50 border-border/50"
               />
             </div>
+            <div className="sm:col-span-2">
+              <Label htmlFor="resumeLink">Resume/CV Download Link</Label>
+              <Input
+                id="resumeLink"
+                value={formData.resumeLink}
+                onChange={(e) => handleChange('resumeLink', e.target.value)}
+                placeholder="https://drive.google.com/file/d/..."
+                className="mt-2 bg-muted/50 border-border/50"
+              />
+              <p className="text-xs text-muted-foreground mt-1">Google Drive or any direct link to your resume</p>
+            </div>
           </div>
         </div>
 

@@ -74,6 +74,9 @@ export interface SiteSettings {
   servicesText: string;
   servicesLink: string;
   
+  // Resume
+  resumeLink: string;
+  
   // Skills
   skillTags: string[];
   
@@ -111,6 +114,7 @@ const defaultSettings: SiteSettings = {
   hireMeLink: '/contact',
   servicesText: 'View Services',
   servicesLink: '/services',
+  resumeLink: 'https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing',
   skillTags: ['Web Development', 'UI/UX Design', 'Digital Marketing', 'Video Editing'],
   portfolioLinks: [],
   serviceLinks: [],
