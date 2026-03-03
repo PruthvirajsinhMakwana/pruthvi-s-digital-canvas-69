@@ -5,6 +5,10 @@ import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
+import { TextStyle } from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
+import { Extension } from '@tiptap/core';
 import { useState, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -32,11 +36,51 @@ import {
   Redo,
   Loader2,
   Minus,
-  Highlighter
+  Highlighter,
+  Palette,
+  Type,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
+
+// Custom FontSize extension
+const FontSize = Extension.create({
+  name: 'fontSize',
+
+  addOptions() {
+    return { types: ['textStyle'] };
+  },
+
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: (element) => element.style.fontSize?.replace(/['"]+/g, ''),
+            renderHTML: (attributes) => {
+              if (!attributes.fontSize) return {};
+              return { style: `font-size: ${attributes.fontSize}` };
+            },
+          },
+        },
+      },
+    ];
+  },
+
+  addCommands() {
+    return {
+      setFontSize: (fontSize: string) => ({ chain }: any) => {
+        return chain().setMark('textStyle', { fontSize }).run();
+      },
+      unsetFontSize: () => ({ chain }: any) => {
+        return chain().setMark('textStyle', { fontSize: null }).removeEmptyTextStyle().run();
+      },
+    };
+  },
+});
 
 interface RichTextEditorProps {
   content: string;
@@ -72,8 +116,44 @@ const MenuButton = ({
   </Button>
 );
 
+const fontSizes = [
+  { label: 'Small', value: '14px' },
+  { label: 'Normal', value: '16px' },
+  { label: 'Medium', value: '18px' },
+  { label: 'Large', value: '20px' },
+  { label: 'XL', value: '24px' },
+  { label: '2XL', value: '30px' },
+  { label: '3XL', value: '36px' },
+];
+
+const textColors = [
+  { label: 'Default', value: '' },
+  { label: 'Red', value: '#ef4444' },
+  { label: 'Orange', value: '#f97316' },
+  { label: 'Yellow', value: '#eab308' },
+  { label: 'Green', value: '#22c55e' },
+  { label: 'Blue', value: '#3b82f6' },
+  { label: 'Purple', value: '#a855f7' },
+  { label: 'Pink', value: '#ec4899' },
+  { label: 'Gray', value: '#6b7280' },
+  { label: 'White', value: '#ffffff' },
+];
+
+const highlightColors = [
+  { label: 'None', value: '' },
+  { label: 'Yellow', value: '#fef08a' },
+  { label: 'Green', value: '#bbf7d0' },
+  { label: 'Blue', value: '#bfdbfe' },
+  { label: 'Purple', value: '#e9d5ff' },
+  { label: 'Pink', value: '#fbcfe8' },
+  { label: 'Orange', value: '#fed7aa' },
+];
+
 export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showHighlightPicker, setShowHighlightPicker] = useState(false);
+  const [showFontSize, setShowFontSize] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
@@ -98,6 +178,10 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
         types: ['heading', 'paragraph'],
       }),
       Underline,
+      TextStyle,
+      Color,
+      FontSize,
+      Highlight.configure({ multicolor: true }),
       Placeholder.configure({
         placeholder: 'Start writing your blog post here...',
       }),
@@ -250,6 +334,51 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
 
         <Separator orientation="vertical" className="h-9 mx-1" />
 
+        {/* Font Size */}
+        <div className="relative">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => { setShowFontSize(!showFontSize); setShowColorPicker(false); setShowHighlightPicker(false); }}
+            title="Font Size"
+            className="h-9 px-2 hover:bg-primary/10 gap-1 text-xs"
+          >
+            <Type className="w-4 h-4" />
+            <span className="hidden sm:inline">Size</span>
+          </Button>
+          {showFontSize && (
+            <div className="absolute top-full left-0 mt-1 z-50 bg-popover border border-border rounded-lg shadow-lg p-1 min-w-[120px]">
+              {fontSizes.map((size) => (
+                <button
+                  key={size.value}
+                  type="button"
+                  onClick={() => {
+                    (editor.commands as any).setFontSize(size.value);
+                    setShowFontSize(false);
+                  }}
+                  className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-muted transition-colors"
+                  style={{ fontSize: size.value }}
+                >
+                  {size.label}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  (editor.commands as any).unsetFontSize();
+                  setShowFontSize(false);
+                }}
+                className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-muted transition-colors text-muted-foreground"
+              >
+                Reset
+              </button>
+            </div>
+          )}
+        </div>
+
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
         {/* Text formatting */}
         <div className="flex gap-0.5 pr-2 mr-1">
           <MenuButton
@@ -285,8 +414,112 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
             isActive={editor.isActive('code')}
             title="Inline Code"
           >
-            <Highlighter className="w-4 h-4" />
+            <Code className="w-4 h-4" />
           </MenuButton>
+        </div>
+
+        <Separator orientation="vertical" className="h-9 mx-1" />
+
+        {/* Text Color */}
+        <div className="relative">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => { setShowColorPicker(!showColorPicker); setShowHighlightPicker(false); setShowFontSize(false); }}
+            title="Text Color"
+            className="h-9 w-9 p-0 hover:bg-primary/10"
+          >
+            <div className="flex flex-col items-center">
+              <Palette className="w-4 h-4" />
+              <div 
+                className="w-4 h-0.5 rounded-full mt-0.5"
+                style={{ backgroundColor: editor.getAttributes('textStyle').color || 'currentColor' }}
+              />
+            </div>
+          </Button>
+          {showColorPicker && (
+            <div className="absolute top-full left-0 mt-1 z-50 bg-popover border border-border rounded-lg shadow-lg p-2">
+              <p className="text-xs text-muted-foreground mb-2 px-1">Text Color</p>
+              <div className="grid grid-cols-5 gap-1">
+                {textColors.map((color) => (
+                  <button
+                    key={color.value || 'default'}
+                    type="button"
+                    onClick={() => {
+                      if (color.value) {
+                        editor.chain().focus().setColor(color.value).run();
+                      } else {
+                        editor.chain().focus().unsetColor().run();
+                      }
+                      setShowColorPicker(false);
+                    }}
+                    title={color.label}
+                    className="w-7 h-7 rounded-md border border-border hover:scale-110 transition-transform"
+                    style={{ backgroundColor: color.value || 'transparent' }}
+                  >
+                    {!color.value && <span className="text-xs">✕</span>}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-2 pt-2 border-t border-border">
+                <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
+                  Custom:
+                  <input
+                    type="color"
+                    className="w-6 h-6 rounded cursor-pointer border-0"
+                    onChange={(e) => {
+                      editor.chain().focus().setColor(e.target.value).run();
+                      setShowColorPicker(false);
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Highlight Color */}
+        <div className="relative">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => { setShowHighlightPicker(!showHighlightPicker); setShowColorPicker(false); setShowFontSize(false); }}
+            title="Highlight Color"
+            className={cn(
+              "h-9 w-9 p-0 hover:bg-primary/10",
+              editor.isActive('highlight') && "bg-primary/20 text-primary"
+            )}
+          >
+            <Highlighter className="w-4 h-4" />
+          </Button>
+          {showHighlightPicker && (
+            <div className="absolute top-full left-0 mt-1 z-50 bg-popover border border-border rounded-lg shadow-lg p-2">
+              <p className="text-xs text-muted-foreground mb-2 px-1">Highlight</p>
+              <div className="grid grid-cols-4 gap-1">
+                {highlightColors.map((color) => (
+                  <button
+                    key={color.value || 'none'}
+                    type="button"
+                    onClick={() => {
+                      if (color.value) {
+                        editor.chain().focus().toggleHighlight({ color: color.value }).run();
+                      } else {
+                        editor.chain().focus().unsetHighlight().run();
+                      }
+                      setShowHighlightPicker(false);
+                    }}
+                    title={color.label}
+                    className="w-7 h-7 rounded-md border border-border hover:scale-110 transition-transform"
+                    style={{ backgroundColor: color.value || 'transparent' }}
+                  >
+                    {!color.value && <span className="text-xs">✕</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <Separator orientation="vertical" className="h-9 mx-1" />
@@ -429,6 +662,14 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           prose-ol:list-decimal prose-ol:pl-6
           prose-li:leading-relaxed"
       />
+
+      {/* Click outside to close dropdowns */}
+      {(showColorPicker || showHighlightPicker || showFontSize) && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => { setShowColorPicker(false); setShowHighlightPicker(false); setShowFontSize(false); }} 
+        />
+      )}
     </div>
   );
 };

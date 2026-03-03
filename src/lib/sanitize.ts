@@ -16,7 +16,7 @@ export const sanitizeHtml = (dirty: string): string => {
       'code', 'pre',
       'img',
       'table', 'thead', 'tbody', 'tr', 'th', 'td',
-      'div', 'span'
+      'div', 'span', 'mark'
     ],
     ALLOWED_ATTR: [
       'href', 'src', 'alt', 'title',
