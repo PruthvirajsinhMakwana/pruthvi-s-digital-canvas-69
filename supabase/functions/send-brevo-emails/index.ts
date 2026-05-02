@@ -28,29 +28,72 @@ function escapeHtml(s: string) {
 }
 
 function thankYouTemplate(name: string) {
-  return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f4f4f7;font-family:Arial,sans-serif;color:#1f2937;">
+  const services = [
+    { icon: '💻', title: 'Web Development', desc: 'Modern, responsive websites & web apps' },
+    { icon: '📱', title: 'Social Media Marketing', desc: 'Grow your brand across all platforms' },
+    { icon: '🎬', title: 'Video Editing', desc: 'Professional editing for reels, ads & films' },
+    { icon: '🎨', title: 'Graphic Design', desc: 'Logos, posters, branding & creatives' },
+    { icon: '📹', title: 'Video Shooting', desc: 'On-location shoots with pro equipment' },
+    { icon: '🎙️', title: 'Esports Hosting', desc: 'Live tournament hosting & commentary' },
+  ];
+
+  const serviceRows = services.map(s => `
+    <tr><td style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td width="48" style="vertical-align:top;font-size:24px;line-height:1;padding-right:12px;">${s.icon}</td>
+        <td style="vertical-align:top;">
+          <div style="font-size:14px;font-weight:600;color:#1f2937;margin-bottom:2px;">${s.title}</div>
+          <div style="font-size:13px;color:#6b7280;line-height:1.4;">${s.desc}</div>
+        </td>
+      </tr></table>
+    </td></tr>`).join('');
+
+  return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f4f4f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#1f2937;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7;padding:24px 0;">
     <tr><td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;max-width:600px;width:100%;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-        <tr><td style="background:linear-gradient(135deg,${PRIMARY_COLOR},${ACCENT_COLOR});padding:32px 24px;text-align:center;">
-          <img src="${LOGO_URL}" alt="Logo" width="64" height="64" style="border-radius:50%;display:block;margin:0 auto 12px;">
-          <h1 style="color:#ffffff;font-size:24px;margin:0;">Thanks for reaching out!</h1>
+      <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;max-width:600px;width:100%;box-shadow:0 4px 16px rgba(0,0,0,0.06);">
+        <tr><td style="background:linear-gradient(135deg,${PRIMARY_COLOR},${ACCENT_COLOR});padding:36px 24px;text-align:center;">
+          <img src="${LOGO_URL}" alt="Logo" width="72" height="72" style="border-radius:50%;display:block;margin:0 auto 14px;border:3px solid rgba(255,255,255,0.25);">
+          <h1 style="color:#ffffff;font-size:26px;margin:0 0 6px;font-weight:700;">Thanks for reaching out! 🎉</h1>
+          <p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0;">Your message is in good hands</p>
         </td></tr>
-        <tr><td style="padding:32px 24px;">
-          <p style="font-size:16px;margin:0 0 16px;">Hi ${escapeHtml(name)},</p>
-          <p style="font-size:15px;line-height:1.6;color:#374151;margin:0 0 16px;">Thank you for contacting me through my website. I've received your message and will get back to you within <strong>24 hours</strong>.</p>
-          <p style="font-size:15px;line-height:1.6;color:#374151;margin:0 0 24px;">In the meantime, feel free to explore more of my work or connect with me on social media.</p>
-          <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr><td style="background:${PRIMARY_COLOR};border-radius:8px;">
-            <a href="${SITE_URL}" style="display:inline-block;padding:12px 28px;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;">Visit Website</a>
+
+        <tr><td style="padding:32px 28px 8px;">
+          <p style="font-size:16px;margin:0 0 14px;">Hi <strong>${escapeHtml(name)}</strong>,</p>
+          <p style="font-size:15px;line-height:1.65;color:#374151;margin:0 0 14px;">Thank you for getting in touch! I've received your message and will personally review it shortly. Expect a reply within <strong style="color:${PRIMARY_COLOR};">24 hours</strong>.</p>
+          <p style="font-size:15px;line-height:1.65;color:#374151;margin:0 0 24px;">While you wait, here's a quick look at the services I offer — feel free to mention if any of these align with what you need.</p>
+        </td></tr>
+
+        <tr><td style="padding:0 28px;">
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 18px;">
+            <h2 style="font-size:13px;font-weight:700;color:${PRIMARY_COLOR};margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.8px;">✨ What I Offer</h2>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
+              ${serviceRows}
+            </table>
+          </div>
+        </td></tr>
+
+        <tr><td style="padding:28px 28px 8px;text-align:center;">
+          <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr><td style="background:linear-gradient(135deg,${PRIMARY_COLOR},${ACCENT_COLOR});border-radius:8px;">
+            <a href="${SITE_URL}" style="display:inline-block;padding:13px 32px;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;">Explore My Portfolio →</a>
           </td></tr></table>
-          <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 24px;">
-          <p style="font-size:13px;color:#6b7280;margin:0 0 8px;"><strong>Need to reach me directly?</strong></p>
-          <p style="font-size:13px;color:#6b7280;margin:0 0 4px;">📧 <a href="mailto:${BREVO_SENDER_EMAIL}" style="color:${PRIMARY_COLOR};">${BREVO_SENDER_EMAIL}</a></p>
-          <p style="font-size:13px;color:#6b7280;margin:0;">📱 +91 7016592727</p>
         </td></tr>
-        <tr><td style="background:#f9fafb;padding:20px;text-align:center;">
-          <p style="font-size:12px;color:#9ca3af;margin:0 0 8px;">Pruthvirajsinh Makwana — Web Developer & Esports Host</p>
-          <p style="font-size:12px;color:#9ca3af;margin:0;"><a href="${SITE_URL}" style="color:${PRIMARY_COLOR};text-decoration:none;">pruthvirajsinh.in</a></p>
+
+        <tr><td style="padding:24px 28px 8px;">
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:0 0 20px;">
+          <p style="font-size:13px;color:#374151;margin:0 0 10px;font-weight:600;">📞 Need to reach me directly?</p>
+          <p style="font-size:13px;color:#6b7280;margin:0 0 5px;">✉️ <a href="mailto:${BREVO_SENDER_EMAIL}" style="color:${PRIMARY_COLOR};text-decoration:none;">${BREVO_SENDER_EMAIL}</a></p>
+          <p style="font-size:13px;color:#6b7280;margin:0 0 5px;">📱 <a href="tel:+917016592727" style="color:${PRIMARY_COLOR};text-decoration:none;">+91 70165 92727</a></p>
+          <p style="font-size:13px;color:#6b7280;margin:0;">📍 Gujarat, India</p>
+        </td></tr>
+
+        <tr><td style="background:#0f172a;padding:24px;text-align:center;">
+          <p style="font-size:14px;color:#ffffff;margin:0 0 4px;font-weight:600;">Pruthvirajsinh Makwana</p>
+          <p style="font-size:12px;color:#94a3b8;margin:0 0 12px;">Web Developer • Designer • Esports Host</p>
+          <p style="font-size:12px;color:#64748b;margin:0;">
+            <a href="${SITE_URL}" style="color:${PRIMARY_COLOR};text-decoration:none;">pruthvirajsinh.in</a>
+            &nbsp;•&nbsp; © ${new Date().getFullYear()} All rights reserved
+          </p>
         </td></tr>
       </table>
     </td></tr>
