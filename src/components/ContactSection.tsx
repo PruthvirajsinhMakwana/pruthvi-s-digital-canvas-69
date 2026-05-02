@@ -99,6 +99,19 @@ export const ContactSection = () => {
       }).catch((err) => {
         console.error('Telegram notification failed:', err);
       });
+
+      // Send Brevo branded emails (thank-you to user + lead alert to admin)
+      supabase.functions.invoke('send-brevo-emails', {
+        body: {
+          name: trimmedName,
+          email: trimmedEmail,
+          phone: trimmedPhone || null,
+          message: trimmedMessage,
+          adminEmail: settings.email,
+        },
+      }).catch((err) => {
+        console.error('Brevo email failed:', err);
+      });
       
       toast.success('Message sent successfully!', {
         description: "I'll get back to you as soon as possible.",
