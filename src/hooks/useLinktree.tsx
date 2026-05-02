@@ -114,7 +114,7 @@ export const useLinktree = () => {
   const updateLink = async (id: string, updates: Partial<LinktreeLink>) => {
     const { error } = await supabase
       .from('linktree_links')
-      .update(updates as Record<string, unknown>)
+      .update(updates as any)
       .eq('id', id);
 
     if (!error) {
