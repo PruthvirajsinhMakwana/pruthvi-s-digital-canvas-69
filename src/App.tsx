@@ -87,6 +87,14 @@ const VisitorTracker = () => {
   return null;
 };
 
+// Show lead capture popup only on public pages
+const LeadPopupGate = () => {
+  const location = useLocation();
+  const hidden = location.pathname.startsWith('/admin') || location.pathname === '/auth';
+  if (hidden) return null;
+  return <LeadCapturePopup />;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
@@ -95,6 +103,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <VisitorTracker />
+          <LeadPopupGate />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
