@@ -26,6 +26,7 @@ import AdminLinks from "./pages/admin/AdminLinks";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import NotFound from "./pages/NotFound";
+import { LeadCapturePopup } from "./components/LeadCapturePopup";
 
 const queryClient = new QueryClient();
 
