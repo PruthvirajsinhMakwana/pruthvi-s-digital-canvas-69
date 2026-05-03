@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Save, Eye, Edit3 } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Edit3, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import { ImageUploader } from '@/components/admin/ImageUploader';
@@ -24,6 +24,7 @@ const AdminBlogEditor = () => {
   
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   
@@ -161,6 +162,32 @@ const AdminBlogEditor = () => {
     }
   };
 
+  const handleOptimizeWithAI = async () => {
+    if (!formData.content?.trim()) {
+      toast.error('Add some content first');
+      return;
+    }
+    setIsOptimizing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('optimize-blog-content', {
+        body: { content: formData.content, title: formData.title },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.content) throw new Error('No content returned');
+      setFormData((prev) => ({ ...prev, content: data.content }));
+      toast.success('Content optimized with AI');
+    } catch (e: any) {
+      console.error('Optimize error:', e);
+      const msg = e?.message || 'Failed to optimize content';
+      if (msg.includes('Rate limit')) toast.error('Rate limit reached. Try again shortly.');
+      else if (msg.includes('credits')) toast.error('AI credits exhausted. Add credits in workspace settings.');
+      else toast.error(msg);
+    } finally {
+      setIsOptimizing(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -287,13 +314,24 @@ const AdminBlogEditor = () => {
 
           {/* Content with Rich Text Editor */}
           <div className="glass-card rounded-2xl p-6">
-            <Label htmlFor="content">Content</Label>
-            <div className="mt-2">
-              <RichTextEditor
-                content={formData.content}
-                onChange={(content) => setFormData({ ...formData, content })}
-              />
+            <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
+              <Label htmlFor="content">Content</Label>
+              <Button
+                type="button"
+                variant="neon"
+                size="sm"
+                onClick={handleOptimizeWithAI}
+                disabled={isOptimizing || !formData.content?.trim()}
+                className="gap-2"
+              >
+                <Sparkles className={`w-4 h-4 ${isOptimizing ? 'animate-pulse' : ''}`} />
+                {isOptimizing ? 'Optimizing...' : 'Optimize with AI'}
+              </Button>
             </div>
+            <RichTextEditor
+              content={formData.content}
+              onChange={(content) => setFormData({ ...formData, content })}
+            />
           </div>
 
           {/* Excerpt */}
