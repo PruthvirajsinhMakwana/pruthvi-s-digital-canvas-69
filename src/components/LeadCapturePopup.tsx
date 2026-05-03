@@ -11,7 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const SESSION_KEY = 'lead_popup_shown';
-const DELAY_MS = 90_000 + Math.floor(Math.random() * 30_000); // 90–120s
+const DELAY_MS = 30_000; // 30 seconds
 
 const PROJECT_TYPES = [
   'Web Development',
