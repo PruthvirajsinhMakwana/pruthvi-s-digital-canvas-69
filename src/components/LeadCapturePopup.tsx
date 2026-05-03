@@ -149,9 +149,9 @@ export const LeadCapturePopup = () => {
           </div>
 
           {/* Right: form */}
-          <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-3">
+          <form onSubmit={handleSubmit} className="p-5 sm:p-7 md:p-8 space-y-3">
             <div>
-              <Label htmlFor="lp-name">Name</Label>
+              <Label htmlFor="lp-name" className="text-xs sm:text-sm">Name</Label>
               <Input
                 id="lp-name"
                 value={form.name}
@@ -159,30 +159,32 @@ export const LeadCapturePopup = () => {
                 placeholder="Your name"
                 maxLength={100}
                 required
-                className="mt-1"
+                className="mt-1 text-base sm:text-sm"
               />
             </div>
             <div>
-              <Label htmlFor="lp-email">Email</Label>
+              <Label htmlFor="lp-email" className="text-xs sm:text-sm">Email</Label>
               <Input
                 id="lp-email"
                 type="email"
+                inputMode="email"
+                autoComplete="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="you@example.com"
                 maxLength={255}
                 required
-                className="mt-1"
+                className="mt-1 text-base sm:text-sm"
               />
             </div>
             <div>
-              <Label htmlFor="lp-type">Project type</Label>
+              <Label htmlFor="lp-type" className="text-xs sm:text-sm">Project type</Label>
               <select
                 id="lp-type"
                 value={form.projectType}
                 onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                 required
-                className="mt-1 w-full bg-background border border-input rounded-md p-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                className="mt-1 w-full bg-background border border-input rounded-md p-2.5 sm:p-2 text-base sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 <option value="">Select a service</option>
                 {PROJECT_TYPES.map((t) => (
@@ -191,19 +193,19 @@ export const LeadCapturePopup = () => {
               </select>
             </div>
             <div>
-              <Label htmlFor="lp-message">Message</Label>
+              <Label htmlFor="lp-message" className="text-xs sm:text-sm">Message</Label>
               <Textarea
                 id="lp-message"
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 placeholder="Briefly describe your project, timeline, and budget."
-                rows={4}
+                rows={3}
                 maxLength={2000}
                 required
-                className="mt-1"
+                className="mt-1 text-base sm:text-sm"
               />
             </div>
-            <div className="flex items-center justify-between gap-3 pt-1">
+            <div className="flex items-center justify-between gap-3 pt-2 sticky bottom-0 bg-card/95 backdrop-blur -mx-5 sm:-mx-7 md:-mx-8 px-5 sm:px-7 md:px-8 pb-1">
               <button
                 type="button"
                 onClick={close}
