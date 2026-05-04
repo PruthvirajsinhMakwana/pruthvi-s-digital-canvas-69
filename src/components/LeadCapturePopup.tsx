@@ -176,6 +176,21 @@ export const LeadCapturePopup = () => {
                 />
               </div>
               <div>
+                <Label htmlFor="lp-phone" className="text-xs sm:text-sm">Phone</Label>
+                <Input
+                  id="lp-phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  placeholder="+91 98765 43210"
+                  maxLength={20}
+                  required
+                  className="mt-1 text-base sm:text-sm"
+                />
+              </div>
+              <div>
                 <Label htmlFor="lp-type" className="text-xs sm:text-sm">Project type</Label>
                 <select
                   id="lp-type"
