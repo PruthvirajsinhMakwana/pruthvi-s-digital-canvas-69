@@ -26,6 +26,7 @@ const PROJECT_TYPES = [
 const schema = z.object({
   name: z.string().trim().min(2, 'Name is too short').max(100),
   email: z.string().trim().email('Invalid email').max(255),
+  phone: z.string().trim().min(7, 'Enter a valid phone number').max(20).regex(/^[+\d][\d\s\-()]*$/, 'Invalid phone number'),
   projectType: z.string().min(1, 'Select a project type').max(100),
   message: z.string().trim().min(10, 'Tell me a bit more (min 10 chars)').max(2000),
 });
@@ -34,7 +35,7 @@ export const LeadCapturePopup = () => {
   const { settings } = useSiteSettings();
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', projectType: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', projectType: '', message: '' });
 
   useEffect(() => {
     const t = setTimeout(() => setOpen(true), DELAY_MS);
@@ -61,25 +62,25 @@ export const LeadCapturePopup = () => {
       toast.error(parsed.error.errors[0]?.message || 'Please fix the form');
       return;
     }
-    const { name, email, projectType, message } = parsed.data;
+    const { name, email, phone, projectType, message } = parsed.data;
     setSubmitting(true);
     try {
       const fullMessage = `[Project Type: ${projectType}]\n\n${message}`;
       const { error } = await supabase.from('contact_messages').insert({
-        name, email, phone: null, message: fullMessage,
+        name, email, phone, message: fullMessage,
       });
       if (error) throw error;
 
       supabase.functions.invoke('send-telegram-notification', {
-        body: { name, email, phone: null, message: fullMessage },
+        body: { name, email, phone, message: fullMessage },
       }).catch((err) => console.error('Telegram failed:', err));
 
       supabase.functions.invoke('send-brevo-emails', {
-        body: { name, email, phone: null, message: fullMessage, adminEmail: settings.email },
+        body: { name, email, phone, message: fullMessage, adminEmail: settings.email },
       }).catch((err) => console.error('Brevo failed:', err));
 
       toast.success("Thanks! I'll get back to you shortly.");
-      setForm({ name: '', email: '', projectType: '', message: '' });
+      setForm({ name: '', email: '', phone: '', projectType: '', message: '' });
       close();
     } catch (err) {
       console.error('Lead popup submit error:', err);
