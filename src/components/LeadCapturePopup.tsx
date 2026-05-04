@@ -11,7 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const STORAGE_KEY = 'lead_popup_last_shown';
-const DELAY_MS = 30_000; // 30 seconds
+const DELAY_MS = 20_000; // 20 seconds
 const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 const PROJECT_TYPES = [
