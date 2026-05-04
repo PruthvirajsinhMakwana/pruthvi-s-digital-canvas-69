@@ -37,14 +37,7 @@ export const LeadCapturePopup = () => {
   const [form, setForm] = useState({ name: '', email: '', projectType: '', message: '' });
 
   useEffect(() => {
-    try {
-      const last = Number(localStorage.getItem(STORAGE_KEY) || 0);
-      if (last && Date.now() - last < COOLDOWN_MS) return;
-    } catch {}
-    const t = setTimeout(() => {
-      setOpen(true);
-      try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch {}
-    }, DELAY_MS);
+    const t = setTimeout(() => setOpen(true), DELAY_MS);
     return () => clearTimeout(t);
   }, []);
 
