@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer';
 import { PortfolioShowcase } from '@/components/PortfolioShowcase';
 import { CompanyLogosSection } from '@/components/CompanyLogosSection';
 import { EsportsServicesHighlight } from '@/components/EsportsServicesHighlight';
+import { CertificationsSection } from '@/components/CertificationsSection';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -94,6 +95,9 @@ const Services = () => {
 
           {/* Esports Services Highlight */}
           <EsportsServicesHighlight />
+
+          {/* Certifications Section */}
+          <CertificationsSection />
 
           {/* Final CTA */}
           <section className="py-20 relative overflow-hidden">
