@@ -10,9 +10,9 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
-const STORAGE_KEY = 'lead_popup_last_shown';
-const DELAY_MS = 20_000; // 20 seconds
-const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_KEY = 'lead_popup_shown_session';
+// Random delay between 90-120 seconds, once per browser session
+const DELAY_MS = (90 + Math.floor(Math.random() * 31)) * 1000;
 
 const PROJECT_TYPES = [
   'Web Development',
@@ -38,7 +38,11 @@ export const LeadCapturePopup = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', projectType: '', message: '' });
 
   useEffect(() => {
-    const t = setTimeout(() => setOpen(true), DELAY_MS);
+    if (sessionStorage.getItem(SESSION_KEY)) return;
+    const t = setTimeout(() => {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      setOpen(true);
+    }, DELAY_MS);
     return () => clearTimeout(t);
   }, []);
 
