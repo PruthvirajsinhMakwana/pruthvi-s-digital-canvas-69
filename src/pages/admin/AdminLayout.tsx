@@ -16,7 +16,8 @@ import {
   BarChart3,
   Link2,
   Search,
-  Briefcase
+  Briefcase,
+  Award
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -26,6 +27,7 @@ const navItems = [
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Site Content', href: '/admin/content', icon: Globe },
   { name: 'Services', href: '/admin/services', icon: Briefcase },
+  { name: 'Certifications', href: '/admin/certifications', icon: Award },
   { name: 'SEO Settings', href: '/admin/seo', icon: Search },
   { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },

@@ -106,6 +106,48 @@ export type Database = {
           },
         ]
       }
+      certifications: {
+        Row: {
+          certificate_url: string | null
+          created_at: string | null
+          description: string | null
+          gradient: string | null
+          id: string
+          image_url: string | null
+          is_visible: boolean | null
+          issuer: string | null
+          sort_order: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          certificate_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          gradient?: string | null
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean | null
+          issuer?: string | null
+          sort_order?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          certificate_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          gradient?: string | null
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean | null
+          issuer?: string | null
+          sort_order?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string | null
