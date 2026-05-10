@@ -250,3 +250,158 @@ export const CertificationsSection = () => {
     </section>
   );
 };
+
+interface CardProps {
+  cert: Certification;
+  index: number;
+  onPreview: (c: Certification) => void;
+}
+
+const CertificationCard = ({ cert, onPreview }: CardProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0, mx: 50, my: 50 });
+  const gradient = cert.gradient || 'from-blue-500 to-cyan-500';
+  const canPreview = !!(cert.certificate_url || cert.image_url);
+
+  const handleMove = (e: MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    const px = x / r.width;
+    const py = y / r.height;
+    setTilt({
+      rx: (0.5 - py) * 10,
+      ry: (px - 0.5) * 12,
+      mx: px * 100,
+      my: py * 100,
+    });
+  };
+  const handleLeave = () => setTilt({ rx: 0, ry: 0, mx: 50, my: 50 });
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className="group relative h-full [transform-style:preserve-3d] transition-transform duration-300 ease-out will-change-transform"
+      style={{ transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)` }}
+    >
+      {/* Outer glow */}
+      <div className={`absolute -inset-0.5 bg-gradient-to-br ${gradient} rounded-2xl opacity-0 group-hover:opacity-50 blur-xl transition-all duration-700 animate-gradient-shift bg-[length:200%_200%]`} />
+      {/* Animated border */}
+      <div className={`absolute -inset-[1px] rounded-2xl bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_200%] animate-gradient-shift`} />
+
+      <div className="relative h-full bg-card/90 backdrop-blur-xl border border-border/50 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-transparent group-hover:-translate-y-2 group-hover:shadow-[0_25px_60px_-15px_hsl(var(--primary)/0.5)] flex flex-col">
+        {/* Cursor spotlight */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-30"
+          style={{
+            background: `radial-gradient(400px circle at ${tilt.mx}% ${tilt.my}%, hsl(var(--primary) / 0.15), transparent 60%)`,
+          }}
+        />
+
+        {/* Verified ribbon with shine */}
+        <div className="absolute top-0 left-0 z-30 pointer-events-none overflow-hidden rounded-br-xl">
+          <div className={`relative flex items-center gap-1 pl-3 pr-4 py-1.5 bg-gradient-to-r ${gradient} text-white text-[10px] font-bold uppercase tracking-wider shadow-lg overflow-hidden`}>
+            <BadgeCheck className="w-3 h-3 animate-pulse" />
+            Verified
+            <span className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-ribbon-shine" />
+          </div>
+        </div>
+
+        {/* Corner sparkle */}
+        <Star className="absolute top-2 right-20 w-3 h-3 text-primary/70 z-30 animate-sparkle" style={{ animationDelay: '0.5s' }} />
+        <Sparkles className="absolute bottom-24 left-3 w-3 h-3 text-accent/70 z-30 animate-sparkle" style={{ animationDelay: '1.2s' }} />
+
+        {/* Image */}
+        <button
+          type="button"
+          onClick={() => canPreview && onPreview(cert)}
+          disabled={!canPreview}
+          aria-label={`Preview ${cert.title} certificate`}
+          className="relative aspect-[16/10] overflow-hidden bg-muted text-left disabled:cursor-default cursor-zoom-in [transform:translateZ(40px)]"
+        >
+          <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-20 group-hover:opacity-30 transition-opacity duration-500 z-10`} />
+          {/* Shimmer sweep */}
+          <div className="absolute inset-0 z-20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+
+          {cert.image_url ? (
+            <img
+              src={cert.image_url}
+              alt={`${cert.title} certification`}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1"
+            />
+          ) : (
+            <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradient} bg-opacity-10`}>
+              <Award className="w-20 h-20 text-white/40 animate-float" />
+            </div>
+          )}
+
+          {/* Floating award badge with orbit */}
+          <div className="absolute top-4 right-4 z-20">
+            <div className={`relative w-12 h-12 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 animate-tilt`}>
+              <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradient} animate-ping opacity-25`} />
+              <Award className="w-5 h-5 text-white relative z-10" strokeWidth={2.5} />
+              {/* Orbiting dot */}
+              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span className="absolute w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_white] animate-orbit" />
+              </span>
+            </div>
+          </div>
+
+          {/* Hover preview overlay */}
+          {canPreview && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-background/50 backdrop-blur-sm">
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-300 animate-glow">
+                <Eye className="w-4 h-4" /> View Certificate
+              </span>
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent z-10 pointer-events-none" />
+        </button>
+
+        {/* Body */}
+        <div className="p-6 lg:p-7 flex flex-col flex-1 [transform:translateZ(20px)]">
+          {cert.issuer && (
+            <div className="flex items-center gap-2 mb-2">
+              <div className={`w-1 h-4 rounded-full bg-gradient-to-b ${gradient} animate-pulse`} />
+              <p className="text-[11px] uppercase tracking-[0.15em] text-primary font-bold">
+                {cert.issuer}
+              </p>
+            </div>
+          )}
+          <h3 className="font-heading text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300 leading-snug">
+            {cert.title}
+          </h3>
+          {cert.description && (
+            <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
+              {cert.description}
+            </p>
+          )}
+
+          {canPreview && (
+            <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => onPreview(cert)}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5 transition-all duration-300 group/btn"
+              >
+                <Eye className="w-3.5 h-3.5 group-hover/btn:scale-125 transition-transform" />
+                View Certificate
+                <span className="ml-0.5 transition-transform duration-300 group-hover/btn:translate-x-1">→</span>
+              </button>
+              <div className="flex items-center gap-1 text-[10px] text-muted-foreground uppercase tracking-wider">
+                <Calendar className="w-3 h-3" />
+                Verified
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
