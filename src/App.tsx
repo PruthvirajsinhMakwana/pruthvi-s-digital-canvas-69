@@ -11,6 +11,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Services from "./pages/Services";
+import Certifications from "./pages/Certifications";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
 import Links from "./pages/Links";
@@ -110,6 +111,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/certifications" element={<Certifications />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
