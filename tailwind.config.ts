@@ -112,6 +112,39 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        "orbit": {
+          "0%": { transform: "rotate(0deg) translateX(40px) rotate(0deg)" },
+          "100%": { transform: "rotate(360deg) translateX(40px) rotate(-360deg)" },
+        },
+        "tilt": {
+          "0%, 100%": { transform: "rotate(-1deg)" },
+          "50%": { transform: "rotate(1deg)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0) translateX(0)" },
+          "33%": { transform: "translateY(-15px) translateX(8px)" },
+          "66%": { transform: "translateY(10px) translateX(-8px)" },
+        },
+        "sparkle": {
+          "0%, 100%": { opacity: "0", transform: "scale(0)" },
+          "50%": { opacity: "1", transform: "scale(1)" },
+        },
+        "gradient-shift": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "ribbon-shine": {
+          "0%": { transform: "translateX(-100%) skewX(-20deg)" },
+          "100%": { transform: "translateX(300%) skewX(-20deg)" },
+        },
+        "card-in": {
+          "0%": { opacity: "0", transform: "translateY(40px) rotateX(-10deg) scale(0.95)" },
+          "100%": { opacity: "1", transform: "translateY(0) rotateX(0) scale(1)" },
+        },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
