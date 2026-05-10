@@ -62,9 +62,25 @@ export const CertificationsSection = () => {
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
       <div className="absolute inset-0 opacity-[0.04] [background-image:linear-gradient(hsl(var(--foreground))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--foreground))_1px,transparent_1px)] [background-size:40px_40px]" />
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[140px] animate-pulse" />
-      <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[140px] animate-float-slow" />
+      <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[120px] animate-float-slow" style={{ animationDelay: '1.5s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
 
+      {/* Floating sparkles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <span
+            key={i}
+            className="absolute block w-1 h-1 rounded-full bg-primary/60 animate-sparkle"
+            style={{
+              top: `${(i * 53) % 100}%`,
+              left: `${(i * 37) % 100}%`,
+              animationDelay: `${(i % 6) * 0.4}s`,
+              animationDuration: `${2 + (i % 4) * 0.6}s`,
+            }}
+          />
+        ))}
+      </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <ScrollReveal animation="fade-up">
