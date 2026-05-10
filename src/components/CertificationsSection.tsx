@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Award, ExternalLink, Eye, Loader2, AlertCircle, BadgeCheck, Sparkles, Trophy, GraduationCap, Calendar } from 'lucide-react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { Award, ExternalLink, Eye, Loader2, AlertCircle, BadgeCheck, Sparkles, Trophy, GraduationCap, Calendar, Star } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
