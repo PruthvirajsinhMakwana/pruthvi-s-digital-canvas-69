@@ -729,20 +729,23 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
           [&_.ProseMirror_p.is-editor-empty:first-child::before]:italic
           
-          prose-headings:font-heading prose-headings:font-bold
-          prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
-          prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/50
-          prose-h3:text-xl prose-h3:mt-5 prose-h3:mb-2
-          prose-h4:text-lg prose-h4:mt-4 prose-h4:mb-2
-          prose-p:leading-relaxed prose-p:mb-4
+          prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight
+          prose-h1:text-3xl prose-h1:mt-10 prose-h1:mb-5
+          prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/40
+          prose-h3:text-xl prose-h3:mt-7 prose-h3:mb-3
+          prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3
+          prose-p:leading-[1.8] prose-p:mb-5 prose-p:text-base
           prose-a:text-primary prose-a:font-semibold
-          prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/50 prose-blockquote:pl-4 prose-blockquote:py-2 prose-blockquote:rounded-r-lg
+          prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/50 prose-blockquote:pl-5 prose-blockquote:py-3 prose-blockquote:my-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
           prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-          prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:p-4
-          prose-img:rounded-xl prose-img:shadow-lg
-          prose-ul:list-disc prose-ul:pl-6
-          prose-ol:list-decimal prose-ol:pl-6
-          prose-li:leading-relaxed"
+          prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:p-4 prose-pre:my-6
+          prose-img:rounded-xl prose-img:shadow-lg prose-img:my-6
+          prose-ul:list-disc prose-ul:pl-6 prose-ul:my-5 prose-ul:space-y-2
+          prose-ol:list-decimal prose-ol:pl-6 prose-ol:my-5 prose-ol:space-y-2
+          prose-li:leading-[1.7] prose-li:mb-1
+          prose-hr:my-8 prose-hr:border-border/50
+          [&_.ProseMirror>*+*]:mt-4
+          [&_.ProseMirror>h1+*]:mt-3 [&_.ProseMirror>h2+*]:mt-3 [&_.ProseMirror>h3+*]:mt-2 [&_.ProseMirror>h4+*]:mt-2"
       />
 
       {/* Click outside to close dropdowns */}
