@@ -224,6 +224,74 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
     }
   }, [editor]);
 
+  // Auto-format: clean spacing, split paragraphs on blank lines, trim whitespace,
+  // normalize empty paragraphs, and tidy up structure.
+  const autoFormat = useCallback(() => {
+    if (!editor) return;
+    const html = editor.getHTML();
+
+    // Work in a sandbox DOM
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+
+    // 1. Collapse multiple consecutive empty paragraphs into a single break
+    const isEmpty = (el: Element) =>
+      el.tagName === 'P' && !el.textContent?.trim() && !el.querySelector('img, br, iframe');
+
+    let prevEmpty = false;
+    Array.from(wrapper.children).forEach((child) => {
+      if (isEmpty(child)) {
+        if (prevEmpty) child.remove();
+        prevEmpty = true;
+      } else {
+        prevEmpty = false;
+      }
+    });
+
+    // 2. Split paragraphs that contain double line breaks into separate <p>
+    wrapper.querySelectorAll('p').forEach((p) => {
+      const inner = p.innerHTML;
+      if (/<br\s*\/?>(\s*<br\s*\/?>)+/i.test(inner)) {
+        const parts = inner.split(/(?:<br\s*\/?>\s*){2,}/i).filter((s) => s.trim());
+        if (parts.length > 1) {
+          const frag = document.createDocumentFragment();
+          parts.forEach((part) => {
+            const np = document.createElement('p');
+            np.innerHTML = part.trim();
+            frag.appendChild(np);
+          });
+          p.replaceWith(frag);
+        }
+      }
+    });
+
+    // 3. Trim leading/trailing whitespace inside paragraphs and headings
+    wrapper.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li').forEach((el) => {
+      el.innerHTML = el.innerHTML
+        .replace(/^(&nbsp;|\s)+/g, '')
+        .replace(/(&nbsp;|\s)+$/g, '')
+        .replace(/[ \t]{2,}/g, ' ');
+    });
+
+    // 4. Remove fully empty trailing paragraphs at the very end
+    while (wrapper.lastElementChild && isEmpty(wrapper.lastElementChild)) {
+      wrapper.lastElementChild.remove();
+    }
+
+    // 5. Ensure plain text nodes at root are wrapped in <p>
+    Array.from(wrapper.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+        const p = document.createElement('p');
+        p.textContent = node.textContent.trim();
+        node.replaceWith(p);
+      }
+    });
+
+    const cleaned = wrapper.innerHTML.trim();
+    editor.commands.setContent(cleaned || '<p></p>', { emitUpdate: true });
+    toast.success('Content auto-formatted ✨');
+  }, [editor]);
+
   const handleImageUpload = async (file: File) => {
     if (!file || !editor) return;
 
