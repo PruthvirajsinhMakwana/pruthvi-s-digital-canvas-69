@@ -51,9 +51,14 @@ export const CertificationsSection = () => {
 
   if (!loading && items.length === 0) return null;
 
-  const previewUrl = active?.certificate_url || active?.image_url || '';
+  // Prefer embeddable preview: use certificate_url only if it's an image/PDF,
+  // otherwise fall back to the uploaded image (external sites usually block iframes).
+  const certUrl = active?.certificate_url || '';
+  const certIsEmbeddable = certUrl && (isImageUrl(certUrl) || isPdfUrl(certUrl));
+  const previewUrl = certIsEmbeddable ? certUrl : (active?.image_url || '');
+  const externalUrl = active?.certificate_url || active?.image_url || '';
   const isPdf = previewUrl && isPdfUrl(previewUrl);
-  const isImg = previewUrl && (isImageUrl(previewUrl) || previewUrl === active?.image_url);
+  const isImg = previewUrl && !isPdf;
 
   const uniqueIssuers = new Set(items.map(i => i.issuer).filter(Boolean)).size;
 
@@ -190,9 +195,9 @@ export const CertificationsSection = () => {
                     <p className="font-medium">Couldn't load preview</p>
                     <p className="text-sm text-muted-foreground mt-1">The certificate may be private or blocked from embedding.</p>
                   </div>
-                  {previewUrl && (
+                  {externalUrl && (
                     <Button asChild variant="outline" className="mt-2">
-                      <a href={previewUrl} target="_blank" rel="noopener noreferrer">
+                      <a href={externalUrl} target="_blank" rel="noopener noreferrer">
                         Open in new tab <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
                       </a>
                     </Button>
@@ -236,9 +241,9 @@ export const CertificationsSection = () => {
               <p className="text-xs text-muted-foreground">
                 Some issuers block in-page previews. If the preview is empty, open in a new tab.
               </p>
-              {previewUrl && (
+              {externalUrl && (
                 <Button asChild size="sm" className="gap-1.5">
-                  <a href={previewUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={externalUrl} target="_blank" rel="noopener noreferrer">
                     Open original <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </Button>
