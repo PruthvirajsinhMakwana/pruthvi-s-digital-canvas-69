@@ -195,9 +195,9 @@ export const CertificationsSection = () => {
                     <p className="font-medium">Couldn't load preview</p>
                     <p className="text-sm text-muted-foreground mt-1">The certificate may be private or blocked from embedding.</p>
                   </div>
-                  {previewUrl && (
+                  {externalUrl && (
                     <Button asChild variant="outline" className="mt-2">
-                      <a href={previewUrl} target="_blank" rel="noopener noreferrer">
+                      <a href={externalUrl} target="_blank" rel="noopener noreferrer">
                         Open in new tab <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
                       </a>
                     </Button>
