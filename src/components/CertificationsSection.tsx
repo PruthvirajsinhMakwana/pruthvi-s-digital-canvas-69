@@ -241,9 +241,9 @@ export const CertificationsSection = () => {
               <p className="text-xs text-muted-foreground">
                 Some issuers block in-page previews. If the preview is empty, open in a new tab.
               </p>
-              {previewUrl && (
+              {externalUrl && (
                 <Button asChild size="sm" className="gap-1.5">
-                  <a href={previewUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={externalUrl} target="_blank" rel="noopener noreferrer">
                     Open original <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </Button>
