@@ -703,6 +703,17 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
             )}
             Upload Image
           </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={autoFormat}
+            className="h-9 text-xs gap-1.5 ml-1 border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
+            title="Auto-format: clean spacing, structure paragraphs, trim whitespace"
+          >
+            <Wand2 className="w-3.5 h-3.5" />
+            Auto Format
+          </Button>
         </div>
       </div>
 
