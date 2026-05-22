@@ -184,6 +184,7 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
       Color,
       FontSize,
       Highlight.configure({ multicolor: true }),
+      Typography,
       Placeholder.configure({
         placeholder: 'Start writing your blog post here...',
       }),
