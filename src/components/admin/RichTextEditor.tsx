@@ -8,6 +8,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
+import Typography from '@tiptap/extension-typography';
 import { Extension } from '@tiptap/core';
 import { useState, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -39,6 +40,7 @@ import {
   Highlighter,
   Palette,
   Type,
+  Wand2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -182,6 +184,7 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
       Color,
       FontSize,
       Highlight.configure({ multicolor: true }),
+      Typography,
       Placeholder.configure({
         placeholder: 'Start writing your blog post here...',
       }),
@@ -219,6 +222,74 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
     if (url) {
       editor.chain().focus().setImage({ src: url }).run();
     }
+  }, [editor]);
+
+  // Auto-format: clean spacing, split paragraphs on blank lines, trim whitespace,
+  // normalize empty paragraphs, and tidy up structure.
+  const autoFormat = useCallback(() => {
+    if (!editor) return;
+    const html = editor.getHTML();
+
+    // Work in a sandbox DOM
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+
+    // 1. Collapse multiple consecutive empty paragraphs into a single break
+    const isEmpty = (el: Element) =>
+      el.tagName === 'P' && !el.textContent?.trim() && !el.querySelector('img, br, iframe');
+
+    let prevEmpty = false;
+    Array.from(wrapper.children).forEach((child) => {
+      if (isEmpty(child)) {
+        if (prevEmpty) child.remove();
+        prevEmpty = true;
+      } else {
+        prevEmpty = false;
+      }
+    });
+
+    // 2. Split paragraphs that contain double line breaks into separate <p>
+    wrapper.querySelectorAll('p').forEach((p) => {
+      const inner = p.innerHTML;
+      if (/<br\s*\/?>(\s*<br\s*\/?>)+/i.test(inner)) {
+        const parts = inner.split(/(?:<br\s*\/?>\s*){2,}/i).filter((s) => s.trim());
+        if (parts.length > 1) {
+          const frag = document.createDocumentFragment();
+          parts.forEach((part) => {
+            const np = document.createElement('p');
+            np.innerHTML = part.trim();
+            frag.appendChild(np);
+          });
+          p.replaceWith(frag);
+        }
+      }
+    });
+
+    // 3. Trim leading/trailing whitespace inside paragraphs and headings
+    wrapper.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li').forEach((el) => {
+      el.innerHTML = el.innerHTML
+        .replace(/^(&nbsp;|\s)+/g, '')
+        .replace(/(&nbsp;|\s)+$/g, '')
+        .replace(/[ \t]{2,}/g, ' ');
+    });
+
+    // 4. Remove fully empty trailing paragraphs at the very end
+    while (wrapper.lastElementChild && isEmpty(wrapper.lastElementChild)) {
+      wrapper.lastElementChild.remove();
+    }
+
+    // 5. Ensure plain text nodes at root are wrapped in <p>
+    Array.from(wrapper.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+        const p = document.createElement('p');
+        p.textContent = node.textContent.trim();
+        node.replaceWith(p);
+      }
+    });
+
+    const cleaned = wrapper.innerHTML.trim();
+    editor.commands.setContent(cleaned || '<p></p>', { emitUpdate: true });
+    toast.success('Content auto-formatted ✨');
   }, [editor]);
 
   const handleImageUpload = async (file: File) => {
@@ -632,6 +703,17 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
             )}
             Upload Image
           </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={autoFormat}
+            className="h-9 text-xs gap-1.5 ml-1 border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
+            title="Auto-format: clean spacing, structure paragraphs, trim whitespace"
+          >
+            <Wand2 className="w-3.5 h-3.5" />
+            Auto Format
+          </Button>
         </div>
       </div>
 
@@ -647,20 +729,23 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
           [&_.ProseMirror_p.is-editor-empty:first-child::before]:italic
           
-          prose-headings:font-heading prose-headings:font-bold
-          prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
-          prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/50
-          prose-h3:text-xl prose-h3:mt-5 prose-h3:mb-2
-          prose-h4:text-lg prose-h4:mt-4 prose-h4:mb-2
-          prose-p:leading-relaxed prose-p:mb-4
+          prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight
+          prose-h1:text-3xl prose-h1:mt-10 prose-h1:mb-5
+          prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/40
+          prose-h3:text-xl prose-h3:mt-7 prose-h3:mb-3
+          prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3
+          prose-p:leading-[1.8] prose-p:mb-5 prose-p:text-base
           prose-a:text-primary prose-a:font-semibold
-          prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/50 prose-blockquote:pl-4 prose-blockquote:py-2 prose-blockquote:rounded-r-lg
+          prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/50 prose-blockquote:pl-5 prose-blockquote:py-3 prose-blockquote:my-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
           prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-          prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:p-4
-          prose-img:rounded-xl prose-img:shadow-lg
-          prose-ul:list-disc prose-ul:pl-6
-          prose-ol:list-decimal prose-ol:pl-6
-          prose-li:leading-relaxed"
+          prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:p-4 prose-pre:my-6
+          prose-img:rounded-xl prose-img:shadow-lg prose-img:my-6
+          prose-ul:list-disc prose-ul:pl-6 prose-ul:my-5 prose-ul:space-y-2
+          prose-ol:list-decimal prose-ol:pl-6 prose-ol:my-5 prose-ol:space-y-2
+          prose-li:leading-[1.7] prose-li:mb-1
+          prose-hr:my-8 prose-hr:border-border/50
+          [&_.ProseMirror>*+*]:mt-4
+          [&_.ProseMirror>h1+*]:mt-3 [&_.ProseMirror>h2+*]:mt-3 [&_.ProseMirror>h3+*]:mt-2 [&_.ProseMirror>h4+*]:mt-2"
       />
 
       {/* Click outside to close dropdowns */}
