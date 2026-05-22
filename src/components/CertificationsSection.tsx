@@ -51,9 +51,14 @@ export const CertificationsSection = () => {
 
   if (!loading && items.length === 0) return null;
 
-  const previewUrl = active?.certificate_url || active?.image_url || '';
+  // Prefer embeddable preview: use certificate_url only if it's an image/PDF,
+  // otherwise fall back to the uploaded image (external sites usually block iframes).
+  const certUrl = active?.certificate_url || '';
+  const certIsEmbeddable = certUrl && (isImageUrl(certUrl) || isPdfUrl(certUrl));
+  const previewUrl = certIsEmbeddable ? certUrl : (active?.image_url || '');
+  const externalUrl = active?.certificate_url || active?.image_url || '';
   const isPdf = previewUrl && isPdfUrl(previewUrl);
-  const isImg = previewUrl && (isImageUrl(previewUrl) || previewUrl === active?.image_url);
+  const isImg = previewUrl && !isPdf;
 
   const uniqueIssuers = new Set(items.map(i => i.issuer).filter(Boolean)).size;
 
