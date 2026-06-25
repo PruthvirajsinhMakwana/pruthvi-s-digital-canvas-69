@@ -67,6 +67,14 @@ export const SEODashboardWidget = () => {
       .maybeSingle();
     if (logData?.value) setAutoLog(logData.value as unknown as AutoSeoLog);
 
+    // Sitemap submit log
+    const { data: subData } = await supabase
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'sitemap_submit_log')
+      .maybeSingle();
+    if (subData?.value) setSubmitLog(subData.value as unknown as SitemapSubmitLog);
+
     setLoading(false);
   };
 
@@ -84,6 +92,17 @@ export const SEODashboardWidget = () => {
       await load();
     }
     setRunning(false);
+  };
+
+  const submitSitemap = async () => {
+    setSubmitting(true);
+    toast.info('Submitting sitemap to Google Search Console...');
+    const { data, error } = await supabase.functions.invoke('submit-sitemap-gsc');
+    if (error) toast.error('Failed: ' + error.message);
+    else if (data?.success) toast.success('Sitemap submitted to GSC');
+    else toast.error('GSC rejected sitemap: ' + (data?.error || 'unknown'));
+    await load();
+    setSubmitting(false);
   };
 
   const StatusBadge = ({ ok, label }: { ok: boolean; label: string }) => (
