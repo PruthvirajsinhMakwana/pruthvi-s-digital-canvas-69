@@ -129,6 +129,7 @@ const App = () => (
               <Route path="blog" element={<AdminBlog />} />
               <Route path="blog/new" element={<AdminBlogEditor />} />
               <Route path="blog/edit/:id" element={<AdminBlogEditor />} />
+              <Route path="blog/preview-test" element={<AdminBlogPreviewTest />} />
               <Route path="messages" element={<AdminMessages />} />
               <Route path="links" element={<AdminLinks />} />
               <Route path="seo" element={<AdminSEO />} />
