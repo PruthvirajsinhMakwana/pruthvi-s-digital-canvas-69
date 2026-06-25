@@ -266,7 +266,27 @@ const AdminBlogEditor = () => {
             </h2>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.txt,.md,image/png,image/jpeg,image/webp,application/pdf,text/plain,text/markdown"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleGenerateFromFile(f);
+            }}
+          />
+          <Button
+            variant="neon"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isGenerating}
+            className="gap-2"
+            title="Upload PDF, TXT, MD or image — AI writes a full formatted blog"
+          >
+            {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileUp className="w-4 h-4" />}
+            {isGenerating ? 'Generating...' : 'AI Blog from File'}
+          </Button>
           <Button 
             variant={isPreview ? "default" : "outline"} 
             onClick={() => setIsPreview(!isPreview)}
