@@ -5,14 +5,17 @@ import profileImage from '@/assets/profile-hero.png';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const FloatingCard = ({ icon: Icon, label, className }: { icon: any; label: string; className?: string }) => (
-  <div className={`glass-card rounded-xl sm:rounded-2xl p-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 neon-glow cursor-pointer
+  <div
+    role="img"
+    aria-label={label}
+    className={`glass-card rounded-xl sm:rounded-2xl p-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 neon-glow cursor-pointer
     transition-all duration-300 ease-out
     hover:scale-110 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/20
     hover:border-primary/40 hover:bg-card/80
     group ${className}`}>
     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center
       transition-all duration-300 group-hover:from-primary/40 group-hover:to-secondary/40 group-hover:scale-110">
-      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary transition-all duration-300 group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
+      <Icon aria-hidden="true" className="w-4 h-4 sm:w-5 sm:h-5 text-primary transition-all duration-300 group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
     </div>
     <span className="font-medium text-foreground text-xs sm:text-sm transition-all duration-300 group-hover:text-primary">{label}</span>
   </div>
@@ -50,9 +53,12 @@ export const HeroSection = () => {
             <h1 className="font-heading text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] sm:leading-tight mb-3 sm:mb-4 lg:mb-6">
               <span className="text-foreground">Hi, I'm</span>
               <br />
-              <span className="gradient-text">{firstName}</span>
-              <br />
+              <span className="gradient-text">{firstName}</span>{' '}
               <span className="text-foreground">{lastName}</span>
+              <br />
+              <span className="block text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold text-muted-foreground mt-2 sm:mt-3">
+                Web Developer, Designer &amp; Digital Marketer
+              </span>
             </h1>
             
             <p className="text-[13px] sm:text-sm md:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-2 sm:mb-3 lg:mb-4 leading-relaxed">

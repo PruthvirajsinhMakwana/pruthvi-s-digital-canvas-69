@@ -1,0 +1,18 @@
+# Pruthvirajsinh Makwana
+
+> Portfolio of Pruthvirajsinh Makwana — IT Professional, Web Developer, Graphic & Video Designer, and Digital Marketer based in Gujarat, India.
+
+Pruthvirajsinh Makwana builds modern web experiences and offers services in web development, social media marketing, video editing, graphic design, video shooting, and esports tournament hosting & commentary.
+
+## Pages
+
+- [Home](/): Overview of services, experience, and featured work.
+- [About](/about): Background, skills, and professional journey.
+- [Services](/services): Web development, marketing, video, design, and esports services.
+- [Certifications](/certifications): Verified courses and recognitions.
+- [Blog](/blog): Articles on web development, AI, gaming, and digital strategy.
+- [Contact](/contact): Project inquiries, hiring, and collaboration.
+
+## Optional
+
+- [Links](/links): Curated link-in-bio with social and project links.
