@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Save, Search, Globe, Share2, FileText, CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { SEODashboardWidget } from '@/components/admin/SEODashboardWidget';
 
 interface SEOSettings {
   siteTitle: string;
@@ -128,6 +129,10 @@ const AdminSEO = () => {
         <h2 className="font-heading text-2xl font-bold">SEO Settings</h2>
         <p className="text-muted-foreground">Optimize your website for search engines</p>
       </div>
+
+      <SEODashboardWidget />
+
+
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic SEO Section */}
