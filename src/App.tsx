@@ -127,6 +127,7 @@ const App = () => (
               <Route path="content" element={<AdminSiteContent />} />
               <Route path="services" element={<AdminServices />} />
               <Route path="certifications" element={<AdminCertifications />} />
+              <Route path="packages" element={<AdminPackages />} />
               <Route path="blog" element={<AdminBlog />} />
               <Route path="blog/new" element={<AdminBlogEditor />} />
               <Route path="blog/edit/:id" element={<AdminBlogEditor />} />
