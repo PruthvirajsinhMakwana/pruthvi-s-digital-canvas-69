@@ -23,12 +23,25 @@ interface AutoSeoLog {
   success: number;
 }
 
+interface SitemapSubmitLog {
+  ran_at: string;
+  success: boolean;
+  status?: number;
+  url_count?: number;
+  last_submitted?: string;
+  last_downloaded?: string;
+  is_pending?: boolean;
+  error?: string;
+}
+
 export const SEODashboardWidget = () => {
   const [gsc, setGsc] = useState<GscData | null>(null);
   const [sitemap, setSitemap] = useState<{ ok: boolean; urls: number } | null>(null);
   const [autoLog, setAutoLog] = useState<AutoSeoLog | null>(null);
+  const [submitLog, setSubmitLog] = useState<SitemapSubmitLog | null>(null);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -54,6 +67,14 @@ export const SEODashboardWidget = () => {
       .maybeSingle();
     if (logData?.value) setAutoLog(logData.value as unknown as AutoSeoLog);
 
+    // Sitemap submit log
+    const { data: subData } = await supabase
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'sitemap_submit_log')
+      .maybeSingle();
+    if (subData?.value) setSubmitLog(subData.value as unknown as SitemapSubmitLog);
+
     setLoading(false);
   };
 
@@ -71,6 +92,17 @@ export const SEODashboardWidget = () => {
       await load();
     }
     setRunning(false);
+  };
+
+  const submitSitemap = async () => {
+    setSubmitting(true);
+    toast.info('Submitting sitemap to Google Search Console...');
+    const { data, error } = await supabase.functions.invoke('submit-sitemap-gsc');
+    if (error) toast.error('Failed: ' + error.message);
+    else if (data?.success) toast.success('Sitemap submitted to GSC');
+    else toast.error('GSC rejected sitemap: ' + (data?.error || 'unknown'));
+    await load();
+    setSubmitting(false);
   };
 
   const StatusBadge = ({ ok, label }: { ok: boolean; label: string }) => (
@@ -150,6 +182,47 @@ export const SEODashboardWidget = () => {
           </Button>
         </Card>
       </div>
+
+      {/* Sitemap submission to GSC */}
+      <Card className="p-4 space-y-2 bg-muted/30">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <Globe className="h-4 w-4" /> Daily Sitemap Submission to GSC
+          </div>
+          {submitLog && (
+            <StatusBadge ok={!!submitLog.success} label={submitLog.success ? 'Submitted' : 'Failed'} />
+          )}
+        </div>
+        {submitLog ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <div>
+              <p className="text-muted-foreground">Last run</p>
+              <p className="font-medium">{formatDistanceToNow(new Date(submitLog.ran_at), { addSuffix: true })}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">URLs</p>
+              <p className="font-medium">{submitLog.url_count ?? '—'}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Last submitted</p>
+              <p className="font-medium">{submitLog.last_submitted ? formatDistanceToNow(new Date(submitLog.last_submitted), { addSuffix: true }) : '—'}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Last downloaded</p>
+              <p className="font-medium">{submitLog.last_downloaded ? formatDistanceToNow(new Date(submitLog.last_downloaded), { addSuffix: true }) : '—'}</p>
+            </div>
+            {submitLog.error && (
+              <p className="col-span-full text-destructive break-words">Error: {submitLog.error}</p>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">No submissions yet. Runs daily at 03:15 UTC.</p>
+        )}
+        <Button size="sm" variant="outline" onClick={submitSitemap} disabled={submitting}>
+          {submitting ? <RefreshCw className="h-3 w-3 mr-2 animate-spin" /> : <Globe className="h-3 w-3 mr-2" />}
+          Submit sitemap now
+        </Button>
+      </Card>
 
       {gsc?.top_queries && gsc.top_queries.length > 0 && (
         <div>

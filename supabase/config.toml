@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.track-page-view]
 verify_jwt = false
+
+[functions.submit-sitemap-gsc]
+verify_jwt = false
