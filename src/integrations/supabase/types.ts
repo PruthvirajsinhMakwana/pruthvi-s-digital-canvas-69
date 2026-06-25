@@ -250,6 +250,57 @@ export type Database = {
         }
         Relationships: []
       }
+      packages: {
+        Row: {
+          created_at: string
+          features: Json
+          gradient: string
+          icon: string
+          id: string
+          is_active: boolean
+          name: string
+          popular: boolean
+          price: string
+          price_note: string
+          services: Json
+          sort_order: number
+          tagline: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          features?: Json
+          gradient?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          popular?: boolean
+          price: string
+          price_note?: string
+          services?: Json
+          sort_order?: number
+          tagline?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          features?: Json
+          gradient?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          popular?: boolean
+          price?: string
+          price_note?: string
+          services?: Json
+          sort_order?: number
+          tagline?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       page_views: {
         Row: {
           city: string | null

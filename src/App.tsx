@@ -28,6 +28,7 @@ import AdminLinks from "./pages/admin/AdminLinks";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminCertifications from "./pages/admin/AdminCertifications";
+import AdminPackages from "./pages/admin/AdminPackages";
 import NotFound from "./pages/NotFound";
 import { LeadCapturePopup } from "./components/LeadCapturePopup";
 
@@ -126,6 +127,7 @@ const App = () => (
               <Route path="content" element={<AdminSiteContent />} />
               <Route path="services" element={<AdminServices />} />
               <Route path="certifications" element={<AdminCertifications />} />
+              <Route path="packages" element={<AdminPackages />} />
               <Route path="blog" element={<AdminBlog />} />
               <Route path="blog/new" element={<AdminBlogEditor />} />
               <Route path="blog/edit/:id" element={<AdminBlogEditor />} />
