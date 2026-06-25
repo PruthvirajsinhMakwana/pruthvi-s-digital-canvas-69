@@ -328,15 +328,28 @@ const AdminBlogEditor = () => {
           
           <div 
             className="prose prose-lg dark:prose-invert max-w-none
-              prose-headings:font-heading prose-headings:font-bold
-              prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
-              prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3
-              prose-h3:text-xl prose-h3:mt-4 prose-h3:mb-2
-              prose-p:leading-relaxed prose-p:mb-4
+              prose-headings:font-heading prose-headings:font-bold prose-headings:scroll-mt-24
+              prose-h1:text-4xl prose-h1:mt-10 prose-h1:mb-5
+              prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/40
+              prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
+              prose-h4:text-xl prose-h4:mt-6 prose-h4:mb-2
+              prose-p:leading-[1.85] prose-p:mb-5 prose-p:text-foreground/90
+              prose-strong:text-foreground prose-strong:font-semibold
               prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic
-              prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-              prose-img:rounded-lg prose-img:my-6"
+              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-5 prose-blockquote:py-1
+              prose-blockquote:italic prose-blockquote:bg-primary/5 prose-blockquote:rounded-r-lg prose-blockquote:my-6
+              prose-ul:my-5 prose-ul:space-y-2 prose-ol:my-5 prose-ol:space-y-2
+              prose-li:leading-relaxed prose-li:marker:text-primary
+              prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-primary prose-code:before:content-none prose-code:after:content-none
+              prose-pre:bg-muted prose-pre:border prose-pre:border-border/40 prose-pre:rounded-xl
+              prose-img:rounded-lg prose-img:my-6
+              prose-hr:my-10 prose-hr:border-border/60
+              [&_table]:w-full [&_table]:my-6 [&_table]:rounded-xl [&_table]:overflow-hidden [&_table]:border [&_table]:border-border/50
+              [&_thead]:bg-primary/10
+              [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-semibold [&_th]:text-foreground
+              [&_td]:px-4 [&_td]:py-3 [&_td]:border-t [&_td]:border-border/40
+              [&_tbody_tr:nth-child(even)]:bg-muted/30
+              [&_mark]:bg-primary/20 [&_mark]:text-foreground [&_mark]:px-1 [&_mark]:rounded"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(formData.content || '<p class="text-muted-foreground">No content yet...</p>') }}
           />
           
