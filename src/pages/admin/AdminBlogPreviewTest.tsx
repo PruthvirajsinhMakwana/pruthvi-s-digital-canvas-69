@@ -3,7 +3,7 @@ import { sanitizeHtml } from '@/lib/sanitize';
 import { Button } from '@/components/ui/button';
 
 const PROSE_CLASSES = `prose prose-lg dark:prose-invert max-w-none
-  prose-headings:font-heading prose-headings:font-bold prose-headings:scroll-mt-24
+  prose-headings:font-heading prose-headings:font-bold prose-headings:scroll-mt-24 prose-headings:text-foreground
   prose-h1:text-4xl prose-h1:mt-10 prose-h1:mb-5
   prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-border/40
   prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
