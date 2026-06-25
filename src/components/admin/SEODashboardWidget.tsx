@@ -183,6 +183,47 @@ export const SEODashboardWidget = () => {
         </Card>
       </div>
 
+      {/* Sitemap submission to GSC */}
+      <Card className="p-4 space-y-2 bg-muted/30">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <Globe className="h-4 w-4" /> Daily Sitemap Submission to GSC
+          </div>
+          {submitLog && (
+            <StatusBadge ok={!!submitLog.success} label={submitLog.success ? 'Submitted' : 'Failed'} />
+          )}
+        </div>
+        {submitLog ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <div>
+              <p className="text-muted-foreground">Last run</p>
+              <p className="font-medium">{formatDistanceToNow(new Date(submitLog.ran_at), { addSuffix: true })}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">URLs</p>
+              <p className="font-medium">{submitLog.url_count ?? '—'}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Last submitted</p>
+              <p className="font-medium">{submitLog.last_submitted ? formatDistanceToNow(new Date(submitLog.last_submitted), { addSuffix: true }) : '—'}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Last downloaded</p>
+              <p className="font-medium">{submitLog.last_downloaded ? formatDistanceToNow(new Date(submitLog.last_downloaded), { addSuffix: true }) : '—'}</p>
+            </div>
+            {submitLog.error && (
+              <p className="col-span-full text-destructive break-words">Error: {submitLog.error}</p>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">No submissions yet. Runs daily at 03:15 UTC.</p>
+        )}
+        <Button size="sm" variant="outline" onClick={submitSitemap} disabled={submitting}>
+          {submitting ? <RefreshCw className="h-3 w-3 mr-2 animate-spin" /> : <Globe className="h-3 w-3 mr-2" />}
+          Submit sitemap now
+        </Button>
+      </Card>
+
       {gsc?.top_queries && gsc.top_queries.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
