@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.send-brevo-emails]
 verify_jwt = false
+
+[functions.track-page-view]
+verify_jwt = false
