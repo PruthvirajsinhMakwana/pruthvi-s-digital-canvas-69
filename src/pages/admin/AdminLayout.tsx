@@ -17,7 +17,8 @@ import {
   Link2,
   Search,
   Briefcase,
-  Award
+  Award,
+  Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
