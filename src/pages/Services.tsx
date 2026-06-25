@@ -5,6 +5,7 @@ import { PortfolioShowcase } from '@/components/PortfolioShowcase';
 import { CompanyLogosSection } from '@/components/CompanyLogosSection';
 import { EsportsServicesHighlight } from '@/components/EsportsServicesHighlight';
 import { CertificationsSection } from '@/components/CertificationsSection';
+import { PackagesSection } from '@/components/PackagesSection';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -92,6 +93,9 @@ const Services = () => {
           <div id="portfolio">
             <PortfolioShowcase />
           </div>
+
+          {/* Packages Section */}
+          <PackagesSection />
 
           {/* Esports Services Highlight */}
           <EsportsServicesHighlight />
