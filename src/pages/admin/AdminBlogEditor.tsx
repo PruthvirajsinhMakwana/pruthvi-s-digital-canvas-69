@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Save, Eye, Edit3, Sparkles } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Edit3, Sparkles, FileUp, Loader2 } from 'lucide-react';
+import { useRef } from 'react';
 import { toast } from 'sonner';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import { ImageUploader } from '@/components/admin/ImageUploader';
@@ -25,8 +26,10 @@ const AdminBlogEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     title: '',
