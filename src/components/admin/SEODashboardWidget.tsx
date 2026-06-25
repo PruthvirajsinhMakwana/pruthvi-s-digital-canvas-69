@@ -23,12 +23,25 @@ interface AutoSeoLog {
   success: number;
 }
 
+interface SitemapSubmitLog {
+  ran_at: string;
+  success: boolean;
+  status?: number;
+  url_count?: number;
+  last_submitted?: string;
+  last_downloaded?: string;
+  is_pending?: boolean;
+  error?: string;
+}
+
 export const SEODashboardWidget = () => {
   const [gsc, setGsc] = useState<GscData | null>(null);
   const [sitemap, setSitemap] = useState<{ ok: boolean; urls: number } | null>(null);
   const [autoLog, setAutoLog] = useState<AutoSeoLog | null>(null);
+  const [submitLog, setSubmitLog] = useState<SitemapSubmitLog | null>(null);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const load = async () => {
     setLoading(true);
