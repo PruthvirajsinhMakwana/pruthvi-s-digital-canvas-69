@@ -19,32 +19,16 @@ export const useVisitorTracking = () => {
     const trackPageView = async () => {
       try {
         const visitorId = getVisitorId();
-        
-        // Get location data from edge function
-        let locationData = { ip: 'unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown' };
-        try {
-          const response = await supabase.functions.invoke('get-visitor-location');
-          if (response.data) {
-            locationData = response.data;
-          }
-        } catch (locError) {
-          console.error('Error fetching location:', locError);
-        }
-        
-        const { error } = await supabase.from('page_views').insert({
-          page_path: window.location.pathname,
-          user_agent: navigator.userAgent,
-          referrer: document.referrer || null,
-          visitor_ip: visitorId,
-          real_ip: locationData.ip,
-          country: locationData.country,
-          city: locationData.city,
-          region: locationData.region,
+        // All IP / geolocation / user-agent fields are derived server-side
+        // by the edge function; the client only supplies non-sensitive context.
+        const { error } = await supabase.functions.invoke('track-page-view', {
+          body: {
+            page_path: window.location.pathname,
+            referrer: document.referrer || null,
+            visitor_id: visitorId,
+          },
         });
-
-        if (error) {
-          console.error('Error tracking page view:', error);
-        }
+        if (error) console.error('Error tracking page view:', error);
       } catch (err) {
         console.error('Failed to track page view:', err);
       }
