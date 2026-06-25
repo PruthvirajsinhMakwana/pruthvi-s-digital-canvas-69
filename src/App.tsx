@@ -28,6 +28,7 @@ import AdminLinks from "./pages/admin/AdminLinks";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminCertifications from "./pages/admin/AdminCertifications";
+import AdminPackages from "./pages/admin/AdminPackages";
 import NotFound from "./pages/NotFound";
 import { LeadCapturePopup } from "./components/LeadCapturePopup";
 
