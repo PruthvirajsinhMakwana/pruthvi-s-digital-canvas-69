@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Save, Eye, Edit3, Sparkles } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Edit3, Sparkles, FileUp, Loader2 } from 'lucide-react';
+import { useRef } from 'react';
 import { toast } from 'sonner';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import { ImageUploader } from '@/components/admin/ImageUploader';
@@ -25,8 +26,10 @@ const AdminBlogEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -188,6 +191,59 @@ const AdminBlogEditor = () => {
     }
   };
 
+  const handleGenerateFromFile = async (file: File) => {
+    const MAX = 15 * 1024 * 1024;
+    if (file.size > MAX) {
+      toast.error('File too large (max 15 MB)');
+      return;
+    }
+    const allowed = ['application/pdf', 'text/plain', 'text/markdown', 'image/png', 'image/jpeg', 'image/webp'];
+    if (!allowed.includes(file.type) && !file.name.match(/\.(md|txt)$/i)) {
+      toast.error('Supported: PDF, TXT, MD, PNG, JPG, WEBP');
+      return;
+    }
+    setIsGenerating(true);
+    const toastId = toast.loading('AI is reading your file and writing the blog...');
+    try {
+      const buf = await file.arrayBuffer();
+      const bytes = new Uint8Array(buf);
+      let binary = '';
+      const chunk = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunk) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+      }
+      const base64 = btoa(binary);
+      const mimeType = file.type || (file.name.endsWith('.md') ? 'text/markdown' : 'text/plain');
+
+      const { data, error } = await supabase.functions.invoke('generate-blog-from-file', {
+        body: { fileData: base64, mimeType, fileName: file.name },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.content) throw new Error('No content returned');
+
+      setFormData((prev) => ({
+        ...prev,
+        title: data.title || prev.title,
+        slug: data.slug || prev.slug || generateSlug(data.title || ''),
+        excerpt: data.excerpt || prev.excerpt,
+        content: data.content,
+        tags: Array.isArray(data.tags) ? data.tags.join(', ') : (data.tags || prev.tags),
+        meta_title: data.meta_title || prev.meta_title,
+        meta_description: data.meta_description || prev.meta_description,
+        meta_keywords: data.meta_keywords || prev.meta_keywords,
+      }));
+      toast.success('Blog generated! Review & publish.', { id: toastId });
+    } catch (e: any) {
+      console.error('Generate from file error:', e);
+      const msg = e?.message || 'Failed to generate blog';
+      toast.error(msg, { id: toastId });
+    } finally {
+      setIsGenerating(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -210,7 +266,27 @@ const AdminBlogEditor = () => {
             </h2>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.txt,.md,image/png,image/jpeg,image/webp,application/pdf,text/plain,text/markdown"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleGenerateFromFile(f);
+            }}
+          />
+          <Button
+            variant="neon"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isGenerating}
+            className="gap-2"
+            title="Upload PDF, TXT, MD or image — AI writes a full formatted blog"
+          >
+            {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileUp className="w-4 h-4" />}
+            {isGenerating ? 'Generating...' : 'AI Blog from File'}
+          </Button>
           <Button 
             variant={isPreview ? "default" : "outline"} 
             onClick={() => setIsPreview(!isPreview)}
