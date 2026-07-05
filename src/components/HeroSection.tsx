@@ -137,8 +137,13 @@ export const HeroSection = () => {
                   src={profileImage}
                   alt={settings.name}
                   className="w-full h-full object-cover object-[center_20%]"
+                  width={600}
+                  height={600}
                   loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
                 />
+
               </div>
               
               {/* Floating Cards - All visible on lg screens with smooth loop animations */}

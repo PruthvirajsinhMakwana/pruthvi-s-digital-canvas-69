@@ -9,8 +9,14 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>About - Pruthvirajsinh Makwana | IT Professional & Esports Commentator</title>
-        <meta name="description" content="Learn about Pruthvirajsinh Makwana - IT Professional specializing in Web Development, Digital Marketing, Graphic Design AND Esports Commentator, Event Host, and Tournament Organizer." />
+        <title>About Pruthvirajsinh Makwana | IT Pro & Esports Host</title>
+        <meta name="description" content="About Pruthvirajsinh Makwana — IT Professional in Web Dev, Digital Marketing, Design, plus Esports commentator, host & tournament organiser." />
+        <link rel="canonical" href="https://pruthvirajsinh.in/about" />
+        <meta property="og:title" content="About Pruthvirajsinh Makwana" />
+        <meta property="og:description" content="IT Professional in Web Development, Digital Marketing & Design — also an Esports commentator, host and tournament organiser from Gujarat." />
+        <meta property="og:type" content="profile" />
+        <meta property="og:url" content="https://pruthvirajsinh.in/about" />
+        <meta property="og:image" content="https://pruthvirajsinh.in/favicon.jpg" />
       </Helmet>
 
       <div className="min-h-screen bg-background">

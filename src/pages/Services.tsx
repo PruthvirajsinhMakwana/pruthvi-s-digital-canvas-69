@@ -16,8 +16,14 @@ const Services = () => {
   return (
     <>
       <Helmet>
-        <title>Services - Pruthvirajsinh Makwana | Web Development, Digital Marketing, Design & Esports</title>
-        <meta name="description" content="Professional services including Web Development, Digital Marketing, Graphic Design, Video Editing, UI/UX Design, IT Support, Esports Commentary, Event Hosting, and Tournament Organization." />
+        <title>Services | Pruthvirajsinh Makwana — Web, Design, Esports</title>
+        <meta name="description" content="Web Development, Digital Marketing, Design, Video Editing, Esports commentary, event hosting and tournament organisation." />
+        <link rel="canonical" href="https://pruthvirajsinh.in/services" />
+        <meta property="og:title" content="Services — Pruthvirajsinh Makwana" />
+        <meta property="og:description" content="Web dev, digital marketing, design, video editing and esports services — from a Gujarat-based freelance IT professional." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pruthvirajsinh.in/services" />
+        <meta property="og:image" content="https://pruthvirajsinh.in/favicon.jpg" />
       </Helmet>
 
       <div className="min-h-screen bg-background">

@@ -8,8 +8,14 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact - Pruthvirajsinh Makwana | Get In Touch</title>
-        <meta name="description" content="Get in touch with Pruthvirajsinh Makwana for collaborations, freelance opportunities, internships, and full-time roles in Web Development, Digital Marketing, and Design." />
+        <title>Contact Pruthvirajsinh Makwana | Get in Touch</title>
+        <meta name="description" content="Contact Pruthvirajsinh Makwana for freelance, internships, or collaborations in Web Development, Digital Marketing and Design." />
+        <link rel="canonical" href="https://pruthvirajsinh.in/contact" />
+        <meta property="og:title" content="Contact Pruthvirajsinh Makwana" />
+        <meta property="og:description" content="Reach out for freelance projects, internships, or collaborations in Web Development, Digital Marketing and Design." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pruthvirajsinh.in/contact" />
+        <meta property="og:image" content="https://pruthvirajsinh.in/favicon.jpg" />
       </Helmet>
 
       <div className="min-h-screen bg-background">

@@ -60,22 +60,22 @@ const Index = () => {
     <>
       <Helmet>
         <title>Pruthvirajsinh Makwana – Web Developer & IT Professional</title>
-        <meta name="description" content="Official portfolio of Pruthvirajsinh Makwana, an IT Professional, Web Developer, Digital Marketer, Graphic Designer, and Video Editor from Gujarat, India. Explore his skills, portfolio, services, and projects." />
-        <meta name="keywords" content="Pruthvirajsinh Makwana, Pruthviraj Makwana, Makwana Pruthviraj, Makwana Pruthvirajsinh, Pruthvirajsinh, Pruthviraj, Web Developer Gujarat, IT Professional Gujarat, Portfolio Website India, Freelance Web Developer, Graphic Designer Gujarat, Video Editor Gujarat, Digital Marketing Freelancer, B.Voc IT Student, pruthvi makwana, pruthvi, best web developer gujarat" />
-        <meta property="og:title" content="Portfolio of Pruthvirajsinh Makwana – Web Developer & IT Professional" />
-        <meta property="og:description" content="Explore the official portfolio of Pruthvirajsinh Makwana including web development, digital marketing, graphic design, and creative projects from Gujarat, India." />
+        <meta name="description" content="Portfolio of Pruthvirajsinh Makwana — Web Developer, Digital Marketer, Designer & Video Editor from Gujarat, India." />
+        <meta name="keywords" content="Pruthvirajsinh Makwana, Web Developer Gujarat, IT Professional Gujarat, Freelance Web Developer, Graphic Designer Gujarat, Video Editor Gujarat, Digital Marketing Freelancer" />
+        <meta property="og:title" content="Pruthvirajsinh Makwana – Web Developer & IT Professional" />
+        <meta property="og:description" content="Portfolio of Pruthvirajsinh Makwana — Web Developer, Digital Marketer, Designer & Video Editor from Gujarat, India." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://pruthvirajsinh.com" />
-        <meta property="og:image" content="https://pruthvirajsinh.com/favicon.jpg" />
+        <meta property="og:url" content="https://pruthvirajsinh.in/" />
+        <meta property="og:image" content="https://pruthvirajsinh.in/favicon.jpg" />
         <meta property="og:site_name" content="Pruthvirajsinh Makwana Portfolio" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@pruthvirajsinh" />
         <meta name="twitter:title" content="Pruthvirajsinh Makwana – Web Developer & IT Professional" />
-        <meta name="twitter:description" content="Official portfolio of IT Professional and Web Developer Pruthvirajsinh Makwana showcasing projects, skills, and services." />
-        <meta name="twitter:image" content="https://pruthvirajsinh.com/favicon.jpg" />
+        <meta name="twitter:description" content="Portfolio of Pruthvirajsinh Makwana — Web Developer, Digital Marketer, Designer & Video Editor from Gujarat, India." />
+        <meta name="twitter:image" content="https://pruthvirajsinh.in/favicon.jpg" />
         <meta name="author" content="Pruthvirajsinh Makwana" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <link rel="canonical" href="https://pruthvirajsinh.com" />
+        <link rel="canonical" href="https://pruthvirajsinh.in/" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

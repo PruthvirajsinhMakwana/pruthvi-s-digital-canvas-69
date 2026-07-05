@@ -104,10 +104,38 @@ const BlogPost = () => {
         <title>{post.meta_title || post.title} - Pruthvirajsinh Makwana</title>
         <meta name="description" content={post.meta_description || post.excerpt || ''} />
         {post.meta_keywords && <meta name="keywords" content={post.meta_keywords} />}
+        <link rel="canonical" href={`https://pruthvirajsinh.in/blog/${post.slug}`} />
         <meta property="og:title" content={post.meta_title || post.title} />
         <meta property="og:description" content={post.meta_description || post.excerpt || ''} />
-        {post.featured_image && <meta property="og:image" content={post.featured_image} />}
+        <meta property="og:url" content={`https://pruthvirajsinh.in/blog/${post.slug}`} />
+        <meta property="og:image" content={post.featured_image || 'https://pruthvirajsinh.in/favicon.jpg'} />
         <meta property="og:type" content="article" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            description: post.meta_description || post.excerpt || '',
+            image: post.featured_image || 'https://pruthvirajsinh.in/favicon.jpg',
+            datePublished: post.published_at,
+            dateModified: post.published_at,
+            author: {
+              '@type': 'Person',
+              name: 'Pruthvirajsinh Makwana',
+              url: 'https://pruthvirajsinh.in/',
+            },
+            publisher: {
+              '@type': 'Person',
+              name: 'Pruthvirajsinh Makwana',
+              url: 'https://pruthvirajsinh.in/',
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `https://pruthvirajsinh.in/blog/${post.slug}`,
+            },
+            keywords: post.meta_keywords || (post.tags || []).join(', '),
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
