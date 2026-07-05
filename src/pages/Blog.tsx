@@ -85,8 +85,14 @@ const Blog = () => {
   return (
     <>
       <Helmet>
-        <title>Blog - Pruthvirajsinh Makwana | Tech, Design, Gaming & Marketing Insights</title>
-        <meta name="description" content="Read articles about Web Development, Digital Marketing, Graphic Design, Esports, and Technology by Pruthvirajsinh Makwana." />
+        <title>Blog | Pruthvirajsinh Makwana — Tech & Design</title>
+        <meta name="description" content="Articles on Web Development, Digital Marketing, Design, Esports and Technology by Pruthvirajsinh Makwana." />
+        <link rel="canonical" href="https://pruthvirajsinh.in/blog" />
+        <meta property="og:title" content="Blog — Pruthvirajsinh Makwana" />
+        <meta property="og:description" content="Practical guides and insights on Web Development, Digital Marketing, Design, Esports and Technology." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pruthvirajsinh.in/blog" />
+        <meta property="og:image" content="https://pruthvirajsinh.in/favicon.jpg" />
       </Helmet>
 
       <div className="min-h-screen bg-background">
