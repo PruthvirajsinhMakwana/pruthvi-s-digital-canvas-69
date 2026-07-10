@@ -135,6 +135,9 @@ export const AboutSection = () => {
                     Co-founder of <span className="gradient-text">PROFIQUES</span>
                   </span>
                 </a>
+              </div>
+
+
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-muted-foreground">
