@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ArrowDown, Code, Palette, Video, Globe } from 'lucide-react';
+import { ArrowDown, Code, Palette, Video, Globe, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import profileImage from '@/assets/profile-hero.png';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
