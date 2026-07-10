@@ -124,7 +124,17 @@ export const AboutSection = () => {
                 <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
                 <p className="text-primary font-medium text-center">💻 IT Professional & Digital Creator</p>
                 <p className="text-muted-foreground text-sm mt-1">🎨 Designer | 🌐 Developer | 📈 Marketer</p>
-              </div>
+                <a
+                  href="https://profiques.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 border border-primary/30 hover:border-primary/60 transition-all"
+                >
+                  <span>🚀</span>
+                  <span className="text-xs font-semibold">
+                    Co-founder of <span className="gradient-text">PROFIQUES</span>
+                  </span>
+                </a>
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-muted-foreground">
