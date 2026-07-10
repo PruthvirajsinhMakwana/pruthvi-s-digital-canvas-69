@@ -124,7 +124,20 @@ export const AboutSection = () => {
                 <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
                 <p className="text-primary font-medium text-center">💻 IT Professional & Digital Creator</p>
                 <p className="text-muted-foreground text-sm mt-1">🎨 Designer | 🌐 Developer | 📈 Marketer</p>
+                <a
+                  href="https://profiques.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 border border-primary/30 hover:border-primary/60 transition-all"
+                >
+                  <span>🚀</span>
+                  <span className="text-xs font-semibold">
+                    Co-founder of <span className="gradient-text">PROFIQUES</span>
+                  </span>
+                </a>
               </div>
+
+
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-muted-foreground">
@@ -193,7 +206,35 @@ export const AboutSection = () => {
                 <p className="text-muted-foreground leading-relaxed">
                   Driven by curiosity and continuous learning, I strive to deliver excellence in every project. My goal is to support business growth and establish myself as a <span className="text-primary font-medium">versatile professional</span> in the digital and IT ecosystem. I'm open to collaborations, freelance projects, internships, and opportunities to innovate and grow.
                 </p>
+
+                {/* PROFIQUES Highlight */}
+                <a
+                  href="https://profiques.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 block group relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 p-5 hover:border-primary/60 transition-all"
+                >
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-all" />
+                  <div className="relative flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl shrink-0">
+                      🚀
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="text-xs font-medium text-primary uppercase tracking-wider">Co-Founder</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary font-semibold">Gujarat</span>
+                      </div>
+                      <h4 className="font-heading text-lg font-bold">
+                        <span className="gradient-text">PROFIQUES</span> — Digital Marketing Agency
+                      </h4>
+                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                        One of the best digital marketing agencies in Gujarat, delivering web development, branding, social media growth, video production and full-stack marketing solutions to businesses across India.
+                      </p>
+                    </div>
+                  </div>
+                </a>
               </div>
+
 
               {/* Stats Row */}
               <div className="grid grid-cols-3 gap-2 sm:gap-4">

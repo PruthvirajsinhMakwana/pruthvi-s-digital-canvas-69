@@ -45,9 +45,22 @@ export const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left animate-fade-in-up order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 glass-card rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-3 sm:mb-4 lg:mb-6">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[11px] sm:text-xs lg:text-sm text-muted-foreground">{settings.availabilityStatus}</span>
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-3 sm:mb-4 lg:mb-6">
+              <div className="inline-flex items-center gap-2 glass-card rounded-full px-3 py-1.5 sm:px-4 sm:py-2">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[11px] sm:text-xs lg:text-sm text-muted-foreground">{settings.availabilityStatus}</span>
+              </div>
+              <a
+                href="https://profiques.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-primary/15 to-secondary/15 border border-primary/30 hover:border-primary/60 transition-all group"
+              >
+                <span className="text-sm">🚀</span>
+                <span className="text-[11px] sm:text-xs lg:text-sm font-medium">
+                  Co-founder <span className="gradient-text font-bold">PROFIQUES</span>
+                </span>
+              </a>
             </div>
             
             <h1 className="font-heading text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] sm:leading-tight mb-3 sm:mb-4 lg:mb-6">
