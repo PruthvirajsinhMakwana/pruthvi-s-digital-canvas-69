@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ArrowDown, Code, Palette, Video, Globe } from 'lucide-react';
+import { ArrowDown, Code, Palette, Video, Globe, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import profileImage from '@/assets/profile-hero.png';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
@@ -180,6 +180,28 @@ export const HeroSection = () => {
                 label="Marketer"
                 className="absolute -right-20 xl:-right-28 bottom-[25%] hidden lg:flex z-20 animate-float-4"
               />
+
+              {/* Co-founder PROFIQUES highlight card */}
+              <a
+                href="https://profiques.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Co-founder of PROFIQUES"
+                className="absolute left-1/2 -translate-x-1/2 -top-6 xl:-top-8 hidden lg:flex z-30 items-center gap-3 rounded-2xl px-4 py-2.5
+                  bg-gradient-to-r from-primary/25 via-secondary/20 to-accent/25
+                  border border-primary/50 backdrop-blur-xl
+                  shadow-[0_0_30px_hsl(var(--primary)/0.35)]
+                  hover:shadow-[0_0_45px_hsl(var(--primary)/0.55)]
+                  hover:-translate-y-1 transition-all duration-300 group animate-float-1"
+              >
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Rocket className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <div className="flex flex-col leading-tight">
+                  <span className="text-[10px] uppercase tracking-wider text-primary font-semibold">Co-Founder</span>
+                  <span className="text-sm font-bold gradient-text">PROFIQUES</span>
+                </div>
+              </a>
             </div>
           </div>
         </div>
