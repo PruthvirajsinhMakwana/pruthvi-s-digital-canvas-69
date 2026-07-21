@@ -1,4 +1,4 @@
-import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, ExternalLink, Briefcase, Dribbble, Github, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, LucideIcon, ArrowRight, CheckCircle2, Smartphone, Database, Cloud, Shield, Zap } from 'lucide-react';
+import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, ExternalLink, Briefcase, Dribbble, Github, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, LucideIcon, ArrowRight, CheckCircle2, Smartphone, Database, Cloud, Shield, Zap, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
