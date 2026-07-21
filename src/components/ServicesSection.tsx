@@ -423,6 +423,26 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
                       </Link>
                     </Button>
                   </div>
+
+                  <div className="mt-10 pt-10 border-t border-border/40">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 text-primary rounded-full text-sm font-medium mb-4">
+                      <Sparkles className="w-4 h-4" />
+                      Pricing & Packages
+                    </div>
+                    <h4 className="font-heading text-2xl sm:text-3xl font-bold mb-3">
+                      Explore My <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Packages</span>
+                    </h4>
+                    <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+                      Transparent pricing with flexible tiers — from starter websites to full-scale business solutions.
+                    </p>
+                    <Button size="lg" className="px-8 h-12 text-base group bg-gradient-to-r from-primary to-secondary hover:opacity-90" asChild>
+                      <a href="/#packages">
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        See Packages
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
