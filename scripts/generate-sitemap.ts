@@ -24,7 +24,33 @@ const staticEntries: SitemapEntry[] = [
   { path: "/blog", changefreq: "weekly", priority: "0.8" },
   { path: "/contact", changefreq: "monthly", priority: "0.8" },
   { path: "/links", changefreq: "weekly", priority: "0.7" },
+  { path: "/locations", changefreq: "monthly", priority: "0.8" },
 ];
+
+// Programmatic SEO: service × city landing pages
+const seoServiceSlugs = [
+  "web-development",
+  "digital-marketing",
+  "video-editing",
+  "graphic-design",
+  "seo-services",
+  "social-media-marketing",
+  "wordpress-development",
+  "esports-hosting",
+];
+const seoCitySlugs = [
+  "ahmedabad", "surat", "rajkot", "vadodara", "gandhinagar", "bhavnagar",
+  "jamnagar", "junagadh", "anand", "mehsana", "mumbai", "delhi",
+  "bangalore", "pune", "hyderabad", "chennai", "kolkata", "jaipur",
+];
+const locationEntries: SitemapEntry[] = seoServiceSlugs.flatMap((s) =>
+  seoCitySlugs.map((c) => ({
+    path: `/services/${s}/in/${c}`,
+    changefreq: "monthly" as const,
+    priority: "0.7",
+  }))
+);
+staticEntries.push(...locationEntries);
 
 async function fetchBlogEntries(): Promise<SitemapEntry[]> {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
