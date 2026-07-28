@@ -1,5 +1,9 @@
-// Runs before `vite dev` and `vite build` (predev/prebuild hooks); writes public/sitemap.xml.
-// Pulls published blog posts from Supabase using the publishable anon key.
+// Runs before `vite dev` and `vite build` (predev/prebuild hooks).
+// Writes:
+//   public/sitemap.xml            — sitemap index (references the child sitemaps below)
+//   public/sitemap-main.xml       — static routes
+//   public/sitemap-locations.xml  — programmatic service × city pages
+//   public/sitemap-blog.xml       — published blog posts (from Supabase)
 
 import { writeFileSync } from "fs";
 import { resolve } from "path";
@@ -50,7 +54,6 @@ const locationEntries: SitemapEntry[] = seoServiceSlugs.flatMap((s) =>
     priority: "0.7",
   }))
 );
-staticEntries.push(...locationEntries);
 
 async function fetchBlogEntries(): Promise<SitemapEntry[]> {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -81,7 +84,7 @@ async function fetchBlogEntries(): Promise<SitemapEntry[]> {
   }
 }
 
-function generateSitemap(entries: SitemapEntry[]) {
+function generateUrlset(entries: SitemapEntry[]) {
   const urls = entries.map((e) =>
     [
       `  <url>`,
@@ -103,11 +106,33 @@ function generateSitemap(entries: SitemapEntry[]) {
   ].join("\n");
 }
 
+function generateIndex(children: string[]) {
+  const items = children.map((name) =>
+    [`  <sitemap>`, `    <loc>${BASE_URL}/${name}</loc>`, `  </sitemap>`].join("\n")
+  );
+  return [
+    `<?xml version="1.0" encoding="UTF-8"?>`,
+    `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+    ...items,
+    `</sitemapindex>`,
+  ].join("\n");
+}
+
 async function main() {
   const blog = await fetchBlogEntries();
-  const entries = [...staticEntries, ...blog];
-  writeFileSync(resolve("public/sitemap.xml"), generateSitemap(entries));
-  console.log(`sitemap.xml written (${entries.length} entries)`);
+
+  writeFileSync(resolve("public/sitemap-main.xml"), generateUrlset(staticEntries));
+  writeFileSync(resolve("public/sitemap-locations.xml"), generateUrlset(locationEntries));
+  writeFileSync(resolve("public/sitemap-blog.xml"), generateUrlset(blog));
+
+  writeFileSync(
+    resolve("public/sitemap.xml"),
+    generateIndex(["sitemap-main.xml", "sitemap-locations.xml", "sitemap-blog.xml"])
+  );
+
+  console.log(
+    `sitemaps written — main: ${staticEntries.length}, locations: ${locationEntries.length}, blog: ${blog.length}`
+  );
 }
 
 main();

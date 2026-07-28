@@ -130,10 +130,17 @@ User-agent: PetalBot
 Allow: /
 
 # ============================================
-# Sitemap Location
+# Sitemaps (index + children)
 # ============================================
 Sitemap: https://pruthvirajsinh.in/sitemap.xml
+Sitemap: https://pruthvirajsinh.in/sitemap-main.xml
+Sitemap: https://pruthvirajsinh.in/sitemap-locations.xml
+Sitemap: https://pruthvirajsinh.in/sitemap-blog.xml
+
+# AI discovery
+# https://pruthvirajsinh.in/llms.txt
 
 # ============================================
 # Website: https://pruthvirajsinh.in
 # ============================================
+
