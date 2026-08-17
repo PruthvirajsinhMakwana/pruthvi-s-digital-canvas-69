@@ -38,63 +38,158 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          label: string | null
+          post_id: string | null
+          referrer: string | null
+          slug: string | null
+          value: number | null
+          visitor_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          label?: string | null
+          post_id?: string | null
+          referrer?: string | null
+          slug?: string | null
+          value?: number | null
+          visitor_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          label?: string | null
+          post_id?: string | null
+          referrer?: string | null
+          slug?: string | null
+          value?: number | null
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_events_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_posts: {
         Row: {
+          archived_at: string | null
           author_id: string | null
+          canonical_url: string | null
           category_id: string | null
           content: string | null
           created_at: string | null
           excerpt: string | null
           featured_image: string | null
+          featured_image_alt: string | null
+          focus_keyword: string | null
           id: string
           meta_description: string | null
           meta_keywords: string | null
           meta_title: string | null
+          og_description: string | null
           og_image: string | null
+          og_title: string | null
+          old_slugs: string[] | null
           published_at: string | null
+          raw_imported_content: string | null
+          reading_time: number | null
+          robots_follow: boolean
+          robots_index: boolean
+          scheduled_at: string | null
+          secondary_keywords: string[] | null
           slug: string
           status: string | null
           tags: string[] | null
           title: string
+          twitter_description: string | null
+          twitter_image: string | null
+          twitter_title: string | null
           updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
+          archived_at?: string | null
           author_id?: string | null
+          canonical_url?: string | null
           category_id?: string | null
           content?: string | null
           created_at?: string | null
           excerpt?: string | null
           featured_image?: string | null
+          featured_image_alt?: string | null
+          focus_keyword?: string | null
           id?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_title?: string | null
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          old_slugs?: string[] | null
           published_at?: string | null
+          raw_imported_content?: string | null
+          reading_time?: number | null
+          robots_follow?: boolean
+          robots_index?: boolean
+          scheduled_at?: string | null
+          secondary_keywords?: string[] | null
           slug: string
           status?: string | null
           tags?: string[] | null
           title: string
+          twitter_description?: string | null
+          twitter_image?: string | null
+          twitter_title?: string | null
           updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
+          archived_at?: string | null
           author_id?: string | null
+          canonical_url?: string | null
           category_id?: string | null
           content?: string | null
           created_at?: string | null
           excerpt?: string | null
           featured_image?: string | null
+          featured_image_alt?: string | null
+          focus_keyword?: string | null
           id?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_title?: string | null
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          old_slugs?: string[] | null
           published_at?: string | null
+          raw_imported_content?: string | null
+          reading_time?: number | null
+          robots_follow?: boolean
+          robots_index?: boolean
+          scheduled_at?: string | null
+          secondary_keywords?: string[] | null
           slug?: string
           status?: string | null
           tags?: string[] | null
           title?: string
+          twitter_description?: string | null
+          twitter_image?: string | null
+          twitter_title?: string | null
           updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -102,6 +197,38 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "blog_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_redirects: {
+        Row: {
+          created_at: string
+          id: string
+          new_slug: string
+          old_slug: string
+          post_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          new_slug: string
+          old_slug: string
+          post_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          new_slug?: string
+          old_slug?: string
+          post_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_redirects_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
             referencedColumns: ["id"]
           },
         ]
@@ -247,6 +374,54 @@ export type Database = {
           key?: string
           updated_at?: string | null
           value?: Json | null
+        }
+        Relationships: []
+      }
+      media_library: {
+        Row: {
+          alt: string | null
+          bucket: string
+          caption: string | null
+          created_at: string
+          created_by: string | null
+          height: number | null
+          id: string
+          mime_type: string | null
+          path: string
+          size_bytes: number | null
+          updated_at: string
+          url: string
+          width: number | null
+        }
+        Insert: {
+          alt?: string | null
+          bucket?: string
+          caption?: string | null
+          created_at?: string
+          created_by?: string | null
+          height?: number | null
+          id?: string
+          mime_type?: string | null
+          path: string
+          size_bytes?: number | null
+          updated_at?: string
+          url: string
+          width?: number | null
+        }
+        Update: {
+          alt?: string | null
+          bucket?: string
+          caption?: string | null
+          created_at?: string
+          created_by?: string | null
+          height?: number | null
+          id?: string
+          mime_type?: string | null
+          path?: string
+          size_bytes?: number | null
+          updated_at?: string
+          url?: string
+          width?: number | null
         }
         Relationships: []
       }
@@ -450,6 +625,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin_user: { Args: never; Returns: boolean }
+      publish_due_scheduled_posts: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer"
