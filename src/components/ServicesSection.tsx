@@ -436,7 +436,7 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
                       Transparent pricing with flexible tiers — from starter websites to full-scale business solutions.
                     </p>
                     <Button size="lg" className="px-8 h-12 text-base group bg-gradient-to-r from-primary to-secondary hover:opacity-90" asChild>
-                      <a href="/#packages">
+                      <a href="/plans">
                         <Sparkles className="w-5 h-5 mr-2" />
                         See Packages
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
