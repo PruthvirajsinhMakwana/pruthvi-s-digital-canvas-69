@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { PortfolioShowcase } from '@/components/PortfolioShowcase';
+import { ServicesSection } from '@/components/ServicesSection';
 import { CompanyLogosSection } from '@/components/CompanyLogosSection';
 import { EsportsServicesHighlight } from '@/components/EsportsServicesHighlight';
 import { CertificationsSection } from '@/components/CertificationsSection';
@@ -90,6 +91,9 @@ const Services = () => {
               </ScrollReveal>
             </div>
           </section>
+
+          {/* Services with category filter */}
+          <ServicesSection showBothCategories />
 
           {/* Company Logos Section - Scrolling Marquee */}
           <CompanyLogosSection />
