@@ -5,10 +5,9 @@ import { PortfolioShowcase } from '@/components/PortfolioShowcase';
 import { CompanyLogosSection } from '@/components/CompanyLogosSection';
 import { EsportsServicesHighlight } from '@/components/EsportsServicesHighlight';
 import { CertificationsSection } from '@/components/CertificationsSection';
-import { PackagesSection } from '@/components/PackagesSection';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -100,14 +99,46 @@ const Services = () => {
             <PortfolioShowcase />
           </div>
 
-          {/* Packages Section */}
-          <PackagesSection />
-
           {/* Esports Services Highlight */}
           <EsportsServicesHighlight />
 
           {/* Certifications Section */}
           <CertificationsSection />
+
+          {/* Plans CTA */}
+          <section className="py-16 sm:py-20 relative overflow-hidden">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
+              <ScrollReveal animation="fade-up">
+                <div className="max-w-4xl mx-auto rounded-3xl p-[1.5px] bg-gradient-to-r from-primary via-accent to-secondary">
+                  <div className="rounded-3xl bg-card px-8 py-12 sm:px-14 text-center relative overflow-hidden">
+                    <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+                    <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl" />
+                    <div className="relative">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm font-medium text-primary mb-5">
+                        <Star className="w-4 h-4" />
+                        Transparent Pricing
+                      </div>
+                      <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-4">
+                        Simple Plans,{' '}
+                        <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                          Honest Prices
+                        </span>
+                      </h2>
+                      <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto mb-8">
+                        Pick a ready-made package or request a custom quote — no hidden fees, no confusion.
+                      </p>
+                      <Button size="lg" className="px-10 h-12 text-base group" asChild>
+                        <Link to="/plans">
+                          See Plans
+                          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+          </section>
 
           {/* Final CTA */}
           <section className="py-20 relative overflow-hidden">
