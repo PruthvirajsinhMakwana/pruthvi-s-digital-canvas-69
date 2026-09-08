@@ -91,6 +91,9 @@ const Services = () => {
             </div>
           </section>
 
+          {/* Services with category filter */}
+          <ServicesSection showBothCategories />
+
           {/* Company Logos Section - Scrolling Marquee */}
           <CompanyLogosSection />
 
