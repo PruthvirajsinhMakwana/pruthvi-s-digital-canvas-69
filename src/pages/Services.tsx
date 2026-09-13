@@ -3,9 +3,6 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { PortfolioShowcase } from '@/components/PortfolioShowcase';
 import { ServicesSection } from '@/components/ServicesSection';
-import { CompanyLogosSection } from '@/components/CompanyLogosSection';
-import { EsportsServicesHighlight } from '@/components/EsportsServicesHighlight';
-import { CertificationsSection } from '@/components/CertificationsSection';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { ArrowRight, Sparkles, Star } from 'lucide-react';
@@ -68,46 +65,16 @@ const Services = () => {
                 </div>
               </ScrollReveal>
 
-              {/* Quick Service Tags */}
-              <ScrollReveal animation="fade-up" delay={200}>
-                <div className="flex flex-wrap justify-center gap-3 mt-14">
-                  {[
-                    'Web Development',
-                    'Digital Marketing', 
-                    'Graphic Design',
-                    'Video Editing',
-                    'Esports Commentary',
-                    'Event Hosting',
-                    'Tournament Org',
-                  ].map((item, index) => (
-                    <span
-                      key={index}
-                      className="px-4 py-2 bg-card/80 border border-border/50 rounded-full text-sm text-muted-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-all cursor-default"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </ScrollReveal>
             </div>
           </section>
-
-          {/* Services with category filter */}
-          <ServicesSection showBothCategories />
-
-          {/* Company Logos Section - Scrolling Marquee */}
-          <CompanyLogosSection />
 
           {/* Portfolio Showcase Section */}
           <div id="portfolio">
             <PortfolioShowcase />
           </div>
 
-          {/* Esports Services Highlight */}
-          <EsportsServicesHighlight />
-
-          {/* Certifications Section */}
-          <CertificationsSection />
+          {/* Services with category filter */}
+          <ServicesSection showBothCategories />
 
           {/* Plans CTA */}
           <section className="py-16 sm:py-20 relative overflow-hidden">
@@ -144,28 +111,6 @@ const Services = () => {
             </div>
           </section>
 
-          {/* Final CTA */}
-          <section className="py-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
-            <div className="container mx-auto px-4 sm:px-6 relative z-10">
-              <ScrollReveal animation="fade-up">
-                <div className="max-w-3xl mx-auto text-center">
-                  <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-6">
-                    Ready to Start Your Project?
-                  </h2>
-                  <p className="text-muted-foreground text-lg mb-8">
-                    Let's discuss how I can help bring your ideas to life. Get in touch today!
-                  </p>
-                  <Button size="lg" className="px-10 h-14 text-base" asChild>
-                    <Link to="/contact">
-                      Contact Me
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-              </ScrollReveal>
-            </div>
-          </section>
         </main>
         <Footer />
         <WhatsAppButton />

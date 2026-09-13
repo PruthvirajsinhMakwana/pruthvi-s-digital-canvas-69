@@ -21,7 +21,7 @@ export interface CustomService {
   description: string;
   deliverables: string[];
   linkUrl: string;
-  category: 'it' | 'esports';
+  category: 'it' | 'websites' | 'design' | 'video' | 'marketing' | 'support' | 'esports';
   icon: string;
   gradient: string;
   isVisible: boolean;

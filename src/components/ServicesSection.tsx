@@ -1,25 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, ExternalLink, Briefcase, Dribbble, Github, FileImage, Code, Youtube, Instagram, Linkedin, Twitter, LucideIcon, ArrowRight, CheckCircle2, Smartphone, Database, Cloud, Shield, Zap, Sparkles, LayoutGrid } from 'lucide-react';
+import { Globe, Palette, Video, Megaphone, Layers, PenTool, Mic, Trophy, Gamepad2, Radio, Users, Calendar, Code, LucideIcon, ArrowRight, CheckCircle2, Smartphone, Database, Cloud, Shield, Zap, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
-
-// Icon mapping for portfolio links
-const iconMap: Record<string, LucideIcon> = {
-  briefcase: Briefcase,
-  palette: Palette,
-  dribbble: Dribbble,
-  github: Github,
-  globe: Globe,
-  'file-image': FileImage,
-  code: Code,
-  youtube: Youtube,
-  instagram: Instagram,
-  linkedin: Linkedin,
-  twitter: Twitter,
-  'external-link': ExternalLink,
-};
 
 // Icon mapping for services
 const serviceIconMap: Record<string, LucideIcon> = {
@@ -43,7 +27,6 @@ const serviceIconMap: Record<string, LucideIcon> = {
   zap: Zap,
 };
 
-const getPortfolioIcon = (iconName?: string): LucideIcon => iconMap[iconName || 'briefcase'] || Briefcase;
 const getServiceIcon = (iconName?: string): LucideIcon => serviceIconMap[iconName || 'globe'] || Globe;
 
 type GroupId = 'websites' | 'design' | 'video' | 'marketing' | 'support' | 'esports';
@@ -133,6 +116,9 @@ const baseServices: ServiceData[] = [
 ];
 
 const inferGroup = (title: string, category?: string): GroupId => {
+  if (category && ['websites', 'design', 'video', 'marketing', 'support', 'esports'].includes(category)) {
+    return category as GroupId;
+  }
   if (category === 'esports') return 'esports';
   const t = title.toLowerCase();
   if (t.includes('web') || t.includes('app') || t.includes('site') || t.includes('develop')) return 'websites';
@@ -198,7 +184,6 @@ interface ServicesSectionProps {
 
 export const ServicesSection = ({ showBothCategories = false }: ServicesSectionProps) => {
   const { settings } = useSiteSettings();
-  const portfolioLinks = settings.portfolioLinks || [];
   const serviceLinks = settings.serviceLinks || [];
   const customServices = settings.customServices || [];
 
@@ -206,8 +191,9 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
 
   const allServices: ServiceData[] = useMemo(() => {
     const getLink = (name: string) => serviceLinks.find(l => l.serviceName === name)?.url;
-    const custom: ServiceData[] = customServices
+    const custom: ServiceData[] = [...customServices]
       .filter(s => s.isVisible)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       .map(s => ({
         icon: getServiceIcon(s.icon),
         title: s.title,
@@ -217,8 +203,14 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
         linkUrl: s.linkUrl,
       }));
 
-    const base = baseServices.map(s => ({ ...s, linkUrl: getLink(s.title) }));
-    const combined = [...base, ...custom];
+    const customTitles = new Set(custom.map(service => service.title.trim().toLowerCase()));
+    const base = baseServices
+      .filter(service => !customTitles.has(service.title.trim().toLowerCase()))
+      .map(service => ({ ...service, linkUrl: getLink(service.title) }));
+    const combined = [...custom, ...base].filter((service, index, services) => {
+      const key = service.title.trim().toLowerCase();
+      return key.length > 0 && services.findIndex(item => item.title.trim().toLowerCase() === key) === index;
+    });
     return showBothCategories ? combined : combined.filter(s => s.group !== 'esports');
   }, [customServices, serviceLinks, showBothCategories]);
 
@@ -253,33 +245,31 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
         {/* Category filter */}
         <ScrollReveal animation="fade-up" delay={80}>
           <div className="flex flex-wrap justify-center gap-2.5 mb-12">
-            <button
+            <Button
+              type="button"
+              size="sm"
+              variant={active === 'all' ? 'default' : 'outline'}
               onClick={() => setActive('all')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-                active === 'all'
-                  ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20'
-                  : 'bg-card text-muted-foreground border-border/60 hover:border-primary/40 hover:text-primary'
-              }`}
+              className="rounded-full"
             >
               <LayoutGrid className="w-4 h-4" />
               All ({allServices.length})
-            </button>
+            </Button>
             {availableGroups.map(g => {
               const count = allServices.filter(s => s.group === g.id).length;
               const isActive = active === g.id;
               return (
-                <button
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={isActive ? 'default' : 'outline'}
                   key={g.id}
                   onClick={() => setActive(g.id)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-                    isActive
-                      ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20'
-                      : 'bg-card text-muted-foreground border-border/60 hover:border-primary/40 hover:text-primary'
-                  }`}
+                  className="rounded-full"
                 >
                   <g.icon className="w-4 h-4" />
                   {g.label} ({count})
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -291,45 +281,6 @@ export const ServicesSection = ({ showBothCategories = false }: ServicesSectionP
           ))}
         </div>
 
-        {/* Portfolio + Plans CTA */}
-        <ScrollReveal animation="fade-up" delay={120}>
-          <div className="mt-20 max-w-3xl mx-auto text-center bg-card border border-border/60 rounded-3xl p-8 sm:p-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-full text-sm font-medium mb-6">
-              <Briefcase className="w-4 h-4" />
-              Portfolio & Pricing
-            </div>
-            <h3 className="font-heading text-2xl sm:text-3xl font-bold mb-4">
-              See real work, then pick a plan
-            </h3>
-            <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
-              Browse projects I've delivered, and check transparent packages when you're ready.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center flex-wrap">
-              {(portfolioLinks.length > 0
-                ? portfolioLinks
-                : [{ id: 'default', title: 'View My Work', url: 'https://www.behance.net/jaypatel351', icon: 'briefcase' }]
-              ).map(link => {
-                const IconComponent = getPortfolioIcon(link.icon);
-                return (
-                  <Button key={link.id} size="lg" variant="outline" className="px-7 h-12 text-base group" asChild>
-                    <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      <IconComponent className="w-5 h-5 mr-2" />
-                      {link.title || 'View My Work'}
-                      <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </a>
-                  </Button>
-                );
-              })}
-              <Button size="lg" className="px-7 h-12 text-base group" asChild>
-                <Link to="/plans">
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  See Plans
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );
