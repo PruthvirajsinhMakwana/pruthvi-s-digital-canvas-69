@@ -37,6 +37,8 @@ export interface PortfolioCategory {
   gradient: string;
   isVisible: boolean;
   order: number;
+  category?: 'graphic-design' | 'video' | 'photo' | 'website' | 'ai' | 'other';
+  imageUrl?: string;
 }
 
 export interface CompanyLogo {
