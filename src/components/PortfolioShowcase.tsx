@@ -1,4 +1,5 @@
-import { ExternalLink, FolderOpen, Image, Palette, Video, Film, Sparkles, PlayCircle, FileVideo, Clapperboard, MonitorPlay, Camera, Brush, Type, Layout, Megaphone, Globe, Code, LucideIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ExternalLink, FolderOpen, Image, Palette, Video, Film, Sparkles, PlayCircle, FileVideo, Clapperboard, MonitorPlay, Camera, Brush, Type, Layout, Megaphone, Globe, Code, LucideIcon, Grid3X3, WandSparkles, Images, Play, Link2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { useSiteSettings, PortfolioCategory } from '@/hooks/useSiteSettings';
@@ -26,119 +27,169 @@ const getIcon = (iconName: string): LucideIcon => {
   return portfolioIconMap[iconName] || FolderOpen;
 };
 
-const getShadowColor = (gradient: string): string => {
-  if (gradient.includes('blue')) return 'shadow-blue-500/20';
-  if (gradient.includes('green') || gradient.includes('emerald')) return 'shadow-green-500/20';
-  if (gradient.includes('pink') || gradient.includes('rose')) return 'shadow-pink-500/20';
-  if (gradient.includes('red')) return 'shadow-red-500/20';
-  if (gradient.includes('purple') || gradient.includes('violet')) return 'shadow-purple-500/20';
-  if (gradient.includes('orange') || gradient.includes('amber')) return 'shadow-orange-500/20';
-  if (gradient.includes('cyan')) return 'shadow-cyan-500/20';
-  if (gradient.includes('indigo')) return 'shadow-indigo-500/20';
-  return 'shadow-primary/20';
+type WorkType = 'graphic-design' | 'video' | 'photo' | 'website' | 'ai' | 'other';
+
+const filters: { id: 'all' | WorkType; label: string; icon: LucideIcon }[] = [
+  { id: 'all', label: 'All Work', icon: Grid3X3 },
+  { id: 'graphic-design', label: 'Graphic Design', icon: Palette },
+  { id: 'video', label: 'Video', icon: Play },
+  { id: 'photo', label: 'Photo', icon: Camera },
+  { id: 'website', label: 'Websites', icon: Globe },
+  { id: 'ai', label: 'AI Creative', icon: WandSparkles },
+  { id: 'other', label: 'Other', icon: FolderOpen },
+];
+
+const inferWorkType = (item: PortfolioCategory): WorkType => {
+  if (item.category) return item.category;
+  const value = `${item.title} ${item.description} ${item.icon} ${item.driveLink}`.toLowerCase();
+  if (/\b(ai|artificial|generated|prompt)\b/.test(value)) return 'ai';
+  if (/\b(video|reel|film|edit|livestream|webinar|motion|youtube)\b/.test(value)) return 'video';
+  if (/\b(photo|photography|shoot|camera|portrait)\b/.test(value)) return 'photo';
+  if (/\b(web|website|landing|app|ui|ux|code|netlify|lovable)\b/.test(value)) return 'website';
+  if (/\b(design|poster|graphic|logo|brand|creative|banner|thumbnail)\b/.test(value)) return 'graphic-design';
+  return 'other';
+};
+
+const getSource = (url: string) => {
+  const value = url.toLowerCase();
+  if (value.includes('drive.google.com')) return 'Google Drive';
+  if (value.includes('behance.net')) return 'Behance';
+  if (value.includes('youtube.com') || value.includes('youtu.be')) return 'YouTube';
+  if (value.includes('github.com')) return 'GitHub';
+  return 'Live project';
 };
 
 interface PortfolioCategoryCardProps {
   category: PortfolioCategory;
   index: number;
+  type: WorkType;
 }
 
-const PortfolioCategoryCard = ({ category, index }: PortfolioCategoryCardProps) => {
+const PortfolioCategoryCard = ({ category, index, type }: PortfolioCategoryCardProps) => {
   const IconComponent = getIcon(category.icon);
-  const shadowColor = getShadowColor(category.gradient);
-
-  const handleClick = () => {
-    if (category.driveLink) {
-      window.open(category.driveLink, '_blank', 'noopener,noreferrer');
-    }
-  };
+  const typeLabel = filters.find(filter => filter.id === type)?.label || 'Other';
+  const details = category.description.split(/[•\n]/).map(item => item.trim()).filter(Boolean);
+  const summary = details[0];
+  const highlights = details.slice(1, 3);
 
   return (
-    <ScrollReveal animation="fade-up" delay={index * 100}>
-      <div 
-        onClick={handleClick}
-        className={`group relative cursor-pointer bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 hover:shadow-2xl ${shadowColor}`}
+    <ScrollReveal animation="fade-up" delay={Math.min(index, 5) * 70} className="h-full">
+      <a
+        href={category.driveLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group relative flex h-full min-h-[310px] flex-col overflow-hidden rounded-lg border border-border/70 bg-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-[0.05] rounded-2xl transition-opacity duration-500`} />
-        
-        {/* Icon */}
-        <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${category.gradient} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-          <IconComponent className="w-7 h-7 text-white" strokeWidth={1.5} />
+        <div className="relative flex min-h-[150px] items-center justify-center overflow-hidden border-b border-border/60 bg-muted/45">
+          {category.imageUrl ? (
+            <img
+              src={category.imageUrl}
+              alt={`${category.title} project preview`}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+          ) : (
+            <>
+              <div className="absolute inset-0 tech-grid opacity-30" />
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-card to-transparent" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-lg border border-primary/25 bg-background/70 text-primary shadow-neon transition-transform duration-300 group-hover:scale-105">
+                <IconComponent className="h-8 w-8" strokeWidth={1.5} />
+              </div>
+            </>
+          )}
+          <span className="absolute left-4 top-4 rounded-md border border-border/70 bg-background/80 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground backdrop-blur-md">
+            {typeLabel}
+          </span>
+          <span className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-background/85 text-foreground backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+            <ExternalLink className="h-4 w-4" />
+          </span>
         </div>
 
-        {/* Title */}
-        <h3 className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">
-          {category.title}
-        </h3>
-        
-        {/* Description */}
-        {category.description && (
-          <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-            {category.description}
-          </p>
-        )}
-
-        {/* View Button */}
-        <div className="flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
-          <span>View Work</span>
-          <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+        <div className="flex flex-1 flex-col p-5">
+          <h3 className="font-heading text-lg font-bold leading-snug transition-colors duration-300 group-hover:text-primary">
+            {category.title}
+          </h3>
+          {summary && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{summary}</p>}
+          {highlights.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {highlights.map(item => (
+                <span key={item} className="rounded-md bg-muted px-2 py-1 text-[11px] text-muted-foreground">
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="mt-auto flex items-center gap-2 pt-5 text-xs font-medium text-primary">
+            <Link2 className="h-3.5 w-3.5" />
+            {getSource(category.driveLink)}
+          </div>
         </div>
-
-        {/* Hover glow effect */}
-        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-[0.03] blur-xl transition-opacity duration-500`} />
-      </div>
+      </a>
     </ScrollReveal>
   );
 };
 
 export const PortfolioShowcase = () => {
   const { settings, isLoading } = useSiteSettings();
-  const portfolioCategories = settings.portfolioCategories?.filter(c => c.isVisible) || [];
+  const [active, setActive] = useState<'all' | WorkType>('all');
+  const portfolioCategories = useMemo(() => (settings.portfolioCategories || [])
+    .filter(item => item.isVisible && item.title.trim() && item.driveLink.trim())
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .filter((item, index, items) => items.findIndex(candidate => candidate.driveLink.trim().toLowerCase() === item.driveLink.trim().toLowerCase()) === index)
+    .map(item => ({ ...item, workType: inferWorkType(item) })), [settings.portfolioCategories]);
+  const availableFilters = filters.filter(filter => filter.id === 'all' || portfolioCategories.some(item => item.workType === filter.id));
+  const visibleItems = active === 'all' ? portfolioCategories : portfolioCategories.filter(item => item.workType === active);
 
   if (isLoading || portfolioCategories.length === 0) {
     return null;
   }
 
   return (
-    <section className="py-24 lg:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
-      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px]" />
-      <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[120px]" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="relative overflow-hidden border-y border-border/50 bg-card/25 py-20 lg:py-28">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal animation="fade-up">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-full text-sm font-medium text-primary mb-6">
-              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              My Work Samples
+          <div className="mb-10 grid gap-6 border-b border-border/60 pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div className="max-w-2xl">
+              <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-primary">
+                <Images className="h-4 w-4" />
+                Selected projects
+              </div>
+              <h2 className="font-heading text-4xl font-bold sm:text-5xl lg:text-6xl">
+                See My <span className="gradient-text">Work</span>
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                Real design, video, photography and website projects—organised so you can find relevant work quickly.
+              </p>
             </div>
-            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-              Explore My <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Portfolio</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-              Browse through different categories of my work. Click on any category to view samples and projects.
-            </p>
+            <div className="text-sm text-muted-foreground"><strong className="text-foreground">{portfolioCategories.length}</strong> work collections</div>
           </div>
         </ScrollReveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {portfolioCategories.map((category, index) => (
+        {availableFilters.length > 2 && (
+          <div className="mb-10 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap" aria-label="Filter portfolio projects">
+            {availableFilters.map(filter => {
+              const count = filter.id === 'all' ? portfolioCategories.length : portfolioCategories.filter(item => item.workType === filter.id).length;
+              return (
+                <Button key={filter.id} type="button" size="sm" variant={active === filter.id ? 'default' : 'outline'} onClick={() => setActive(filter.id)} className="shrink-0 rounded-md">
+                  <filter.icon className="h-4 w-4" />
+                  {filter.label}
+                  <span className="opacity-70">{count}</span>
+                </Button>
+              );
+            })}
+          </div>
+        )}
+
+        <div key={active} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {visibleItems.map((category, index) => (
             <PortfolioCategoryCard 
               key={category.id} 
               category={category} 
               index={index} 
+              type={category.workType}
             />
           ))}
         </div>
-
-        <ScrollReveal animation="fade-up" delay={300}>
-          <div className="mt-12 text-center">
-            <p className="text-sm text-muted-foreground">
-              <FolderOpen className="w-4 h-4 inline mr-2" />
-              Click on any category to view my work samples
-            </p>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );

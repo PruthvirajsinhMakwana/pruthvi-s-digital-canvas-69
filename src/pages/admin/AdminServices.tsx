@@ -74,6 +74,15 @@ const portfolioIconOptions = [
   { value: 'code', label: 'Code', icon: Code },
 ];
 
+const portfolioCategoryOptions: { value: NonNullable<PortfolioCategory['category']>; label: string }[] = [
+  { value: 'graphic-design', label: 'Graphic Design' },
+  { value: 'video', label: 'Video' },
+  { value: 'photo', label: 'Photo' },
+  { value: 'website', label: 'Website' },
+  { value: 'ai', label: 'AI Creative' },
+  { value: 'other', label: 'Other' },
+];
+
 const gradientOptions = [
   { value: 'from-blue-500 to-cyan-500', label: 'Blue Cyan' },
   { value: 'from-green-500 to-emerald-500', label: 'Green Emerald' },
@@ -193,6 +202,31 @@ const SortablePortfolioCard = ({
             <p className="text-xs text-muted-foreground mt-1">
               Paste your Google Drive folder link or any portfolio URL
             </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <Label className="text-xs">Work Type</Label>
+              <Select value={category.category || 'other'} onValueChange={(v) => onUpdate('category', v)}>
+                <SelectTrigger className="mt-1 h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {portfolioCategoryOptions.map(option => (
+                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs">Cover Image URL (optional)</Label>
+              <Input
+                value={category.imageUrl || ''}
+                onChange={(e) => onUpdate('imageUrl', e.target.value)}
+                placeholder="https://.../project-cover.jpg"
+                className="mt-1 h-9 text-sm"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -470,6 +504,8 @@ const AdminServices = () => {
       gradient: 'from-pink-500 to-rose-500',
       isVisible: true,
       order: portfolioCategories.length,
+      category: 'graphic-design',
+      imageUrl: '',
     };
     setPortfolioCategories([...portfolioCategories, newCategory]);
     setEditingPortfolioId(newCategory.id);
