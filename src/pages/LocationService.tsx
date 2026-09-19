@@ -100,7 +100,7 @@ const LocationService = () => {
                     </Link>
                   </Button>
                   <Button size="lg" variant="outline" className="px-8 h-12" asChild>
-                    <a href={`https://wa.me/919099999999?text=Hi, I need ${service.name} in ${city.name}`} target="_blank" rel="noopener noreferrer">
+                    <a href={`https://wa.me/917016592727?text=Hi, I need ${service.name} in ${city.name}`} target="_blank" rel="noopener noreferrer">
                       WhatsApp Now
                     </a>
                   </Button>
