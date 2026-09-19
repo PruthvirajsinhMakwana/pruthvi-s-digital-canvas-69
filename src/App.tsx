@@ -18,6 +18,7 @@ import Auth from "./pages/Auth";
 import Links from "./pages/Links";
 import LocationService from "./pages/LocationService";
 import LocationsHub from "./pages/LocationsHub";
+import FreelancerAhmedabad from "./pages/FreelancerAhmedabad";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminSiteContent from "./pages/admin/AdminSiteContent";

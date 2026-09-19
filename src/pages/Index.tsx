@@ -23,7 +23,7 @@ const structuredData = {
     "Pruthvi Makwana",
     "Pruthvi"
   ],
-  "jobTitle": "Web Developer & IT Professional",
+  "jobTitle": "Freelance Web Developer & Digital Marketer",
   "description": "Pruthvirajsinh Makwana is an IT Professional from Gujarat, India, specializing in Web Development, Digital Marketing, Graphic Design, and Video Editing.",
   "url": "https://pruthvirajsinh.com",
   "image": "https://pruthvirajsinh.com/favicon.jpg",
@@ -46,9 +46,10 @@ const structuredData = {
     "Branding",
     "Esports Management"
   ],
+  "areaServed": ["Ahmedabad", "Gandhinagar", "Rajkot", "Surat", "Vadodara", "Gujarat", "India"],
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "Gujarat",
+    "addressLocality": "Ahmedabad",
     "addressRegion": "Gujarat",
     "addressCountry": "India"
   },
@@ -62,19 +63,19 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Pruthvirajsinh Makwana – Web Developer & IT Professional</title>
-        <meta name="description" content="Portfolio of Pruthvirajsinh Makwana — Web Developer, Digital Marketer, Designer & Video Editor from Gujarat, India." />
-        <meta name="keywords" content="Pruthvirajsinh Makwana, Web Developer Gujarat, IT Professional Gujarat, Freelance Web Developer, Graphic Designer Gujarat, Video Editor Gujarat, Digital Marketing Freelancer" />
-        <meta property="og:title" content="Pruthvirajsinh Makwana – Web Developer & IT Professional" />
-        <meta property="og:description" content="Portfolio of Pruthvirajsinh Makwana — Web Developer, Digital Marketer, Designer & Video Editor from Gujarat, India." />
+        <title>Best Freelancer in Ahmedabad | Pruthvirajsinh Makwana</title>
+        <meta name="description" content="Hire the best freelancer in Ahmedabad — Pruthvirajsinh Makwana builds websites and delivers SEO, social media marketing, graphic design and video editing for Gujarat businesses." />
+        <meta name="keywords" content="best freelancer in Ahmedabad, freelancer Ahmedabad, freelance web developer Ahmedabad, freelance graphic designer Ahmedabad, freelance video editor Ahmedabad, SEO freelancer Ahmedabad, Pruthvirajsinh Makwana, Web Developer Gujarat, IT Professional Gujarat, Freelance Web Developer, Graphic Designer Gujarat, Video Editor Gujarat, Digital Marketing Freelancer" />
+        <meta property="og:title" content="Best Freelancer in Ahmedabad | Pruthvirajsinh Makwana" />
+        <meta property="og:description" content="Hire the best freelancer in Ahmedabad — Pruthvirajsinh Makwana builds websites and delivers SEO, social media marketing, graphic design and video editing for Gujarat businesses." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://pruthvirajsinh.in/" />
         <meta property="og:image" content="https://pruthvirajsinh.in/favicon.jpg" />
         <meta property="og:site_name" content="Pruthvirajsinh Makwana Portfolio" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@pruthvirajsinh" />
-        <meta name="twitter:title" content="Pruthvirajsinh Makwana – Web Developer & IT Professional" />
-        <meta name="twitter:description" content="Portfolio of Pruthvirajsinh Makwana — Web Developer, Digital Marketer, Designer & Video Editor from Gujarat, India." />
+        <meta name="twitter:title" content="Best Freelancer in Ahmedabad | Pruthvirajsinh Makwana" />
+        <meta name="twitter:description" content="Hire the best freelancer in Ahmedabad — Pruthvirajsinh Makwana builds websites and delivers SEO, social media marketing, graphic design and video editing for Gujarat businesses." />
         <meta name="twitter:image" content="https://pruthvirajsinh.in/favicon.jpg" />
         <meta name="author" content="Pruthvirajsinh Makwana" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
