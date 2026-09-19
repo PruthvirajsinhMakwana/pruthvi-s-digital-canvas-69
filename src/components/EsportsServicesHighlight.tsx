@@ -2,6 +2,7 @@ import { Mic, Radio, Trophy, Gamepad2, Users, Monitor, Zap, ArrowRight } from 'l
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const esportsFeatures = [
   {
@@ -31,6 +32,9 @@ const esportsFeatures = [
 ];
 
 export const EsportsServicesHighlight = () => {
+  const { settings } = useSiteSettings();
+  const whatsappDigits = (settings.whatsappNumber || '').replace(/\D/g, '');
+
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden">
       {/* Background */}
@@ -101,7 +105,7 @@ export const EsportsServicesHighlight = () => {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="px-8 h-12 text-base" asChild>
-                <a href="https://wa.me/919016790161" target="_blank" rel="noopener noreferrer">
+                <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noopener noreferrer">
                   WhatsApp Me
                 </a>
               </Button>
