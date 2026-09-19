@@ -124,6 +124,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/links" element={<Links />} />
             <Route path="/locations" element={<LocationsHub />} />
+            <Route path="/freelancer-in-ahmedabad" element={<FreelancerAhmedabad />} />
             <Route path="/services/:service/in/:city" element={<LocationService />} />
             
             {/* Admin Routes */}

@@ -30,6 +30,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/contact", changefreq: "monthly", priority: "0.8" },
   { path: "/links", changefreq: "weekly", priority: "0.7" },
   { path: "/locations", changefreq: "monthly", priority: "0.8" },
+  { path: "/freelancer-in-ahmedabad", changefreq: "weekly", priority: "0.9" },
 ];
 
 // Programmatic SEO: service × city landing pages
