@@ -105,7 +105,7 @@ export const EsportsServicesHighlight = () => {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="px-8 h-12 text-base" asChild>
-                <a href="https://wa.me/919016790161" target="_blank" rel="noopener noreferrer">
+                <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noopener noreferrer">
                   WhatsApp Me
                 </a>
               </Button>
