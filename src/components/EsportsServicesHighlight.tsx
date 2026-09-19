@@ -32,6 +32,9 @@ const esportsFeatures = [
 ];
 
 export const EsportsServicesHighlight = () => {
+  const { settings } = useSiteSettings();
+  const whatsappDigits = (settings.whatsappNumber || '').replace(/\D/g, '');
+
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden">
       {/* Background */}
