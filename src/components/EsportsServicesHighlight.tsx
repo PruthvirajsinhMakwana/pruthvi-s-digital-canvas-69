@@ -2,6 +2,7 @@ import { Mic, Radio, Trophy, Gamepad2, Users, Monitor, Zap, ArrowRight } from 'l
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { Link } from 'react-router-dom';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const esportsFeatures = [
   {
