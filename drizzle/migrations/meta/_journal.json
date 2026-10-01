@@ -8,6 +8,13 @@
       "when": 1790852377267,
       "tag": "0000_grant_linktree_links_read",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790852432188,
+      "tag": "0001_linktree_admin_policy_authenticated",
+      "breakpoints": true
     }
   ]
 }
