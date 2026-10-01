@@ -172,7 +172,7 @@ export const PortfolioShowcase = () => {
             {availableFilters.map(filter => {
               const count = filter.id === 'all' ? portfolioCategories.length : portfolioCategories.filter(item => item.workType === filter.id).length;
               return (
-                <Button key={filter.id} type="button" size="sm" variant={active === filter.id ? 'default' : 'outline'} onClick={() => setActive(filter.id)} className="shrink-0 rounded-md">
+                <Button key={filter.id} type="button" size="sm" variant={active === filter.id ? 'default' : 'outline'} onClick={() => { setActive(filter.id); setShowAll(false); }} className="shrink-0 rounded-md">
                   <filter.icon className="h-4 w-4" />
                   {filter.label}
                   <span className="opacity-70">{count}</span>
