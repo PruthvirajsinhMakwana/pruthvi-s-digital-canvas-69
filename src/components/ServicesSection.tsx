@@ -145,7 +145,7 @@ const ServiceCard = ({ service, index }: { service: ServiceData; index: number }
         <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-primary transition-colors">
           {service.title}
         </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed mb-5">{service.description}</p>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-5 line-clamp-3">{service.description.replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, '').replace(/\s{2,}/g, ' ').trim()}</p>
 
         <div className="space-y-2 mb-6">
           {service.deliverables.slice(0, 4).map((item, i) => (
