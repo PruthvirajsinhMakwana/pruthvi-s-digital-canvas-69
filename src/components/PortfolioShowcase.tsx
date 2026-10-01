@@ -80,7 +80,7 @@ const PortfolioCategoryCard = ({ category, index, type }: PortfolioCategoryCardP
         rel="noopener noreferrer"
         className="group relative flex h-full min-h-[310px] flex-col overflow-hidden rounded-lg border border-border/70 bg-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        <div className="relative flex min-h-[150px] items-center justify-center overflow-hidden border-b border-border/60 bg-muted/45">
+        <div className={`relative flex items-center justify-center overflow-hidden border-b border-border/60 bg-muted/45 ${category.imageUrl ? 'aspect-video' : 'min-h-[96px] sm:min-h-[120px]'}`}>
           {category.imageUrl ? (
             <img
               src={category.imageUrl}
@@ -132,6 +132,8 @@ const PortfolioCategoryCard = ({ category, index, type }: PortfolioCategoryCardP
 export const PortfolioShowcase = () => {
   const { settings, isLoading } = useSiteSettings();
   const [active, setActive] = useState<'all' | WorkType>('all');
+  const [showAll, setShowAll] = useState(false);
+  const INITIAL_COUNT = 8;
   const portfolioCategories = useMemo(() => (settings.portfolioCategories || [])
     .filter(item => item.isVisible && item.title.trim() && item.driveLink.trim())
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -181,7 +183,7 @@ export const PortfolioShowcase = () => {
         )}
 
         <div key={active} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {visibleItems.map((category, index) => (
+          {(showAll ? visibleItems : visibleItems.slice(0, INITIAL_COUNT)).map((category, index) => (
             <PortfolioCategoryCard 
               key={category.id} 
               category={category} 
@@ -190,6 +192,13 @@ export const PortfolioShowcase = () => {
             />
           ))}
         </div>
+        {visibleItems.length > INITIAL_COUNT && (
+          <div className="mt-10 flex justify-center">
+            <Button type="button" variant="outline" onClick={() => setShowAll(v => !v)}>
+              {showAll ? 'Show less' : `Show all ${visibleItems.length} projects`}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
