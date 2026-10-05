@@ -149,7 +149,7 @@ export const HeroSection = () => {
                 <img
                   src={profileImage}
                   alt={settings.name}
-                  className="w-full h-full object-cover object-[center_20%]"
+                  className="w-full h-full object-contain object-bottom"
                   width={600}
                   height={600}
                   loading="eager"
