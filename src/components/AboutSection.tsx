@@ -1,261 +1,329 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Download, Linkedin, Github, Instagram, Mail, MapPin, GraduationCap, ArrowUpRight,
-  Globe, TrendingUp, PenTool, Film, Sparkles, Bot, Briefcase, CheckCircle2, Rocket,
-} from 'lucide-react';
+import { Download, Briefcase, GraduationCap, Award, Linkedin, Github, Instagram, Mail, MapPin, Calendar, Code, Palette } from 'lucide-react';
 import { ScrollReveal } from '@/hooks/useScrollReveal';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import profileIT from '@/assets/profile-it.jpg';
 
 const skills = [
-  { name: 'Web Development', level: 90, icon: Globe },
-  { name: 'Digital Marketing & SEO', level: 85, icon: TrendingUp },
-  { name: 'Graphic Design', level: 85, icon: PenTool },
-  { name: 'Video Editing', level: 80, icon: Film },
-  { name: 'UI/UX Design', level: 75, icon: Sparkles },
-  { name: 'AI & Automation', level: 80, icon: Bot },
+  { name: 'Web Development', level: 90, icon: '🌐' },
+  { name: 'Digital Marketing & SEO', level: 85, icon: '📈' },
+  { name: 'Graphic Design', level: 85, icon: '🎨' },
+  { name: 'Video Editing', level: 80, icon: '🎬' },
+  { name: 'UI/UX Design', level: 75, icon: '✨' },
+  { name: 'AI & Automation', level: 80, icon: '🤖' },
 ];
 
 const experiences = [
-  { year: '2023 – Present', title: 'Co-Founder', company: 'PROFIQUES — Digital Marketing Agency', icon: Rocket },
-  { year: '2023 – Present', title: 'Freelance Web Developer & Designer', company: 'Independent client projects', icon: Briefcase },
-  { year: '2024 – Present', title: 'B.Voc in Information Technology', company: 'Shati Business School', icon: GraduationCap },
+  {
+    year: '2024 – Present',
+    title: 'B.Voc in Information Technology',
+    company: 'Shati Business School',
+    type: 'education',
+  },
+  {
+    year: '2023 – Present',
+    title: 'Freelance Digital Creator',
+    company: 'Self-Employed',
+    type: 'work',
+  },
+  {
+    year: '2023 – Present',
+    title: 'Web Developer & Designer',
+    company: 'Freelance Projects',
+    type: 'work',
+  },
 ];
 
 const stats = [
-  { value: 50, label: 'Projects delivered', suffix: '+' },
-  { value: 15, label: 'Tools mastered', suffix: '+' },
-  { value: 3, label: 'Years of practice', suffix: '+' },
+  { icon: Briefcase, value: 50, label: 'Projects', suffix: '+' },
+  { icon: GraduationCap, value: 15, label: 'Tools', suffix: '+' },
+  { icon: Award, value: 3, label: 'Years', suffix: '+' },
 ];
-
-const strengths = ['Problem Solver', 'Quick Learner', 'Creative Thinker', 'Detail Oriented', 'Team Player'];
 
 const socialLinks = [
-  { icon: Linkedin, href: 'https://www.linkedin.com/in/pruthvirajsinh-makwana-635974393/', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com/PruthvirajsinhMakwana', label: 'GitHub' },
-  { icon: Instagram, href: 'https://www.instagram.com/pruthvirajsinh__makwana/', label: 'Instagram' },
-  { icon: Mail, href: 'mailto:pruthvirajsinhpvt@gmail.com', label: 'Email' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/pruthvirajsinh-makwana-635974393/', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
+  { icon: Github, href: 'https://github.com/PruthvirajsinhMakwana', label: 'GitHub', color: 'hover:text-[#333] dark:hover:text-white' },
+  { icon: Instagram, href: 'https://www.instagram.com/pruthvirajsinh__makwana/', label: 'Instagram', color: 'hover:text-[#e4405f]' },
+  { icon: Mail, href: 'mailto:pruthvirajsinhpvt@gmail.com', label: 'Email', color: 'hover:text-primary' },
 ];
-
-const useInView = <T extends HTMLElement>() => {
-  const ref = useRef<T>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    if (!ref.current) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setInView(true); obs.disconnect(); }
-    }, { threshold: 0.3 });
-    obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return { ref, inView };
-};
 
 const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
   const [count, setCount] = useState(0);
-  const { ref, inView } = useInView<HTMLDivElement>();
-  useEffect(() => {
-    if (!inView) return;
-    let frame = 0;
-    const start = performance.now();
-    const tick = (t: number) => {
-      const p = Math.min((t - start) / 1400, 1);
-      setCount(Math.round(value * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, value]);
-  return (
-    <div ref={ref} className="font-heading text-3xl sm:text-4xl font-bold text-foreground tabular-nums">
-      {count}<span className="text-primary">{suffix}</span>
-    </div>
-  );
-};
+  const ref = useRef<HTMLDivElement>(null);
 
-const SkillBars = () => {
-  const { ref, inView } = useInView<HTMLDivElement>();
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let start = 0;
+          const duration = 2000;
+          const increment = value / (duration / 16);
+          
+          const timer = setInterval(() => {
+            start += increment;
+            if (start >= value) {
+              setCount(value);
+              clearInterval(timer);
+            } else {
+              setCount(Math.floor(start));
+            }
+          }, 16);
+          
+          return () => clearInterval(timer);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [value]);
+
   return (
-    <div ref={ref} className="space-y-5">
-      {skills.map((skill, i) => (
-        <div key={skill.name} className="group">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-3">
-              <skill.icon className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">{skill.name}</span>
-            </div>
-            <span className="text-xs text-muted-foreground tabular-nums">{skill.level}%</span>
-          </div>
-          <div className="h-1 bg-muted rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-[width] duration-1000 ease-out"
-              style={{ width: inView ? `${skill.level}%` : '0%', transitionDelay: `${i * 80}ms` }}
-            />
-          </div>
-        </div>
-      ))}
+    <div ref={ref} className="font-heading text-2xl sm:text-4xl font-bold text-primary">
+      {count}{suffix}
     </div>
   );
 };
 
 export const AboutSection = () => {
   const { settings } = useSiteSettings();
-  const resume = settings.resumeLink || 'https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing';
-
   return (
-    <section id="about" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-6xl">
-        {/* Header */}
+    <section id="about" className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background">
+      {/* Decorative Elements */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+      
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        {/* Section Header */}
         <ScrollReveal animation="fade-up">
-          <div className="mb-12 sm:mb-16 max-w-2xl">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="h-px w-10 bg-primary" />
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">About Me</span>
-            </div>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-              Building brands where <span className="gradient-text">technology meets design.</span>
+          <div className="text-center mb-10 sm:mb-16">
+            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              Get to Know Me
+            </span>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold">
+              About <span className="text-primary">Me</span>
             </h2>
           </div>
         </ScrollReveal>
 
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Portrait */}
-          <ScrollReveal animation="fade-up" delay={100} className="lg:col-span-5">
-            <div className="lg:sticky lg:top-24">
-              <div className="relative rounded-3xl overflow-hidden border border-border bg-card group">
-                <div className="aspect-[4/5] overflow-hidden">
-                  <img
-                    src={profileIT}
-                    alt="Pruthvirajsinh Makwana — Freelancer in Ahmedabad"
-                    loading="lazy"
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 mb-10 sm:mb-16">
+          {/* Left Column - Profile Card */}
+          <ScrollReveal animation="fade-up" delay={100} className="lg:col-span-2">
+            <div className="bg-card border border-border rounded-3xl p-5 sm:p-8 h-full">
+              <div className="text-center mb-6">
+                <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-secondary p-1">
+                  <img 
+                    src={profileIT} 
+                    alt="Pruthvirajsinh Makwana" 
+                    className="w-full h-full rounded-full object-cover"
                   />
                 </div>
-                <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-background via-background/85 to-transparent pt-24">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-primary/15 border border-primary/30 mb-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    <span className="text-[11px] font-medium text-foreground">Available for projects</span>
-                  </div>
-                  <h3 className="font-heading text-2xl font-bold text-foreground">Pruthvirajsinh Makwana</h3>
-                  <p className="text-sm text-muted-foreground mt-1">IT Professional & Digital Creator</p>
-                  <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-primary" />Gujarat, India</span>
-                    <span className="flex items-center gap-1.5"><GraduationCap className="w-3.5 h-3.5 text-primary" />B.Voc IT</span>
-                  </div>
+                <h3 className="font-heading text-2xl font-bold">Pruthvirajsinh Makwana</h3>
+                <p className="text-primary font-medium text-center">💻 IT Professional & Digital Creator</p>
+                <p className="text-muted-foreground text-sm mt-1">🎨 Designer | 🌐 Developer | 📈 Marketer</p>
+                <a
+                  href="https://profiques.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 border border-primary/30 hover:border-primary/60 transition-all"
+                >
+                  <span>🚀</span>
+                  <span className="text-xs font-semibold">
+                    Co-founder of <span className="gradient-text">PROFIQUES</span>
+                  </span>
+                </a>
+              </div>
+
+
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  <span>Gujarat, India</span>
+                </div>
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>Available for Freelance & Internships</span>
+                </div>
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <GraduationCap className="w-4 h-4 text-primary" />
+                  <span>B.Voc IT Student</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-5">
-                <a href={resume} target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button size="lg" className="w-full group">
-                    <Download className="w-4 h-4 mr-2 transition-transform group-hover:-translate-y-0.5" />
-                    Download Resume
-                  </Button>
+              {/* Social Links */}
+              <div className="border-t border-border pt-6">
+                <p className="text-sm text-muted-foreground mb-4 text-center">Connect with me</p>
+                <div className="flex justify-center gap-3">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      className={`w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground transition-all duration-300 hover:scale-110 ${social.color}`}
+                    >
+                      <social.icon className="w-5 h-5" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Download Resume */}
+              <a 
+                href={settings.resumeLink || 'https://drive.google.com/file/d/1G7plYbEEkstJyR24LzOvGsANdz7_FeJw/view?usp=sharing'} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full block mt-6"
+              >
+                <Button variant="default" size="lg" className="w-full group">
+                  <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
+                  Download Resume
+                </Button>
+              </a>
+            </div>
+          </ScrollReveal>
+
+          {/* Right Column - Bio & Details */}
+          <ScrollReveal animation="fade-up" delay={200} className="lg:col-span-3">
+            <div className="space-y-6 h-full">
+              {/* Bio Card */}
+              <div className="bg-card border border-border rounded-3xl p-5 sm:p-8">
+                <h3 className="font-heading text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">👋</span>
+                  Hello!
+                </h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  I'm <span className="text-foreground font-medium">Pruthvirajsinh Makwana</span>, an aspiring <span className="text-primary font-medium">IT Professional</span> currently pursuing a Bachelor of Vocation (B.Voc) in Information Technology from Shati Business School. I specialize in <span className="text-primary font-medium">Web Development</span>, <span className="text-primary font-medium">Digital Marketing</span>, <span className="text-primary font-medium">Graphic Design</span>, <span className="text-primary font-medium">Video Editing</span>, and <span className="text-primary font-medium">Brand Creation</span>.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  I'm passionate about working at the intersection of <span className="text-foreground">technology, design, and innovation</span>, where ideas turn into solutions. I enjoy building responsive websites, improving brand visibility through strategic marketing, designing compelling visuals, and leveraging modern tools to enhance productivity and quality.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Driven by curiosity and continuous learning, I strive to deliver excellence in every project. My goal is to support business growth and establish myself as a <span className="text-primary font-medium">versatile professional</span> in the digital and IT ecosystem. I'm open to collaborations, freelance projects, internships, and opportunities to innovate and grow.
+                </p>
+
+                {/* PROFIQUES Highlight */}
+                <a
+                  href="https://profiques.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 block group relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 p-5 hover:border-primary/60 transition-all"
+                >
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-all" />
+                  <div className="relative flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl shrink-0">
+                      🚀
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="text-xs font-medium text-primary uppercase tracking-wider">Co-Founder</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary font-semibold">Gujarat</span>
+                      </div>
+                      <h4 className="font-heading text-lg font-bold">
+                        <span className="gradient-text">PROFIQUES</span> — Digital Marketing Agency
+                      </h4>
+                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                        One of the best digital marketing agencies in Gujarat, delivering web development, branding, social media growth, video production and full-stack marketing solutions to businesses across India.
+                      </p>
+                    </div>
+                  </div>
                 </a>
-                {socialLinks.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="w-11 h-11 shrink-0 rounded-xl border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
+              </div>
+
+
+              {/* Stats Row */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                {stats.map((stat, index) => (
+                  <div
+                    key={index}
+                    className="bg-card border border-border rounded-2xl p-3 sm:p-4 text-center hover:border-primary/50 transition-colors"
                   >
-                    <s.icon className="w-4 h-4" />
-                  </a>
+                    <stat.icon className="w-6 h-6 text-primary mx-auto mb-2" />
+                    <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                    <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+
+        {/* Skills & Experience Grid */}
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Skills */}
+          <ScrollReveal animation="fade-up" delay={300}>
+            <div className="bg-card border border-border rounded-3xl p-5 sm:p-8">
+              <h3 className="font-heading text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">⚡</span>
+                My Skills
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="group p-4 rounded-xl bg-muted/50 hover:bg-primary/10 transition-all duration-300 cursor-default"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-xl">{skill.icon}</span>
+                      <span className="font-medium text-sm group-hover:text-primary transition-colors">
+                        {skill.name}
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-700"
+                        style={{ width: `${skill.level}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1 block">{skill.level}%</span>
+                  </div>
                 ))}
               </div>
             </div>
           </ScrollReveal>
 
-          {/* Content */}
-          <div className="lg:col-span-7 space-y-10">
-            <ScrollReveal animation="fade-up" delay={150}>
-              <div className="space-y-4 text-muted-foreground leading-relaxed text-[15px] sm:text-base">
-                <p className="text-lg sm:text-xl text-foreground leading-relaxed">
-                  I'm Pruthvirajsinh — a multidisciplinary creator helping businesses grow through websites, design, video and marketing that actually perform.
-                </p>
-                <p>
-                  Currently pursuing a B.Voc in Information Technology at Shati Business School, I work across{' '}
-                  <span className="text-foreground">web development, digital marketing, graphic design, video editing</span> and brand creation — turning ideas into polished, measurable results.
-                </p>
-                <p>
-                  I care about clean execution, fast turnaround and honest communication. Open to freelance work, collaborations and long-term partnerships.
-                </p>
-              </div>
-            </ScrollReveal>
-
-            {/* Stats */}
-            <ScrollReveal animation="fade-up" delay={200}>
-              <div className="grid grid-cols-3 divide-x divide-border border-y border-border py-6">
-                {stats.map((s) => (
-                  <div key={s.label} className="px-3 sm:px-6 first:pl-0">
-                    <AnimatedCounter value={s.value} suffix={s.suffix} />
-                    <div className="text-xs sm:text-sm text-muted-foreground mt-1">{s.label}</div>
+          {/* Experience Timeline */}
+          <ScrollReveal animation="fade-up" delay={400}>
+            <div className="bg-card border border-border rounded-3xl p-5 sm:p-8">
+              <h3 className="font-heading text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">📅</span>
+                Experience
+              </h3>
+              <div className="space-y-4">
+                {experiences.map((exp, index) => (
+                  <div
+                    key={index}
+                    className="relative pl-6 border-l-2 border-primary/30 hover:border-primary transition-colors"
+                  >
+                    <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary" />
+                    <span className="text-xs text-primary font-medium">{exp.year}</span>
+                    <h4 className="font-heading font-semibold text-foreground">{exp.title}</h4>
+                    <p className="text-sm text-muted-foreground">{exp.company}</p>
                   </div>
                 ))}
               </div>
-            </ScrollReveal>
 
-            {/* PROFIQUES */}
-            <ScrollReveal animation="fade-up" delay={250}>
-              <a
-                href="https://profiques.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-start gap-4 rounded-2xl border border-border bg-card p-5 sm:p-6 hover:border-primary/50 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
-                  <Rocket className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-primary">Co-Founder</span>
-                  <h4 className="font-heading text-lg font-bold mt-0.5">
-                    <span className="gradient-text">PROFIQUES</span> — Digital Marketing Agency
-                  </h4>
-                  <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                    Web development, branding, social media growth and video production for businesses across India.
-                  </p>
-                </div>
-                <ArrowUpRight className="w-5 h-5 text-muted-foreground shrink-0 transition-all group-hover:text-primary group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </a>
-            </ScrollReveal>
-
-            {/* Skills + Experience */}
-            <div className="grid sm:grid-cols-2 gap-8 sm:gap-10">
-              <ScrollReveal animation="fade-up" delay={300}>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">Expertise</h3>
-                <SkillBars />
-              </ScrollReveal>
-
-              <ScrollReveal animation="fade-up" delay={350}>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">Experience</h3>
-                <ol className="relative border-l border-border ml-2 space-y-6">
-                  {experiences.map((e) => (
-                    <li key={e.title} className="pl-6 relative">
-                      <span className="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-card border border-primary/40 flex items-center justify-center">
-                        <e.icon className="w-3 h-3 text-primary" />
-                      </span>
-                      <span className="text-[11px] font-medium text-primary">{e.year}</span>
-                      <h4 className="font-heading font-semibold text-foreground text-sm mt-0.5">{e.title}</h4>
-                      <p className="text-xs text-muted-foreground mt-0.5">{e.company}</p>
-                    </li>
+              {/* Quick Facts */}
+              <div className="mt-8 pt-6 border-t border-border">
+                <h4 className="font-medium text-sm text-muted-foreground mb-3">What I Bring</h4>
+                <div className="flex flex-wrap gap-2">
+                  {['Problem Solver', 'Quick Learner', 'Creative Thinker', 'Detail Oriented', 'Team Player'].map((tag, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full"
+                    >
+                      {tag}
+                    </span>
                   ))}
-                </ol>
-              </ScrollReveal>
-            </div>
-
-            <ScrollReveal animation="fade-up" delay={400}>
-              <div className="flex flex-wrap gap-x-5 gap-y-2">
-                {strengths.map((t) => (
-                  <span key={t} className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary" />{t}
-                  </span>
-                ))}
+                </div>
               </div>
-            </ScrollReveal>
-          </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
